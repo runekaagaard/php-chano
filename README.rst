@@ -10,7 +10,7 @@ Example
 -------
 The following is a example of usage.
 
-.. code-block:: php5
+.. code-block:: PHP5
 
     <?php
     require realpath(dirname(__FILE__)) . '/TIter.php';
