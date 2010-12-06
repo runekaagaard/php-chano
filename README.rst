@@ -8,10 +8,10 @@ Still extreme alpha.
 
 Example
 -------
-The following is a example of usage.
+The following is a example of usage::
 
 {{{
-
+#
     <?php
     require realpath(dirname(__FILE__)) . '/TIter.php';
 
