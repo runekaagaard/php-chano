@@ -10,7 +10,7 @@ Example
 -------
 The following is a example of usage.
 
-.. code-block::
+{{{
 
     <?php
     require realpath(dirname(__FILE__)) . '/TIter.php';
@@ -37,3 +37,4 @@ The following is a example of usage.
      <?=$_->titles->Main->safe()?>
 
     <?endforeach?>
+}}}
