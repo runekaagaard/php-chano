@@ -10,8 +10,6 @@ Example
 -------
 The following is a example of usage::
 
-{{{
-#
     <?php
     require realpath(dirname(__FILE__)) . '/TIter.php';
 
@@ -23,18 +21,17 @@ The following is a example of usage::
     );
     ?>
     <?foreach(new TIter($items) as $_):?>
-     <?=$_->body?>
-     <?=$_['titles']['Main']?><?if($_['titles']['Main']->has_changed()):?>changed<?endif?>
-     <?=$_->body?>
-     <?=$_->titles->Sub?><?=$_->titles->Sub->same() ? ' same' : ' notsame'?>
-     <?=$_->cycle('das', 'ist', 'gut')?>
-     <?=$_->cycle('is', 'good')?>
-     <?if($_->is_first()):?>isfirst!<?endif?>
-     <?if($_->is_last()):?>islast!<?endif?>
-     <?=$_->body->emptyor('Empty body')?>
-     <?=$_->body->length()?>
-     <?=$_->body->striptags()?>
-     <?=$_->titles->Main->safe()?>
+        <?=$_->body?>
+        <?=$_['titles']['Main']?><?if($_['titles']['Main']->has_changed()):?>changed<?endif?>
+        <?=$_->body?>
+        <?=$_->titles->Sub?><?=$_->titles->Sub->same() ? ' same' : ' notsame'?>
+        <?=$_->cycle('das', 'ist', 'gut')?>
+        <?=$_->cycle('is', 'good')?>
+        <?if($_->is_first()):?>isfirst!<?endif?>
+        <?if($_->is_last()):?>islast!<?endif?>
+        <?=$_->body->emptyor('Empty body')?>
+        <?=$_->body->length()?>
+        <?=$_->body->striptags()?>
+        <?=$_->titles->Main->safe()?>
 
     <?endforeach?>
-}}}
