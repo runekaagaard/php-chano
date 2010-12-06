@@ -27,6 +27,8 @@ class TIter implements Iterator, ArrayAccess {
     public $lookups = array();
     public $previous_lookups = array();
 
+    public $autoescape = True;
+    
     function  __construct($items) {
         $this->items = $items;
         $this->count = count($items) - 1;
@@ -34,15 +36,13 @@ class TIter implements Iterator, ArrayAccess {
 
     function  __toString() {
         $this->lookup_path_reset();
-        $s = $this->out($this->value);
+        $s = $this->autoescape ? htmlentities($this->value) : $this->value;
         $this->value = self::INITIAL;
-        return $s;
+        return (string)$s;
     }
 
-    function out($s, $escape = TRUE) {
-        return $escape ? htmlentities($s) : $s;
-    }
-   
+    function to_s() { return $this->__toString(); }
+    
     // Iterator.
     function rewind() { $this->i = 0; }
     function current() {
@@ -91,6 +91,11 @@ class TIter implements Iterator, ArrayAccess {
     // Object Access
     function  __get($name) { return $this->offsetGet($name); }
 
+    // Callable toString shortcut.
+    function  __call($name, $args) {
+        return $this->$name->__toString();
+    }
+
     // Filters.
 
     function filter_reset() {
@@ -112,9 +117,9 @@ class TIter implements Iterator, ArrayAccess {
     function safe() {
         return $this->filter_reset();
     }
-    function is_first() { return $this->i === 0; }
-    function is_last() { return $this->i === $this->count; }
-    function has_changed() {
+    function isfirst() { return $this->i === 0; }
+    function islast() { return $this->i === $this->count; }
+    function haschanged() {
         $this->value = self::INITIAL;
         $path = $this->lookup_path_reset();
         return isset($this->previous_lookups[$path]) &&
@@ -143,4 +148,34 @@ class TIter implements Iterator, ArrayAccess {
             return $cycles[$key][0][$cycles[$key][1]];
         }
     }
+
+    function autoescape_on() { $this->autoescape = true; }
+    function autoescape_off() { $this->autoescape = false; }
+    function firstof() {
+        $args = func_get_args();
+        foreach ($args as $arg) {
+            if (!empty($arg)) return $arg;
+        }
+        return '';
+    }
+    function now($format) { return date($format); }
+    function widthratio($range_in, $range_out) {
+        return round($this->filter_reset() / $range_in * $range_out);
+    }
+    function add($amount) { return $this->filter_reset() + $amount; }
+    function addslashes() { return addslashes($this->filter_reset()); }
+    function capfirst() { return ucfirst($this->filter_reset()); }
+    function center($width) {
+        return str_pad($this->filter_reset(), $width, " ", STR_PAD_BOTH);
+    }
+    function cut($str) { return str_replace($str, '', $this->filter_reset()); }
+    function date($format) { return date($format, $this->filter_reset()) ;}
+    function divisibleby($divisor) {
+        return ($this->filter_reset() % $divisor) === 0;
+    }
+    function escape() { return htmlentities($this->filter_reset()); }
+    /*function addslashes() { return $this->filter_reset(); }
+    function addslashes() { return $this->filter_reset(); }
+    function addslashes() { return $this->filter_reset(); }
+    function addslashes() { return $this->filter_reset(); }*/
 }
