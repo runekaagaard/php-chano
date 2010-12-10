@@ -61,7 +61,7 @@ class DtlIter implements Iterator, ArrayAccess {
     public $i = 0;
     public $items;
     public $current = self::INITIAL;
-    public $value = self::INITIAL;
+    public $v = self::INITIAL;
     
     public $lookup_path;
     public $lookups = array();
@@ -77,13 +77,15 @@ class DtlIter implements Iterator, ArrayAccess {
     function  __toString() {
         $this->lookup_path_reset();
         $s = $this->out();
-        $this->value = self::INITIAL;
+        $this->v = self::INITIAL;
         return (string)$s;
     }
 
     function out($escape = null) {
         if ($escape === null) $escape = $this->autoescape;
-        $s = $this->autoescape ? htmlentities($this->value) : $this->value;
+        
+        $s = $this->autoescape ? htmlentities((string)$this->v)
+            : (string)$this->v;
         return (string)$s;
     }
     
@@ -106,7 +108,7 @@ class DtlIter implements Iterator, ArrayAccess {
     // Lookups
     function lookup_add($o) {
         $this->lookup_path .= $o;
-        $this->lookups[$this->lookup_path] = $this->value;
+        $this->lookups[$this->lookup_path] = $this->v;
     }
 
     function lookup_path_reset() {
@@ -124,8 +126,8 @@ class DtlIter implements Iterator, ArrayAccess {
     // Array Access
     function offsetGet($o) {
         if ($o == '_') return $this->__toString();
-        if ($this->value == self::INITIAL) $this->value = $this->current[$o];
-        else $this->value = $this->value[$o];
+        if ($this->v == self::INITIAL) $this->v = $this->current[$o];
+        else $this->v = $this->v[$o];
         $this->lookup_add($o);
         return $this;
     }
@@ -139,14 +141,17 @@ class DtlIter implements Iterator, ArrayAccess {
     // Filters.
 
     function filter_reset() {
-        $value = $this->value;
-        $this->value = self::INITIAL;
+        $value = $this->v;
+        $this->v = self::INITIAL;
         $path = $this->lookup_path_reset();
         return $value;
     }
 
     function filter_apply($function) {
-        $this->value = $function($this->value);
+        if (is_scalar($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (is_scalar($v))
+                $v = $function($v);
         return $this;
     }
 
@@ -162,13 +167,13 @@ class DtlIter implements Iterator, ArrayAccess {
     function isfirst() { return $this->i === 0; }
     function islast() { return $this->i === $this->count; }
     function haschanged() {
-        $this->value = self::INITIAL;
+        $this->v = self::INITIAL;
         $path = $this->lookup_path_reset();
         return isset($this->previous_lookups[$path]) &&
             $this->previous_lookups[$path] != $this->lookups[$path];
     }
     function same() {
-        $this->value = self::INITIAL;
+        $this->v = self::INITIAL;
         $path = $this->lookup_path_reset();
         return isset($this->previous_lookups[$path]) &&
             $this->previous_lookups[$path] == $this->lookups[$path];
@@ -200,6 +205,25 @@ class DtlIter implements Iterator, ArrayAccess {
         return ($this->filter_reset() % $divisor) === 0;
     }
     function escape() { return htmlentities($this->filter_reset()); }
+
+    // Filter modifiers. Chainable, but does not care for the value. Works on
+    // the base object too.
+    function counter() {
+        $this->v = $this->i + 1;
+        return $this;
+    }
+    function counter0() {
+        $this->v = $this->i;
+        return $this;
+    }
+    function revcounter() {
+        $this->v = $this->count - $this->i + 1;
+        return $this;
+    }
+    function revcounter0() {
+        $this->v = $this->count - $this->i;
+        return $this;
+    }
     
     // Filter modifiers. Chainable.
     function length() {
@@ -213,7 +237,7 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     
-    function vd() { var_dump($this->value); return $this; }
+    function vd() { var_dump($this->v); return $this; }
     function now($format) {
         return $this->filter_apply(function($v) use ($format) {
             return date($format);
@@ -254,57 +278,11 @@ class DtlIter implements Iterator, ArrayAccess {
             return date($format, $v);
         });
     ;}
-    function counter() {
-        $this->value = $this->i + 1;
-        return $this;
-    }
-    function counter0() {
-        $this->value = $this->i;
-        return $this;
-    }
-    function revcounter() {
-        $this->value = $this->count - $this->i + 1;
-        return $this;
-    }
-    function revcounter0() {
-        $this->value = $this->count - $this->i;
-        return $this;
-    }
-    /**
-     * Return human readable sizes
-     *
-     * @author      Aidan Lister <aidan@php.net>
-     * @version     1.3.0
-     * @link        http://aidanlister.com/2004/04/human-readable-file-sizes/
-     * @param       int     $size        size in bytes
-     * @param       string  $max         maximum unit
-     * @param       string  $system      'si' for SI, 'bi' for binary prefixes
-     * @param       string  $retstring   return string format
-     */
-    static function filesize_readable($size, $max = null, $system = 'bi',
-    $retstring = '%01.1f %s') {
-        // Pick units
-        $systems['si']['prefix'] = array('B', 'K', 'MB', 'GB', 'TB', 'PB');
-        $systems['si']['size']   = 1000;
-        $systems['bi']['prefix'] = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
-        $systems['bi']['size']   = 1024;
-        $sys = isset($systems[$system]) ? $systems[$system] : $systems['si'];
-        // Max unit to display
-        $depth = count($sys['prefix']) - 1;
-        if ($max && false !== $d = array_search($max, $sys['prefix'])) {
-            $depth = $d;
-        }
-        // Loop
-        $i = 0;
-        while ($size >= $sys['size'] && $i < $depth) {
-            $size /= $sys['size'];
-            $i++;
-        }
-        return sprintf($retstring, $size, $sys['prefix'][$i]);
-    }
     function filesizeformat() {
-        return $this->filter_apply(function($v) {
-            return DtlIter::filesize_readable($v);
+        return $this->filter_apply(function($size) {
+            $prefixes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
+            for ($i=0; $size >= 1024 && $i++< 5; $size /= 1024);
+            return sprintf('%01.1f %s', $size, $prefixes[$i]);
         });
     }
 }
