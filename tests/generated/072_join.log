@@ -2,5 +2,5 @@
 ---- EXPECTED OUTPUT
 0glue1glue2
 ---- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::join() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/072_join.php on line 8
+Fatal error: Call to undefined method DtlIter::join() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/072_join.php on line 8
 ---- FAILED

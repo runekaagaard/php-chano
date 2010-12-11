@@ -1,1 +1,1 @@
-Fatal error: Call to undefined method DtlIter::linebreaks() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/080_linebreaks.php on line 5
+Fatal error: Call to undefined method DtlIter::linebreaks() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/080_linebreaks.php on line 5

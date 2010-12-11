@@ -1,2 +1,2 @@
 001- 123
-001+ Fatal error: Call to undefined method DtlIter::lower() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/089_lower.php on line 4
+001+ Fatal error: Call to undefined method DtlIter::lower() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/089_lower.php on line 4

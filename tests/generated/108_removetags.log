@@ -2,5 +2,5 @@
 ---- EXPECTED OUTPUT
 123
 ---- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::removetags() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/108_removetags.php on line 4
+Fatal error: Call to undefined method DtlIter::removetags() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/108_removetags.php on line 4
 ---- FAILED

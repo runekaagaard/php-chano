@@ -1,5 +1,5 @@
 001- 01. x
-001+ Fatal error: Call to undefined method DtlIter::linenumbers() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/082_linenumbers.php on line 13
+001+ Fatal error: Call to undefined method DtlIter::linenumbers() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/082_linenumbers.php on line 13
 002- 02. x
 003- 03. x
 004- 04. x

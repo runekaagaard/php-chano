@@ -1,2 +1,2 @@
 001- <a href="http://31characteruri.com/test/" rel="nofollow">http://31characteruri.com/t...</a>
-001+ Fatal error: Call to undefined method DtlIter::urlizetrunc() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/179_urlizetrunc.php on line 4
+001+ Fatal error: Call to undefined method DtlIter::urlizetrunc() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/179_urlizetrunc.php on line 4

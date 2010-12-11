@@ -2,5 +2,5 @@
 ---- EXPECTED OUTPUT
 default
 ---- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::default_if_none() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/068_default_if_none.php on line 4
+Fatal error: Call to undefined method DtlIter::default_if_none() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/068_default_if_none.php on line 4
 ---- FAILED

@@ -1,5 +1,5 @@
 001- this is a short
-001+ Fatal error: Call to undefined method DtlIter::wordwrap() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/186_wordwrap.php on line 5
+001+ Fatal error: Call to undefined method DtlIter::wordwrap() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/186_wordwrap.php on line 5
 002- paragraph of
 003- text.
 004-   But this line

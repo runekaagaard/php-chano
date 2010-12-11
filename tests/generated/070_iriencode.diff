@@ -1,2 +1,2 @@
 001- S%C3%B8r-Tr%C3%B8ndelag
-001+ Fatal error: Call to undefined method DtlIter::iriencode() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/070_iriencode.php on line 4
+001+ Fatal error: Call to undefined method DtlIter::iriencode() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/070_iriencode.php on line 4

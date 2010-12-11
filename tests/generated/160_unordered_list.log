@@ -2,5 +2,5 @@
 ---- EXPECTED OUTPUT
 <li>item 1</li>
 ---- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::unordered_list() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/160_unordered_list.php on line 9
+Fatal error: Call to undefined method DtlIter::unordered_list() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/160_unordered_list.php on line 9
 ---- FAILED

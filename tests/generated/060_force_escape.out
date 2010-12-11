@@ -1,1 +1,1 @@
-Fatal error: Call to undefined method DtlIter::force_escape() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/060_force_escape.php on line 4
+Fatal error: Call to undefined method DtlIter::force_escape() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/060_force_escape.php on line 4

@@ -6,5 +6,5 @@
 	</ul>
 	</li>
 ---- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::unordered_list() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/155_unordered_list.php on line 10
+Fatal error: Call to undefined method DtlIter::unordered_list() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/155_unordered_list.php on line 10
 ---- FAILED

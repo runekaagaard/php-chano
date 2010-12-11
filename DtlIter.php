@@ -263,6 +263,11 @@ class DtlIter implements Iterator, ArrayAccess {
             return ucfirst($v);
         });
     }
+    function upper() {
+        return $this->filter_apply(function($v) {
+            return strtoupper($v);
+        });
+    }
     function center($width) {
         return $this->filter_apply(function($v) use($width) {
             return str_pad($v, $width, " ", STR_PAD_BOTH);
@@ -277,12 +282,18 @@ class DtlIter implements Iterator, ArrayAccess {
         return $this->filter_apply(function($v) use ($format) {
             return date($format, $v);
         });
-    ;}
+    }
     function filesizeformat() {
         return $this->filter_apply(function($size) {
             $prefixes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
             for ($i=0; $size >= 1024 && $i++< 5; $size /= 1024);
             return sprintf('%01.1f %s', $size, $prefixes[$i]);
+        });
+    }
+    function yesno($yes='yes', $no='no', $maybe='maybe') {
+        return $this->filter_apply(function($v) use ($yes, $no, $maybe) {
+            if ($v === NULL) return $maybe;
+            return $v ? $yes : $no;
         });
     }
 }
