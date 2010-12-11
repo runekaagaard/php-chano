@@ -1,0 +1,2 @@
+001- <a href="http://www.google.co.uk/search?hl=en&q=some+long+url&btnG=Search&meta=" rel="nofollow">http://www.google...</a>
+001+ Fatal error: Call to undefined method DtlIter::urlizetrunc() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/176_urlizetrunc.php on line 4

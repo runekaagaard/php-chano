@@ -1,0 +1,7 @@
+
+---- EXPECTED OUTPUT
+2000.0 PB
+---- ACTUAL OUTPUT
+Notice: Undefined offset: 6 in /home/rune/workspace/php-misc/php-dtl-iterator/DtlIter.php on line 285
+2000.0
+---- FAILED

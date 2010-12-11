@@ -1,0 +1,11 @@
+
+---- EXPECTED OUTPUT
+this is a long
+paragraph of
+text that
+really needs
+to be wrapped
+I'm afraid
+---- ACTUAL OUTPUT
+Fatal error: Call to undefined method DtlIter::wordwrap() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/184_wordwrap.php on line 4
+---- FAILED

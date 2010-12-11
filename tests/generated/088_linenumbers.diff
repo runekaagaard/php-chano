@@ -1,0 +1,2 @@
+001- 1. 123
+001+ Fatal error: Call to undefined method DtlIter::linenumbers() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/088_linenumbers.php on line 4

@@ -1,0 +1,2 @@
+001- \u0022double quotes\u0022 and \u0027single quotes\u0027
+001+ Fatal error: Call to undefined method DtlIter::escapejs() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/015_escapejs.php on line 4

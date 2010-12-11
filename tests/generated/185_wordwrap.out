@@ -1,0 +1,1 @@
+Fatal error: Call to undefined method DtlIter::wordwrap() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/185_wordwrap.php on line 5

@@ -1,0 +1,3 @@
+001- <li>item 1</li>
+001+ Fatal error: Call to undefined method DtlIter::unordered_list() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/django-generated/154_unordered_list.php on line 7
+002- 	<li>item 2</li>
