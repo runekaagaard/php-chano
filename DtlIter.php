@@ -275,6 +275,16 @@ class DtlIter implements Iterator, ArrayAccess {
             return str_pad($v, $width, " ", STR_PAD_BOTH);
         });
     }
+    function ljust($width) {
+        return $this->filter_apply(function($v) use($width) {
+            return str_pad($v, $width, " ", STR_PAD_LEFT);
+        });
+    }
+    function rjust($width) {
+        return $this->filter_apply(function($v) use($width) {
+            return str_pad($v, $width, " ", STR_PAD_RIGHT);
+        });
+    }
     function cut($str) {
         return $this->filter_apply(function($v) use ($str) {
             return str_replace($str, '', $v);
@@ -384,6 +394,11 @@ class DtlIter implements Iterator, ArrayAccess {
             return preg_replace_callback($pat, function($ms) {
                 return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
             }, $v);
+        });
+    }
+    function urlencode() {
+        return $this->filter_apply(function($v) {
+            return urlencode($v);
         });
     }
 }
