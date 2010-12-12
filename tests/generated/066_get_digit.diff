@@ -1,2 +1,0 @@
-001- xyz
-001+ Fatal error: Call to undefined method DtlIter::get_digit() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/066_get_digit.php on line 4

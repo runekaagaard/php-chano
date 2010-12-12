@@ -1,1 +1,0 @@
-Fatal error: Call to undefined method DtlIter::floatformat() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/058_floatformat.php on line 4

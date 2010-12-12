@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 // Exceptions.
 class ReadOnlyError extends Exception {}
 class NotImplementedError extends Exception {}
+class TypeNotArrayError extends Exception {}
 
 /**
  * An irator class that takes an array of arrays as an input and supplies
@@ -22,7 +23,7 @@ class NotImplementedError extends Exception {}
  *    dictsort(reversed)
  *    escapejs
  *    force_escape
- *    get_digit
+ *    getdigit
  *    iriencode
  *    join
  *    last
@@ -266,7 +267,7 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function upper() {
         return $this->filter_apply(function($v) {
-            return strtoupper($v);
+            return mb_strtoupper($v, 'utf-8');
         });
     }
     function center($width) {
@@ -286,10 +287,10 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function filesizeformat() {
         return $this->filter_apply(function($size) {
-            if (empty($size) || !is_numeric($size)) return '0 bytes';
             $prefixes = array('bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
+            if (empty($size) || !is_numeric($size)) return "0 $prefixes[0]";
             for ($i=0; round($size, 1) >= 1024 && $i<5; $size /= 1024, ++$i);
-            if ($i==0) return "$size bytes";
+            if ($i==0) return "$size $prefixes[0]";
             return sprintf('%01.1f %s', $size, $prefixes[$i]);
         });
     }
@@ -326,10 +327,63 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function escapejs() {
-        $from = array("\\"   , "'"      , "\""     , ">"      , "<"      , "&"      , "="      , "-"      , ";"      , "\u2028" , "\u2029" , "\u0000" , "\u0001" , "\u0002" , "\u0003" , "\u0004" , "\u0005" , "\u0006" , "\u0007" , "\b"     , "\t"     , "\n"     , "\v"     , "\f"     , "\r", "\u000e", "\u000f", "\u0010", "\u0011", "\u0012", "\u0013", "\u0014", "\u0015", "\u0016", "\u0017", "\u0018", "\u0019", "\u001a", "\u001b", "\u001c", "\u001d", "\u001e", "\u001f");
-        $to = array('\\u005C', '\\u0027', '\\u0022', '\\u003E', '\\u003C', '\\u0026', '\\u003D', '\\u002D', '\\u003B', '\\u2028', '\\u2029', '\\u0000', '\\u0001', '\\u0002', '\\u0003', '\\u0004', '\\u0005', '\\u0006', '\\u0007', '\\u0008', '\\u0009', '\\u000A', '\\u000B', '\\u000C', '\\u000D', '\\u000E', '\\u000F', '\\u0010', '\\u0011', '\\u0012', '\\u0013', '\\u0014', '\\u0015', '\\u0016', '\\u0017', '\\u0018', '\\u0019', '\\u001A', '\\u001B', '\\u001C', '\\u001D', '\\u001E', '\\u001F');
-        return $this->filter_apply(function($v) use($from, $to) {
-            return str_replace($from, $to, $v);
+        // Thanks Heine!: http://drupal.org/node/479368#pift-results-479368-3198886-3198886.
+        $replace_pairs = array('\\' => '\u005C', '"' => '\u0022', "\x00" => '\u0000', "\x01" => '\u0001', "\x02" => '\u0002', "\x03" => '\u0003', "\x04" => '\u0004', "\x05" => '\u0005', "\x06" => '\u0006', "\x07" => '\u0007', "\x08" => '\u0008', "\x09" => '\u0009', "\x0a" => '\u000A', "\x0b" => '\u000B', "\x0c" => '\u000C', "\x0d" => '\u000D', "\x0e" => '\u000E', "\x0f" => '\u000F', "\x10" => '\u0010', "\x11" => '\u0011', "\x12" => '\u0012', "\x13" => '\u0013', "\x14" => '\u0014', "\x15" => '\u0015', "\x16" => '\u0016', "\x17" => '\u0017', "\x18" => '\u0018', "\x19" => '\u0019', "\x1a" => '\u001A', "\x1b" => '\u001B', "\x1c" => '\u001C', "\x1d" => '\u001D', "\x1e" => '\u001E', "\x1f" => '\u001F', "'" => '\u0027', '<' => '\u003C', '>' => '\u003E', '&' => '\u0026', '/' => '\u002F', "\xe2\x80\xa8" => '\u2028', "\xe2\x80\xa9" => '\u2029',);       
+        return $this->filter_apply(function($v) use($replace_pairs) {
+            return strtr($v, $replace_pairs);
+        });
+    }
+    function first() {
+        if (!is_array($this->v)) throw new TypeNotArrayError;
+        reset($this->v);
+        $this->v = current($this->v);
+        return $this;
+    }
+    function fixampersands() {
+        return $this->filter_apply(function($v) {
+            return strtr($v, '&', '&amp;');
+        });
+    }
+    function floatformat($ds=null) {
+        return $this->filter_apply(function($v) use($ds) {
+            if (!is_numeric($v)) return '';
+            if (!is_numeric($ds)) $ds = '-1';
+            $ds = (string)$ds;
+            $hide_zeros = True;
+            if ($ds) {
+                if ($ds[0] == '-') $ds = ltrim($ds, '-');
+                else $hide_zeros = False;
+            }
+            if ($hide_zeros && (int)$v == $v) return $v;
+            $ds = $ds ? $ds : 1;
+            return sprintf("%.{$ds}f", round($v, $ds));
+        });
+    }
+    function getdigit($n) {
+        return $this->filter_apply(function($v) use($n) {
+            if (!intval($v) || !intval($n)) return $v;
+            $v_s = (string)$v;
+            if (!isset($v_s[$n-1])) return $v;
+            else return $v_s[$n-1];
+        });
+    }
+    function lower() {
+        return $this->filter_apply(function($v) {
+            return mb_strtolower($v, 'utf-8');
+        });
+    }
+    function title() {
+        return $this->filter_apply(function($v) {
+            return mb_convert_case($v, MB_CASE_TITLE, "utf-8");
+        });
+    }
+    function urlize() {
+        throw new NotImplementedError;
+        return $this->filter_apply(function($v) {
+            $pat = '#www.[a-zA-Z0-9-_].[a-z]{2.3}#';
+            return preg_replace_callback($pat, function($ms) {
+                return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
+            }, $v);
         });
     }
 }

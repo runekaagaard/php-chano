@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-0
----- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::first() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/033_first.php on line 8
----- FAILED

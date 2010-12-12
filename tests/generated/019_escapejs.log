@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-paragraph separator:\u2029and line separator:\u2028
----- ACTUAL OUTPUT
-paragraph separator:\u000Aand line separator:\u000A
----- FAILED
