@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-<a href="https://google.com" rel="nofollow">https://google.com</a>
----- ACTUAL OUTPUT
-https://google.com
----- FAILED

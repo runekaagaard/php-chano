@@ -387,18 +387,222 @@ class DtlIter implements Iterator, ArrayAccess {
             return mb_convert_case($v, MB_CASE_TITLE, "utf-8");
         });
     }
+
     function urlize() {
-        throw new NotImplementedError;
-        return $this->filter_apply(function($v) {
-            $pat = '#www.[a-zA-Z0-9-_].[a-z]{2.3}#';
-            return preg_replace_callback($pat, function($ms) {
-                return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
-            }, $v);
-        });
+        $v = make_clickable($this->v);
+        $protocols = array ('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet', 'mms', 'rtsp', 'svn');
+        if (strpos($v, 'www') !== FALSE) {
+            foreach ($protocols as $p) $v = str_replace(">$p://", '>', $v);
+        }
+        $v = preg_replace_callback('#(^| )[a-z0-9-_+]+\.(com|org|net)#', function($ms) {
+            return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
+        }, $v);
+        return $v;
     }
     function urlencode() {
         return $this->filter_apply(function($v) {
             return urlencode($v);
         });
     }
+}
+
+/**
+ * Checks and cleans a URL.
+ *
+ * A number of characters are removed from the URL. If the URL is for displaying
+ * (the default behaviour) amperstands are also replaced. The 'clean_url' filter
+ * is applied to the returned cleaned URL.
+ *
+ * @since 2.8.0
+ * @uses wp_kses_bad_protocol() To only permit protocols in the URL set
+ *		via $protocols or the common ones set in the function.
+ *
+ * @param string $url The URL to be cleaned.
+ * @param array $protocols Optional. An array of acceptable protocols.
+ *		Defaults to 'http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet' if not set.
+ * @param string $_context Private. Use esc_url_raw() for database usage.
+ * @return string The cleaned $url after the 'clean_url' filter is applied.
+ */
+function esc_url( $url, $protocols = null, $_context = 'display' ) {
+	$original_url = $url;
+
+	if ( '' == $url )
+		return $url;
+	$url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $url);
+	$strip = array('%0d', '%0a', '%0D', '%0A');
+	$url = _deep_replace($strip, $url);
+	$url = str_replace(';//', '://', $url);
+	/* If the URL doesn't appear to contain a scheme, we
+	 * presume it needs http:// appended (unless a relative
+	 * link starting with / or a php file).
+	 */
+	if ( strpos($url, ':') === false &&
+		substr( $url, 0, 1 ) != '/' && substr( $url, 0, 1 ) != '#' && !preg_match('/^[a-z0-9-]+?\.php/i', $url) )
+		$url = 'http://' . $url;
+
+	// Replace ampersands and single quotes only when displaying.
+	if ( 'display' == $_context ) {
+		$url = preg_replace('/&([^#])(?![a-z]{2,8};)/', '&#038;$1', $url);
+		$url = str_replace( "'", '&#039;', $url );
+	}
+
+	if ( !is_array($protocols) )
+		$protocols = array ('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet', 'mms', 'rtsp', 'svn');
+	#if ( wp_kses_bad_protocol( $url, $protocols ) != $url )
+		#return '';
+    return $url;
+	#return apply_filters('clean_url', $url, $original_url, $_context);
+}
+
+/**
+ * Callback to convert URI match to HTML A element.
+ *
+ * This function was backported from 2.5.0 to 2.3.2. Regex callback for {@link
+ * make_clickable()}.
+ *
+ * @since 2.3.2
+ * @access private
+ *
+ * @param array $matches Single Regex Match.
+ * @return string HTML A element with URI address.
+ */
+function _make_url_clickable_cb($matches) {
+	$url = $matches[2];
+
+	$url = esc_url($url);
+	if ( empty($url) )
+		return $matches[0];
+
+	return $matches[1] . "<a href=\"$url\" rel=\"nofollow\">$url</a>";
+}
+
+/**
+ * Callback to convert URL match to HTML A element.
+ *
+ * This function was backported from 2.5.0 to 2.3.2. Regex callback for {@link
+ * make_clickable()}.
+ *
+ * @since 2.3.2
+ * @access private
+ *
+ * @param array $matches Single Regex Match.
+ * @return string HTML A element with URL address.
+ */
+function _make_web_ftp_clickable_cb($matches) {
+	$ret = '';
+	$dest = $matches[2];
+	$dest = 'http://' . $dest;
+	$dest = esc_url($dest);
+	if ( empty($dest) )
+		return $matches[0];
+
+	// removed trailing [.,;:)] from URL
+	if ( in_array( substr($dest, -1), array('.', ',', ';', ':', ')') ) === true ) {
+		$ret = substr($dest, -1);
+		$dest = substr($dest, 0, strlen($dest)-1);
+	}
+	return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\">$dest</a>$ret";
+}
+
+/**
+ * Callback to convert email address match to HTML A element.
+ *
+ * This function was backported from 2.5.0 to 2.3.2. Regex callback for {@link
+ * make_clickable()}.
+ *
+ * @since 2.3.2
+ * @access private
+ *
+ * @param array $matches Single Regex Match.
+ * @return string HTML A element with email address.
+ */
+function _make_email_clickable_cb($matches) {
+	$email = $matches[2] . '@' . $matches[3];
+	return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
+}
+
+/**
+ * Convert plaintext URI to HTML links.
+ *
+ * Converts URI, www and ftp, and email addresses. Finishes by fixing links
+ * within links.
+ *
+ * @since 0.71
+ *
+ * @param string $ret Content to convert URIs.
+ * @return string Content with converted URIs.
+ */
+function make_clickable($ret) {
+	$ret = ' ' . $ret;
+	// in testing, using arrays here was found to be faster
+	$ret = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff\#$%&~/=?@\[\](+-]|[.,;:](?![\s<]|(\))?([\s]|$))|(?(1)\)(?![\s<.,;:]|$)|\)))+)#is', '_make_url_clickable_cb', $ret);
+	$ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', '_make_web_ftp_clickable_cb', $ret);
+	$ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', '_make_email_clickable_cb', $ret);
+	// this one is not in an array because we need it to run last, for cleanup of accidental links within links
+	$ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);
+	$ret = trim($ret);
+	return $ret;
+}
+
+/**
+ * Adds rel nofollow string to all HTML A elements in content.
+ *
+ * @since 1.5.0
+ *
+ * @param string $text Content that may contain HTML A elements.
+ * @return string Converted content.
+ */
+function wp_rel_nofollow( $text ) {
+	// This is a pre save filter, so text is already escaped.
+	$text = stripslashes($text);
+	$text = preg_replace_callback('|<a (.+?)>|i', 'wp_rel_nofollow_callback', $text);
+	$text = esc_sql($text);
+	return $text;
+}
+
+/**
+ * Callback to used to add rel=nofollow string to HTML A element.
+ *
+ * Will remove already existing rel="nofollow" and rel='nofollow' from the
+ * string to prevent from invalidating (X)HTML.
+ *
+ * @since 2.3.0
+ *
+ * @param array $matches Single Match
+ * @return string HTML A Element with rel nofollow.
+ */
+function wp_rel_nofollow_callback( $matches ) {
+	$text = $matches[1];
+	$text = str_replace(array(' rel="nofollow"', " rel='nofollow'"), '', $text);
+	return "<a $text rel=\"nofollow\">";
+}
+
+/**
+ * Perform a deep string replace operation to ensure the values in $search are no longer present
+ *
+ * Repeats the replacement operation until it no longer replaces anything so as to remove "nested" values
+ * e.g. $subject = '%0%0%0DDD', $search ='%0D', $result ='' rather than the '%0%0DD' that
+ * str_replace would return
+ *
+ * @since 2.8.1
+ * @access private
+ *
+ * @param string|array $search
+ * @param string $subject
+ * @return string The processed string
+ */
+function _deep_replace( $search, $subject ) {
+	$found = true;
+	$subject = (string) $subject;
+	while ( $found ) {
+		$found = false;
+		foreach ( (array) $search as $val ) {
+			while ( strpos( $subject, $val ) !== false ) {
+				$found = true;
+				$subject = str_replace( $val, '', $subject );
+			}
+		}
+	}
+
+	return $subject;
 }

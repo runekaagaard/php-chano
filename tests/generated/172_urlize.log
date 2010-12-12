@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-<a href="mailto:info@djangoproject.org">info@djangoproject.org</a>
----- ACTUAL OUTPUT
-info@djangoproject.org
----- FAILED
