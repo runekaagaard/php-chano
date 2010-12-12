@@ -1,2 +1,0 @@
-001- and lots of whitespace: \u000D\u000A\u0009\u000B\u000C\u0008
-001+ Fatal error: Call to undefined method DtlIter::escapejs() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/017_escapejs.php on line 5

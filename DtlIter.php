@@ -84,7 +84,8 @@ class DtlIter implements Iterator, ArrayAccess {
     function out($escape = null) {
         if ($escape === null) $escape = $this->autoescape;
         
-        $s = $this->autoescape ? htmlentities((string)$this->v)
+        $s = $this->autoescape 
+            ? htmlspecialchars((string)$this->v, ENT_NOQUOTES, 'utf-8')
             : (string)$this->v;
         return (string)$s;
     }
@@ -148,9 +149,9 @@ class DtlIter implements Iterator, ArrayAccess {
     }
 
     function filter_apply($function) {
-        if (is_scalar($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
-            if (is_scalar($v))
+            if (!is_array($v) || $this->v === null)
                 $v = $function($v);
         return $this;
     }
@@ -162,7 +163,7 @@ class DtlIter implements Iterator, ArrayAccess {
     // Filter commands. Non-chainable.
     function emptyor($default) {
         $value = $this->filter_reset();
-        $return = empty($value) ? $default : $value;
+        return empty($value) ? $default : $value;
     }
     function isfirst() { return $this->i === 0; }
     function islast() { return $this->i === $this->count; }
@@ -285,15 +286,50 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function filesizeformat() {
         return $this->filter_apply(function($size) {
-            $prefixes = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
-            for ($i=0; $size >= 1024 && $i++< 5; $size /= 1024);
+            if (empty($size) || !is_numeric($size)) return '0 bytes';
+            $prefixes = array('bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
+            for ($i=0; round($size, 1) >= 1024 && $i<5; $size /= 1024, ++$i);
+            if ($i==0) return "$size bytes";
             return sprintf('%01.1f %s', $size, $prefixes[$i]);
         });
     }
-    function yesno($yes='yes', $no='no', $maybe='maybe') {
-        return $this->filter_apply(function($v) use ($yes, $no, $maybe) {
-            if ($v === NULL) return $maybe;
-            return $v ? $yes : $no;
+    function yesno($yes=null, $no=null, $maybe=null) {
+        $choices = array(
+            true => $yes ? $yes : 'yes',
+            false => $no ? $no : 'no',
+            null => $maybe ? $maybe : 'maybe',
+        );
+        return $this->filter_apply(function($v) use ($choices, $no, $maybe) {
+            if ($v === null && $no && !$maybe) $v = False;
+            if ($v !== null) $v = (bool)$v;
+            return $choices[$v];
+        });
+    }
+    function wordwrap($width) {
+        return $this->filter_apply(function($v) use ($width) {
+            return wordwrap($v, $width);
+        });
+    }
+    function wordcount() {
+        return $this->filter_apply(function($v) {
+            return str_word_count($v, 0, '0123456789');
+        });
+    }
+    function len() {
+        return $this->filter_apply(function($v) {
+            return strlen($v);
+        });
+    }
+    function stringformat($format) {
+        return $this->filter_apply(function($v) use($format) {
+            return sprintf("%$format", $v);
+        });
+    }
+    function escapejs() {
+        $from = array("\\"   , "'"      , "\""     , ">"      , "<"      , "&"      , "="      , "-"      , ";"      , "\u2028" , "\u2029" , "\u0000" , "\u0001" , "\u0002" , "\u0003" , "\u0004" , "\u0005" , "\u0006" , "\u0007" , "\b"     , "\t"     , "\n"     , "\v"     , "\f"     , "\r", "\u000e", "\u000f", "\u0010", "\u0011", "\u0012", "\u0013", "\u0014", "\u0015", "\u0016", "\u0017", "\u0018", "\u0019", "\u001a", "\u001b", "\u001c", "\u001d", "\u001e", "\u001f");
+        $to = array('\\u005C', '\\u0027', '\\u0022', '\\u003E', '\\u003C', '\\u0026', '\\u003D', '\\u002D', '\\u003B', '\\u2028', '\\u2029', '\\u0000', '\\u0001', '\\u0002', '\\u0003', '\\u0004', '\\u0005', '\\u0006', '\\u0007', '\\u0008', '\\u0009', '\\u000A', '\\u000B', '\\u000C', '\\u000D', '\\u000E', '\\u000F', '\\u0010', '\\u0011', '\\u0012', '\\u0013', '\\u0014', '\\u0015', '\\u0016', '\\u0017', '\\u0018', '\\u0019', '\\u001A', '\\u001B', '\\u001C', '\\u001D', '\\u001E', '\\u001F');
+        return $this->filter_apply(function($v) use($from, $to) {
+            return str_replace($from, $to, $v);
         });
     }
 }

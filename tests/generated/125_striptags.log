@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-some html with alert("You smell") disallowed  tags
----- ACTUAL OUTPUT
-some html with alert(&quot;You smell&quot;) disallowed  tags
----- FAILED

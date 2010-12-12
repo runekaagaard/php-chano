@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-\u0022double quotes\u0022 and \u0027single quotes\u0027
----- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::escapejs() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/015_escapejs.php on line 4
----- FAILED

@@ -1,8 +1,0 @@
-001- this is a
-001+ Fatal error: Call to undefined method DtlIter::wordwrap() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/185_wordwrap.php on line 5
-002- short
-003- paragraph of
-004- text.
-005-   But this
-006- line should be
-007- indented

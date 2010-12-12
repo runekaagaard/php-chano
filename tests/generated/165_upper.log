@@ -2,5 +2,5 @@
 ---- EXPECTED OUTPUT
 Ë
 ---- ACTUAL OUTPUT
-&Atilde;&laquo;
+ë
 ---- FAILED

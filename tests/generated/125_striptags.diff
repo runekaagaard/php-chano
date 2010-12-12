@@ -1,2 +1,0 @@
-001- some html with alert("You smell") disallowed  tags
-001+ some html with alert(&quot;You smell&quot;) disallowed  tags

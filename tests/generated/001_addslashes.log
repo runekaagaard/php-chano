@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-\"double quotes\" and \'single quotes\'
----- ACTUAL OUTPUT
-\&quot;double quotes\&quot; and \'single quotes\'
----- FAILED

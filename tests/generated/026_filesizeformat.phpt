@@ -6,4 +6,4 @@ include dirname(__FILE__) . '/../../DtlIter.php';
 $items = new DtlIter(array(array('input' => 1073741823)));
 foreach ($items as $i) echo $i->input->filesizeformat();
 --EXPECT--
-1024.0 MB
+1.0 GB
