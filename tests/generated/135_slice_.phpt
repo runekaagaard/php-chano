@@ -4,6 +4,6 @@ A generated testfile for the "slice_" filter.
 <?php
 include dirname(__FILE__) . '/../../DtlIter.php';
 $items = new DtlIter(array(array('input' => 'abcdefg')));
-foreach ($items as $i) echo $i->input->slice_('0::2');
+foreach ($items as $i) echo $i->input->slice('0::2');
 --EXPECT--
 aceg

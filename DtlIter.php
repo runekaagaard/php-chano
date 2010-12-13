@@ -428,18 +428,42 @@ class DtlIter implements Iterator, ArrayAccess {
                     return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
                 }, $v);});
     }
+    function truncatewords($n) {
+        // Thanks banderson623: http://snippets.dzone.com/posts/show/412.
+        return $this->filter_apply(function($v) use($n) {
+            $parts = explode(' ', $v);
+            if(count($parts) > $n && $n>0)
+                return implode(' ', array_slice($parts, 0, $n)) . ' ...';
+            else return $v;
+        });
+    }
     function urlencode() {
         return $this->filter_apply(function($v) {
             return urlencode($v);
         });
     }
-    function truncatewords($n) {
-        return $this->filter_apply(function($v) use($n) {
-            $parts = explode(' ', $v);
-            if(count($parts) > $n && $n > 0)
-                return implode(' ', array_slice($parts, 0, $n)) . ' ...';
-            else return $v;
+    function slice($str) {
+        return $this->filter_apply(function($v) use($str) {
+            $ps = explode(':', $str);
+            $count = count($ps);
+            if ($count == 1) {
+                $a = $ps[0];
+                if ($a == 0) return '';
+                else return mb_substr($v, 0, $a, 'utf-8');
+            }
+            if ($count == 2) {
+                list($a,$b) = $ps;
+                return mb_substr($v, $a, $b-$a, 'utf-8');
+            }
+            if ($count == 3) {
+                list ($a, $dummy, $b) = $ps;
+                $v = mb_substr($v, $a, strlen($v), 'utf-8');
+                $len = strlen($v) - 1;
+                $result = '';
+                for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
+                return $result;
+            }
+            return '';
         });
     }
-
 }
