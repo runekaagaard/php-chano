@@ -433,4 +433,13 @@ class DtlIter implements Iterator, ArrayAccess {
             return urlencode($v);
         });
     }
+    function truncatewords($n) {
+        return $this->filter_apply(function($v) use($n) {
+            $parts = explode(' ', $v);
+            if(count($parts) > $n && $n > 0)
+                return implode(' ', array_slice($parts, 0, $n)) . ' ...';
+            else return $v;
+        });
+    }
+
 }
