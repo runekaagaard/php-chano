@@ -392,12 +392,13 @@ class DtlIter implements Iterator, ArrayAccess {
              , " $v");
         $v = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.'.
              '\-;:=,?@\[\]+]+)#is', function ($ms) { return empty($ms[2])
-            ? $ms[0]
-            : sprintf('<a href="http://%1$s" rel="nofollow">http://%1$s</a>',
-            trim($ms[2], '.,;:)')); }, $v);
+                ? $ms[0]
+                : sprintf('<a href="http://%1$s" rel="nofollow">http://%1$s</a>'
+                , trim($ms[2], '.,;:)')); }, $v);
         $v = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+'
              . '[0-9a-z]{2,})#i', function ($ms) { return
-             "$ms[1]<a href=\"mailto:$ms[2]@$ms[3]\">$ms[2]@$ms[3]</a>"; }, $v);
+                    "$ms[1]<a href=\"mailto:$ms[2]@$ms[3]\">$ms[2]@$ms[3]</a>";
+                }, $v);
         $v = trim(preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i",
              "$1$3</a>", $v));
         if (strpos($v, 'www') !== FALSE)
