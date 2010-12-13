@@ -7,4 +7,3 @@ $items = new DtlIter(array(array('input' => array (
 ))));
 foreach ($items as $i) echo $i->input->pluralize();
 --EXPECT--
-s

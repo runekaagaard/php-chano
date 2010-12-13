@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-s
----- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::pluralize() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/115_pluralize.php on line 5
----- FAILED

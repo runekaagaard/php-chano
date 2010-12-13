@@ -198,6 +198,18 @@ class DtlIter implements Iterator, ArrayAccess {
         }
         return '';
     }
+    function pluralize($a='s', $b=null) {
+        if (empty($b)) {
+            list($singular, $plural) = array('', $a);
+        } else {
+            list($singular, $plural) = array($a, $b);
+        }
+        if (is_scalar($this->v)) {
+            if ((int)$this->v == 0) return $plural;
+            return (int)$this->v > 1 ? $plural : $singular;
+        }
+        return count($this->v) > 1 ? $plural : $singular;
+    }
     function safe() { return $this->out(false); }
     function divisibleby($divisor) {
         return ($this->filter_reset() % $divisor) === 0;

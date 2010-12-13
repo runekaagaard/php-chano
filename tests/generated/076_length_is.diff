@@ -1,2 +1,0 @@
-001- 
-001+ Fatal error: Call to undefined method DtlIter::length_is() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/076_length_is.php on line 5
