@@ -69,6 +69,7 @@ class DtlIter implements Iterator, ArrayAccess {
     public $previous_lookups = array();
 
     public $autoescape = True;
+    public $autoescape_off_until_tostring = false;
     
     function  __construct($items) {
         $this->items = $items;
@@ -84,9 +85,10 @@ class DtlIter implements Iterator, ArrayAccess {
 
     function out($escape = null) {
         if ($escape === null) $escape = $this->autoescape;
-        $s = $this->autoescape 
+        $s = !$this->autoescape_off_until_tostring && $escape
             ? htmlspecialchars((string)$this->v, ENT_NOQUOTES, 'utf-8')
             : (string)$this->v;
+        $this->autoescape_off_until_tostring = FALSE;
         return (string)$s;
     }
     
@@ -142,6 +144,7 @@ class DtlIter implements Iterator, ArrayAccess {
         $value = $this->v;
         $this->v = self::INITIAL;
         $path = $this->lookup_path_reset();
+        $this->autoescape_off_until_tostring = FALSE;
         return $value;
     }
     function filter_apply($function) {
@@ -405,15 +408,25 @@ class DtlIter implements Iterator, ArrayAccess {
              }, $v);
     }
     function urlize() {
-        $autosecape = $this->autoescape;
-        $this->autoescape_off();
+        $this->autoescape_off_until_tostring = TRUE;
         return $this->filter_apply(function($v) {
             return DtlIter::_urlize($v);
         });
-        $this->autoescape = $autosecape;
-        return $this;
     }
-
+    function urlizetrunc($len) {
+        // TODO: This passes the tests but also truncates existing html
+        // addresses which is probably not the desired behavior. Change _urlize
+        // to support truncate.
+        $this->autoescape_off_until_tostring = TRUE;
+        return $this->filter_apply(function($v) use ($len) {
+            $v = DtlIter::_urlize($v);
+            return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
+                function($ms) use ($len) {
+                    if ($len <= 3) return $ms[1] . '...' . $ms[3];
+                    if (strlen($ms[2]) <= $len) return $ms[0];
+                    return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
+                }, $v);});
+    }
     function urlencode() {
         return $this->filter_apply(function($v) {
             return urlencode($v);
