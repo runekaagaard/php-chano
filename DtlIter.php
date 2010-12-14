@@ -507,7 +507,7 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function linenumbers() {
-        // TODO: Make pretty.
+        // TODO: Make prety.
         return $this->filter_apply(function($v) {
             $lines = explode("\n", trim($v));
             $strlen = strlen(count($lines));
@@ -520,6 +520,15 @@ class DtlIter implements Iterator, ArrayAccess {
                 ++$i;
             }
             return $string;
+        });
+    }
+    function removetags() {
+        $this->autoescape_off_until_tostring = TRUE;
+        $args = func_get_args();
+        if (empty($args)) return $this;
+        $tags = implode('|', $args);
+        return $this->filter_apply(function($v) use($tags) {
+            return preg_replace("/<\\/?($tags)(\\s+.*?>|>)/Uis", '', $v);
         });
     }
 }
