@@ -1,3 +1,0 @@
-001- <li>ulitem-a</li>
-001+ Fatal error: Call to undefined method DtlIter::unordered_list() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/159_unordered_list.php on line 7
-002- 	<li>ulitem-b</li>

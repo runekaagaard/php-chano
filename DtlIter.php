@@ -46,7 +46,7 @@ class TypeNotArrayError extends Exception {}
  *    title
  *    truncatewords
  *    truncatewords_html
- *    unordered_list
+ *    unorderedlist
  *    upper
  *    urlencode
  *    urlize
@@ -199,16 +199,44 @@ class DtlIter implements Iterator, ArrayAccess {
         return '';
     }
     function pluralize($a='s', $b=null) {
-        if (empty($b)) {
-            list($singular, $plural) = array('', $a);
-        } else {
-            list($singular, $plural) = array($a, $b);
-        }
+        if (empty($b)) list($singular, $plural) = array('', $a);
+        else list($singular, $plural) = array($a, $b);
         if (is_scalar($this->v)) {
             if ((int)$this->v == 0) return $plural;
             return (int)$this->v > 1 ? $plural : $singular;
         }
-        return count($this->v) > 1 ? $plural : $singular;
+        else return count($this->v) > 1 ? $plural : $singular;
+    }
+    function _clean_list($list) {
+        $new_list = array();
+        foreach ($list as $key => $item) {
+            if (is_scalar($item)) $new_list[$key] = $item;
+            elseif (!empty($item) && is_array($item))
+                $new_list[$key] = $this->_clean_list($item);
+        }
+        return $new_list;
+    }
+    function unorderedlist($list=null, $indent=1) {
+        $html = '';
+        $ws = str_repeat("\t", $indent);
+        if ($list === null) $list = $this->_clean_list($this->v);
+        $vs = array_values($list);
+        $count = count($vs);
+        for ($i=0; $i<$count; ++$i) {
+            $item = $vs[$i];
+            $next_item = isset($vs[$i+1]) ? $vs[$i+1] : false;
+            if (is_scalar($item)) $html .= "$ws<li>$item";
+            if (is_array($item)) $html .= $this->unorderedlist($item, $indent);
+            if (is_array($next_item) && !is_array($item)) {
+                $html .=
+                    "\n$ws<ul>\n"
+                    . $this->unorderedlist($next_item, $indent+1)
+                    . "$ws</ul>\n$ws";
+                ++$i;
+            }
+            if (is_scalar($item)) $html .= "</li>\n";
+        }
+        return $html;
     }
     function safe() { return $this->out(false); }
     function divisibleby($divisor) {
@@ -476,6 +504,22 @@ class DtlIter implements Iterator, ArrayAccess {
                 return $result;
             }
             return '';
+        });
+    }
+    function linenumbers() {
+        // TODO: Make pretty.
+        return $this->filter_apply(function($v) {
+            $lines = explode("\n", trim($v));
+            $strlen = strlen(count($lines));
+            $string = '';
+            $i = 1;
+            foreach ($lines as $line) {
+                $string .= 
+                    str_pad($i, $strlen, '0', STR_PAD_LEFT)
+                    . '. ' . $line . "\n";
+                ++$i;
+            }
+            return $string;
         });
     }
 }

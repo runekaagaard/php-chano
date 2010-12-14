@@ -1,7 +1,0 @@
-
----- EXPECTED OUTPUT
-<li>item 1</li>
-	<li>item 2</li>
----- ACTUAL OUTPUT
-Fatal error: Call to undefined method DtlIter::unordered_list() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/154_unordered_list.php on line 7
----- FAILED

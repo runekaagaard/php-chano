@@ -1,5 +1,5 @@
 --TEST--
-A generated testfile for the "unordered_list" filter.
+A generated testfile for the "unorderedlist" filter.
 --FILE--
 <?php
 include dirname(__FILE__) . '/../../DtlIter.php';
@@ -9,6 +9,6 @@ $items = new DtlIter(array(array('input' => array (
   array (
   ),
 ))));
-foreach ($items as $i) echo $i->input->unordered_list();
+foreach ($items as $i) echo $i->input->unorderedlist();
 --EXPECT--
 	<li>item 1</li>

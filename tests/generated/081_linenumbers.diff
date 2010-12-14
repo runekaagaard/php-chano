@@ -1,3 +1,0 @@
-001- 1. line 1
-001+ Fatal error: Call to undefined method DtlIter::linenumbers() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/081_linenumbers.php on line 5
-002- 2. line 2
