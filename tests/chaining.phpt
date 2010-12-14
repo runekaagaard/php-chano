@@ -12,4 +12,4 @@ foreach (new DtlIter($items) as $i)
 foreach (new DtlIter($items) as $i)
     echo $i->a->length()->add(5)->widthratio(10, 100);
 --EXPECT--
-:  &Atilde;&brvbar;f\'   ::   &gt;bar   :11090
+:  æf\'   ::   &gt;bar   :11090
