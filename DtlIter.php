@@ -3,6 +3,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Includes.
+require realpath(dirname(__FILE__) . '/lib/text.php');
+
 // Exceptions.
 class ReadOnlyError extends Exception {}
 class NotImplementedError extends Exception {}
@@ -45,7 +48,7 @@ class TypeNotArrayError extends Exception {}
  *    timeuntil
  *    title
  *    truncatewords
- *    truncatewords_html
+ *    truncatewordshtml
  *    unorderedlist
  *    upper
  *    urlencode
@@ -475,6 +478,27 @@ class DtlIter implements Iterator, ArrayAccess {
             if(count($parts) > $n && $n>0)
                 return implode(' ', array_slice($parts, 0, $n)) . ' ...';
             else return $v;
+        });
+    }
+    function truncatewordshtml($n) {
+        $this->autoescape_off_until_tostring = TRUE;
+        return $this->filter_apply(function($v) use($n) {
+            if ($n == 0) return '';
+            $parts = explode(' ', strip_tags($v));
+            $found_words = 0;
+            $found_words_len = 0;
+            foreach ($parts as $part) {
+                $found_words_len += mb_strlen($part);
+                if (preg_match('#[\w][\w-]+[\w]#u', $part)) ++$found_words;
+                if ($found_words == $n) {
+                    // Thankyou cakePHP!
+                    return dtl_truncate($v, $found_words_len+4, array(
+                        'ending' => ' ...', 'exact' => true, 'html' => true,
+                    ));
+                }
+                ++$found_words_len;
+            }
+            return $v;
         });
     }
     function urlencode() {
