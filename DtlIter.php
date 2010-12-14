@@ -21,11 +21,11 @@ class TypeNotArrayError extends Exception {}
  *
  * Implement the following filters:
  *    floatformat
- *    force_escape
+ *    forceescape
  *    spaceless
  *    dictsort(reversed)
  *    escapejs
- *    force_escape
+ *    forceescape
  *    getdigit
  *    iriencode
  *    join
@@ -161,8 +161,8 @@ class DtlIter implements Iterator, ArrayAccess {
     }
 
     // Filter flags commands.
-    function autoescape_on() { $this->autoescape = true; }
-    function autoescape_off() { $this->autoescape = false; }
+    function autoescapeon() { $this->autoescape = true; }
+    function autoescapeoff() { $this->autoescape = false; }
 
     // Filter commands. Non-chainable.
     function emptyor($default) {
@@ -247,7 +247,7 @@ class DtlIter implements Iterator, ArrayAccess {
     function divisibleby($divisor) {
         return ($this->filter_reset() % $divisor) === 0;
     }
-    function escape() { return htmlentities($this->filter_reset()); }
+    function forceescape() { return htmlentities($this->filter_reset(), null, 'utf-8'); }
 
     // Filter modifiers. Chainable, but does not care for the value. Works on
     // the base object too.
@@ -333,6 +333,11 @@ class DtlIter implements Iterator, ArrayAccess {
     function date($format) {
         return $this->filter_apply(function($v) use ($format) {
             return date($format, $v);
+        });
+    }
+    function time($format) {
+        return $this->filter_apply(function($v) use ($format) {
+            return date($format, mktime($v));
         });
     }
     function filesizeformat() {
@@ -605,5 +610,16 @@ class DtlIter implements Iterator, ArrayAccess {
             $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
             return $v;
         });
+    }
+    function phone2numeric() {
+        return $this->filter_apply(function($v) {
+            $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2', 'd' => '3', 'e' => '3', 'f' => '3', 'g' => '4', 'h' => '4', 'i' => '4', 'j' => '5', 'k' => '5', 'l' => '5', 'm' => '6', 'n' => '6', 'o' => '6', 'p' => '7', 'q' => '7', 'r' => '7', 's' => '7', 't' => '8', 'u' => '8', 'v' => '8', 'w' => '9', 'x' => '9', 'y' => '9', 'z' => '9');
+            return strtr($v, $replace_pairs);
+        });
+    }
+    function escape() {
+        $this->autoescape_off_until_tostring = false;
+        $this->autoescape = true;
+        return $this;
     }
 }
