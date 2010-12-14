@@ -531,4 +531,14 @@ class DtlIter implements Iterator, ArrayAccess {
             return preg_replace("/<\\/?($tags)(\\s+.*?>|>)/Uis", '', $v);
         });
     }
+    function linebreaks() {
+        throw new NotImplementedError;
+        $this->autoescape_off_until_tostring = TRUE;
+        return $this->filter_apply(function($v) {
+            return '<p>'
+                . str_replace("\n", '<br />', $v)
+                . '</p>'
+            ;
+        });
+    }
 }
