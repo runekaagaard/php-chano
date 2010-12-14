@@ -74,9 +74,12 @@ class DtlIter implements Iterator, ArrayAccess {
     public $autoescape = True;
     public $autoescape_off_until_tostring = false;
 
-    public $encoding = 'utf-8';
+    public static $encoding = 'utf-8';
     
-    function  __construct($items) {
+    function  __construct($items, array $options=array()) {
+        $default = array('encoding' => self::$encoding);
+        $options = array_merge($default, $options);
+        self::$encoding = $options['encoding'];
         $this->items = $items;
         $this->count = count($items) - 1;
     }
@@ -91,7 +94,7 @@ class DtlIter implements Iterator, ArrayAccess {
     function out($escape = null) {
         if ($escape === null) $escape = $this->autoescape;
         $s = !$this->autoescape_off_until_tostring && $escape
-            ? htmlspecialchars((string)$this->v, ENT_NOQUOTES, 'utf-8')
+            ? htmlspecialchars((string)$this->v, ENT_NOQUOTES, self::$encoding)
             : (string)$this->v;
         $this->autoescape_off_until_tostring = FALSE;
         return (string)$s;
@@ -247,7 +250,9 @@ class DtlIter implements Iterator, ArrayAccess {
     function divisibleby($divisor) {
         return ($this->filter_reset() % $divisor) === 0;
     }
-    function forceescape() { return htmlentities($this->filter_reset(), null, 'utf-8'); }
+    function forceescape() { 
+        return htmlentities($this->filter_reset(), null, self::$encoding);
+    }
 
     // Filter modifiers. Chainable, but does not care for the value. Works on
     // the base object too.
@@ -307,7 +312,7 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function upper() {
         return $this->filter_apply(function($v) {
-            return mb_strtoupper($v, 'utf-8');
+            return mb_strtoupper($v, DtlIter::$encoding);
         });
     }
     function center($width) {
@@ -424,12 +429,12 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function lower() {
         return $this->filter_apply(function($v) {
-            return mb_strtolower($v, 'utf-8');
+            return mb_strtolower($v, DtlIter::$encoding);
         });
     }
     function title() {
         return $this->filter_apply(function($v) {
-            return mb_convert_case($v, MB_CASE_TITLE, "utf-8");
+            return mb_convert_case($v, MB_CASE_TITLE, DtlIter::$encoding);
         });
     }
     static function _urlize($v) {
@@ -526,15 +531,15 @@ class DtlIter implements Iterator, ArrayAccess {
             if ($count == 1) {
                 $a = $ps[0];
                 if ($a == 0) return '';
-                else return mb_substr($v, 0, $a, 'utf-8');
+                else return mb_substr($v, 0, $a, DtlIter::$encoding);
             }
             if ($count == 2) {
                 list($a,$b) = $ps;
-                return mb_substr($v, $a, $b-$a, 'utf-8');
+                return mb_substr($v, $a, $b-$a, DtlIter::$encoding);
             }
             if ($count == 3) {
                 list ($a, $dummy, $b) = $ps;
-                $v = mb_substr($v, $a, strlen($v), 'utf-8');
+                $v = mb_substr($v, $a, strlen($v), DtlIter::$encoding);
                 $len = strlen($v) - 1;
                 $result = '';
                 for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
@@ -599,13 +604,12 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function slugify() {
         // Thanks Borek! http://drupal.org/node/63924.
-        $encoding = $this->encoding;
-        return $this->filter_apply(function($v) use($encoding) {
+        return $this->filter_apply(function($v) {
             $v = str_replace(array(',', '\''), '', $v);
             $v = preg_replace('#[^\\pL0-9_]+#u', '-', $v);
             $v = preg_replace('#[-]{2,}#', '-', $v);
             $v = trim($v, "-");
-            $v = iconv($encoding, "us-ascii//TRANSLIT", $v);
+            $v = iconv(DtlIter::$encoding, "us-ascii//TRANSLIT", $v);
             $v = strtolower($v);
             $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
             return $v;
