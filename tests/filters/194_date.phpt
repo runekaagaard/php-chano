@@ -2,7 +2,7 @@
 Testing chaining capabilities.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../DtlIter.php';
+include dirname(__FILE__) . '/../../DtlIter.php';
 $items = array(
     array('d' => '9823498374'),
     array('d' => '2234832748'),
