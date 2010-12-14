@@ -4,6 +4,13 @@ A generated testfile for the "make_list" filter.
 <?php
 include dirname(__FILE__) . '/../../DtlIter.php';
 $items = new DtlIter(array(array('input' => 123)));
-foreach ($items as $i) echo $i->input->make_list();
+foreach ($items as $i) var_dump($i->input->makelist()->v);
 --EXPECT--
-Array
+array(3) {
+  [0]=>
+  int(1)
+  [1]=>
+  int(2)
+  [2]=>
+  int(3)
+}

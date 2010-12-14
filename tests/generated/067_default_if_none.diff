@@ -1,2 +1,0 @@
-001- val
-001+ Fatal error: Call to undefined method DtlIter::default_if_none() in /home/rune/workspace/php-misc/php-dtl-iterator/tests/generated/067_default_if_none.php on line 4

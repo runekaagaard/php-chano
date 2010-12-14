@@ -73,6 +73,8 @@ class DtlIter implements Iterator, ArrayAccess {
 
     public $autoescape = True;
     public $autoescape_off_until_tostring = false;
+
+    public $encoding = 'utf-8';
     
     function  __construct($items) {
         $this->items = $items;
@@ -268,9 +270,9 @@ class DtlIter implements Iterator, ArrayAccess {
     
     // Filter modifiers. Chainable.
     function length() {
-        return $this->filter_apply(function($v) {
-            return strlen($v);
-        });
+        if (is_scalar($this->v)) $this->v = strlen((string)$this->v);
+        else $this->v = count($this->v);
+        return $this;
     }
     function striptags() {
         return $this->filter_apply(function($v) {
@@ -506,6 +508,12 @@ class DtlIter implements Iterator, ArrayAccess {
             return urlencode($v);
         });
     }
+    function iriencode() {
+        // TODO: Keep this? Suspicious!
+        return $this->filter_apply(function($v) {
+            return str_replace('+', '%20', urlencode(urldecode($v)));
+        });
+    }
     function slice($str) {
         return $this->filter_apply(function($v) use($str) {
             $ps = explode(':', $str);
@@ -556,13 +564,46 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function linebreaks() {
-        throw new NotImplementedError;
         $this->autoescape_off_until_tostring = TRUE;
         return $this->filter_apply(function($v) {
-            return '<p>'
-                . str_replace("\n", '<br />', $v)
-                . '</p>'
-            ;
+            $v = preg_replace('#\r\n|\r|\n#', "\n", $v);
+            $paragrahps = preg_split('#\n{2,}#', $v);
+            $html = '';
+            foreach ($paragrahps as $p) 
+                $html .= '<p>' . str_replace("\n", '<br />', $p) . '</p>';
+            return $html;
+        });
+    }
+    function linebreaksbr() {
+        $this->autoescape_off_until_tostring = TRUE;
+        return $this->filter_apply(function($v) {
+            return nl2br($v);
+        });
+    }
+    function join($glue) {
+        if (is_scalar($this->v)) return $this;
+        $this->v = implode($glue, $this->v);
+        return $this;
+    }
+    function makelist() {
+        return $this->filter_apply(function($v) {
+            $vs = str_split((string)$v);
+            if (is_int($v)) foreach ($vs as &$v) $v = (int)$v;
+            return $vs;
+        });
+    }
+    function slugify() {
+        // Thanks Borek! http://drupal.org/node/63924.
+        $encoding = $this->encoding;
+        return $this->filter_apply(function($v) use($encoding) {
+            $v = str_replace(array(',', '\''), '', $v);
+            $v = preg_replace('#[^\\pL0-9_]+#u', '-', $v);
+            $v = preg_replace('#[-]{2,}#', '-', $v);
+            $v = trim($v, "-");
+            $v = iconv($encoding, "us-ascii//TRANSLIT", $v);
+            $v = strtolower($v);
+            $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
+            return $v;
         });
     }
 }
