@@ -296,7 +296,16 @@ class DtlIter implements Iterator, ArrayAccess {
             if ($cycles[$key][1] > $cycles[$key][2]) $cycles[$key][1] = 0;
             $this->v = $cycles[$key][0][$cycles[$key][1]];
         }
-        return $v;
+        return $this;
+    }
+
+    /*
+     * Other nonchainable commands.
+     */
+    function length() {
+        $v = $this->filter_reset();
+        if (is_scalar($v)) return strlen((string)$v);
+        else return count($v);
     }
 
     /*
@@ -348,11 +357,6 @@ class DtlIter implements Iterator, ArrayAccess {
     function unorderedlist() {
         $this->autoescape_off_until_tostring = true;
         $this->v = $this->_unorderedlist($this->_clean_list($this->v));
-        return $this;
-    }
-    function length() {
-        if (is_scalar($this->v)) $this->v = strlen((string)$this->v);
-        else $this->v = count($this->v);
         return $this;
     }
     function striptags() {
@@ -683,7 +687,7 @@ class DtlIter implements Iterator, ArrayAccess {
             return nl2br($v);
         });
     }
-    function join($glue) {
+    function join($glue=', ') {
         if (is_scalar($this->v)) return $this;
         $this->v = implode($glue, $this->v);
         return $this;
