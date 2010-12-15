@@ -31,7 +31,7 @@ class TypeNotArrayError extends Exception {}
  * those experiments entails:
  *   * One line functions.
  *   * Skipping brackets.
- *   * Having both a if/foreach and a statement of a single line.
+ *   * Having both a if/foreach and a statement on a single line.
  *   * Not adding docblocks to (for me) obvious stuff.
  *   * Skipping default "public" keywords.
  */
@@ -465,7 +465,7 @@ class DtlIter implements Iterator, ArrayAccess {
     function escapejs() {
         // Thanks Heine!: http://drupal.org/node/479368#pift-results-479368-3198
         // 886-3198886.
-        $replace_pairs = array('\\' => '\u005C', '"' => '\u0022', 
+        static $replace_pairs = array('\\' => '\u005C', '"' => '\u0022',
             "\x00" => '\u0000', "\x01" => '\u0001', "\x02" => '\u0002',
             "\x03" => '\u0003', "\x04" => '\u0004', "\x05" => '\u0005',
             "\x06" => '\u0006', "\x07" => '\u0007', "\x08" => '\u0008',
@@ -642,7 +642,7 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function linenumbers() {
-        // TODO: Make prety.
+        // TODO: Make pretty. Do you feel pretty, well do you punk?.
         return $this->filter_apply(function($v) {
             $lines = explode("\n", trim($v));
             $strlen = strlen(count($lines));
@@ -710,7 +710,7 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function phone2numeric() {
         return $this->filter_apply(function($v) {
-            $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2',
+            static $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2',
                 'd' => '3', 'e' => '3', 'f' => '3', 'g' => '4', 'h' => '4',
                 'i' => '4', 'j' => '5', 'k' => '5', 'l' => '5', 'm' => '6',
                 'n' => '6', 'o' => '6', 'p' => '7', 'q' => '7', 'r' => '7',
