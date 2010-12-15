@@ -1,8 +1,8 @@
 --TEST--
-Testing chaining capabilities.
+Testing that counting works.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../DtlIter.php';
+include dirname(__FILE__) . '/../../DtlIter.php';
 $items = array(
     array('d' => 1),
     array('d' => 1),
