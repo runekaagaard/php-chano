@@ -12,70 +12,63 @@ class NotImplementedError extends Exception {}
 class TypeNotArrayError extends Exception {}
 
 /**
- * An irator class that takes an array of arrays as an input and supplies
- * capabilities resembling the Django Template Language.
+ * An iterator that takes an array of arrays as an input and supplies
+ * capabilities matching the Django Template Language. Implements the full
+ * featureset (almost) found here:
+ *     http://docs.djangoproject.com/en/dev/ref/templates/builtins/.
  *
  * @author Rune Kaagaard
- * @todo Fix everything, comment, write docs,  add (a lot more) tests and
- * cleanup.
+ * @todo
  *
- * Implement the following filters:
- *    floatformat
- *    forceescape
- *    spaceless
- *    dictsort(reversed)
- *    escapejs
- *    forceescape
- *    getdigit
- *    iriencode
- *    join
- *    last
- *    linebreaks
- *    linebreaksbr
- *    linenumbers
- *    ljust
- *    lower
- *    pluralize
- *    random
- *    rjust
- *    safe
- *    safeseq?
- *    slice
- *    slugify
- *    stringformat
- *    time
- *    timesince
- *    timeuntil
- *    title
- *    truncatewords
- *    truncatewordshtml
- *    unorderedlist
- *    upper
- *    urlencode
- *    urlize
- *    urlizetrunc
- *    wordcount
- *    wordwrap
- *    yesno
+ * 1) While the filter tests are pretty good, more tests of more general nature
+ * are needed.
+ * 2) Create proper documentation in restructured text.
+ * 4) Make it work for array of objects too.
+ *
+ * @codestyle
+ *
+ * In this project i've been experimenting with a non-pear code style. Some of
+ * those experiments entails:
+ *   * One line functions.
+ *   * Skipping brackets.
+ *   * Having both a if/foreach and a statement of a single line.
+ *   * Not adding docblocks to (for me) obvious stuff.
+ *   * Skipping default "public" keywords.
  */
 class DtlIter implements Iterator, ArrayAccess {
-    const INITIAL = -9892895829385;
-
-    public $count = 0;
-    public $i = 0;
-    public $items;
-    public $current = self::INITIAL;
+    /**
+     * The encoding used in charset sensitive filters.
+     * @var string
+     */
+    static $encoding = 'utf-8';
+    /**
+     * The value of the current item after filters has been applied.
+     * @var scalar/array
+     */
     public $v = self::INITIAL;
     
-    public $lookup_path;
-    public $lookups = array();
-    public $previous_lookups = array();
+    // Private values.
+    const INITIAL = -9892895829385;
+    private $count = 0;
+    private $i = 0;
+    private $items;
+    private $current = self::INITIAL;
+    private $lookup_path;
+    private $lookups = array();
+    private $previous_lookups = array();
+    private $autoescape = true;
+    private $autoescape_off_until_tostring = false;
 
-    public $autoescape = True;
-    public $autoescape_off_until_tostring = false;
-
-    public static $encoding = 'utf-8';
-    
+    /**
+     * Takes an array of arrays as first parameter and an optional array of
+     * options as second.
+     * 
+     * @param array $items
+     *   Array of arrays or an iterator giving arrays. Must be countable.
+     * @param array $options
+     *   Supported options are:
+     *     'encoding': Defaults to 'utf-8'.
+     */
     function  __construct($items, array $options=array()) {
         $default = array('encoding' => self::$encoding);
         $options = array_merge($default, $options);
@@ -83,14 +76,12 @@ class DtlIter implements Iterator, ArrayAccess {
         $this->items = $items;
         $this->count = count($items) - 1;
     }
-
     function  __toString() {
         $this->lookup_path_reset();
         $s = $this->out();
         $this->v = self::INITIAL;
         return (string)$s;
     }
-
     function out($escape = null) {
         if ($escape === null) $escape = $this->autoescape;
         $s = !$this->autoescape_off_until_tostring && $escape
@@ -100,7 +91,10 @@ class DtlIter implements Iterator, ArrayAccess {
         return (string)$s;
     }
     
-    // Iterator.
+    /*
+     * Implementation of Iterator interface.
+     */
+    
     function rewind() { $this->i = 0; }
     function current() {
         $this->current = current($this->items);
@@ -116,23 +110,30 @@ class DtlIter implements Iterator, ArrayAccess {
         return isset($this->items[$this->i]);
     }
 
-    // Lookups
-    function lookup_add($o) {
+    /*
+     * Stores lookups ($i->key1->key2->etc->_) so it can be compared to lookups
+     * for previous item.
+     */
+    
+    private function lookup_add($o) {
         $this->lookup_path .= $o;
         $this->lookups[$this->lookup_path] = $this->v;
     }
-    function lookup_path_reset() {
+    private function lookup_path_reset() {
         $path = $this->lookup_path;
         $this->lookup_path = '';
         return $path;
     }
-    function lookup_next() {
+    private function lookup_next() {
         $this->previous_lookups = $this->lookups;
         $this->lookups = array();
         $this->lookup_path_reset();
     }
 
-    // Array Access
+    /*
+     * Implementation of ArrayAcces interface.
+     */
+    
     function offsetGet($o) {
         if ($o == '_') return $this->__toString();
         if ($this->v == self::INITIAL) $this->v = $this->current[$o];
@@ -144,10 +145,21 @@ class DtlIter implements Iterator, ArrayAccess {
     function offsetSet($offset, $value) { throw new ReadOnlyError; }
     function offsetUnset($offset) { throw new ReadOnlyError; }
 
-    // Object Access
+    /**
+     * Implementation of __get magic method.
+     *
+     * @param string $name
+     * @return mixed
+     */
     function  __get($name) { return $this->offsetGet($name); }
 
-    // Filters util functions.
+    /**
+     * Resets settings for filters that does not wait for the __toString()
+     * method being called to return calue.
+     *
+     * @todo Fix code duplication with __toString() and out() methods.
+     * @return mixed
+     */
     function filter_reset() {
         $value = $this->v;
         $this->v = self::INITIAL;
@@ -155,6 +167,13 @@ class DtlIter implements Iterator, ArrayAccess {
         $this->autoescape_off_until_tostring = FALSE;
         return $value;
     }
+    /**
+     * Appplies a filter function to the value of current row taking into
+     * account if said value is scalar or arrary.
+     *
+     * @param function $function
+     * @return $this
+     */
     function filter_apply($function) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -163,11 +182,33 @@ class DtlIter implements Iterator, ArrayAccess {
         return $this;
     }
 
-    // Filter flags commands.
-    function autoescapeon() { $this->autoescape = true; }
-    function autoescapeoff() { $this->autoescape = false; }
+    ////////////////////////////////////////////////////////////////////////////
+    // Below this line are the methods that are part of the template api.     //
+    ////////////////////////////////////////////////////////////////////////////
 
-    // Filter commands. Non-chainable.
+    /*
+     * Flags.
+     *
+     * Sets one or more boolean values on the DtlIter class. Chainable.
+     *
+     * Sets autoescape on output on/off.
+     */
+
+    function autoescapeon() { $this->autoescape = true; return $this; }
+    function autoescapeoff() { $this->autoescape = false; return $this; }
+    function escape() {
+        $this->autoescape_off_until_tostring = false;
+        $this->autoescape = true;
+        return $this;
+    }
+
+    /*
+     * Questions.
+     *
+     * Conditionally returns a boolean based on value of current item. All
+     * questions are nonchainable.
+     */
+    
     function emptyor($default) {
         $value = $this->filter_reset();
         return empty($value) ? $default : $value;
@@ -186,76 +227,28 @@ class DtlIter implements Iterator, ArrayAccess {
         return isset($this->previous_lookups[$path]) &&
             $this->previous_lookups[$path] == $this->lookups[$path];
     }
-    function cycle() {
-        static $cycles = array();
-        $args = func_get_args();
-        $key = implode('', $args);
-        if (empty($cycles[$key])) {
-            $cycles[$key] = array($args, 0, count($args)-1);
-            return $cycles[$key][0][0];
-        } else {
-            $cycles[$key][1]++;
-            if ($cycles[$key][1] > $cycles[$key][2]) $cycles[$key][1] = 0;
-            return $cycles[$key][0][$cycles[$key][1]];
-        }
-    }
-    function firstof() {
-        $args = func_get_args();
-        foreach ($args as $arg) {
-            if (!empty($arg)) return $arg;
-        }
-        return '';
-    }
-    function pluralize($a='s', $b=null) {
-        if (empty($b)) list($singular, $plural) = array('', $a);
-        else list($singular, $plural) = array($a, $b);
-        if (is_scalar($this->v)) {
-            if ((int)$this->v == 0) return $plural;
-            return (int)$this->v > 1 ? $plural : $singular;
-        }
-        else return count($this->v) > 1 ? $plural : $singular;
-    }
-    function _clean_list($list) {
-        $new_list = array();
-        foreach ($list as $key => $item) {
-            if (is_scalar($item)) $new_list[$key] = $item;
-            elseif (!empty($item) && is_array($item))
-                $new_list[$key] = $this->_clean_list($item);
-        }
-        return $new_list;
-    }
-    function unorderedlist($list=null, $indent=1) {
-        $html = '';
-        $ws = str_repeat("\t", $indent);
-        if ($list === null) $list = $this->_clean_list($this->v);
-        $vs = array_values($list);
-        $count = count($vs);
-        for ($i=0; $i<$count; ++$i) {
-            $item = $vs[$i];
-            $next_item = isset($vs[$i+1]) ? $vs[$i+1] : false;
-            if (is_scalar($item)) $html .= "$ws<li>$item";
-            if (is_array($item)) $html .= $this->unorderedlist($item, $indent);
-            if (is_array($next_item) && !is_array($item)) {
-                $html .=
-                    "\n$ws<ul>\n"
-                    . $this->unorderedlist($next_item, $indent+1)
-                    . "$ws</ul>\n$ws";
-                ++$i;
-            }
-            if (is_scalar($item)) $html .= "</li>\n";
-        }
-        return $html;
-    }
-    function safe() { return $this->out(false); }
     function divisibleby($divisor) {
         return ($this->filter_reset() % $divisor) === 0;
     }
-    function forceescape() { 
+
+    /*
+     * Returns.
+     *
+     * Returns value of current item in various ways. Unchainable.
+     */
+
+    function safe() { return $this->out(false); }
+    function forceescape() {
         return htmlentities($this->filter_reset(), null, self::$encoding);
     }
 
-    // Filter modifiers. Chainable, but does not care for the value. Works on
-    // the base object too.
+    /*
+     * Counters.
+     *
+     * Different methods of counting to/from the current item. Chainable. Works
+     * on the base instance, ie. you don't have to ask for a key first.
+     */
+
     function counter() {
         $this->v = $this->i + 1;
         return $this;
@@ -273,7 +266,90 @@ class DtlIter implements Iterator, ArrayAccess {
         return $this;
     }
     
-    // Filter modifiers. Chainable.
+    /*
+     * Selectors.
+     *
+     * One of given arguments are conditionally returned. Chainable. Works on
+     * base instance too.
+     */
+
+    function firstof() {
+        $args = func_get_args();
+        $this->v = '';
+        foreach ($args as $arg) {
+            if (!empty($arg)) {
+                $this->v = $arg;
+                break;
+            }
+        }
+        return $this;
+    }
+    function cycle() {
+        static $cycles = array();
+        $args = func_get_args();
+        $key = implode('', $args);
+        if (empty($cycles[$key])) {
+            $cycles[$key] = array($args, 0, count($args)-1);
+            $this->v = $cycles[$key][0][0];
+        } else {
+            $cycles[$key][1]++;
+            if ($cycles[$key][1] > $cycles[$key][2]) $cycles[$key][1] = 0;
+            $this->v = $cycles[$key][0][$cycles[$key][1]];
+        }
+        return $v;
+    }
+
+    /*
+     * Filters.
+     *
+     * Modifies the value of the current item. Chainable.
+     */
+
+    function pluralize($a='s', $b=null) {
+        if (empty($b)) list($singular, $plural) = array('', $a);
+        else list($singular, $plural) = array($a, $b);
+        if (is_scalar($this->v)) {
+            if ((int)$this->v == 0) $this->v = $plural;
+            else $this->v = (int)$this->v > 1 ? $plural : $singular;
+        }
+        else $this->v = count($this->v) > 1 ? $plural : $singular;
+        return $this;
+    }
+    private function _clean_list($list) {
+        $new_list = array();
+        foreach ($list as $key => $item) {
+            if (is_scalar($item)) $new_list[$key] = $item;
+            elseif (!empty($item) && is_array($item))
+                $new_list[$key] = $this->_clean_list($item);
+        }
+        return $new_list;
+    }
+    private function _unorderedlist($list=null, $indent=1) {
+        $html = '';
+        $ws = str_repeat("\t", $indent);
+        $vs = array_values($list);
+        $count = count($vs);
+        for ($i=0; $i<$count; ++$i) {
+            $item = $vs[$i];
+            $next_item = isset($vs[$i+1]) ? $vs[$i+1] : false;
+            if (is_scalar($item)) $html .= "$ws<li>$item";
+            if (is_array($item)) $html .= $this->_unorderedlist($item, $indent);
+            if (is_array($next_item) && !is_array($item)) {
+                $html .=
+                    "\n$ws<ul>\n"
+                    . $this->_unorderedlist($next_item, $indent+1)
+                    . "$ws</ul>\n$ws";
+                ++$i;
+            }
+            if (is_scalar($item)) $html .= "</li>\n";
+        }
+        return $html;
+    }
+    function unorderedlist() {
+        $this->autoescape_off_until_tostring = true;
+        $this->v = $this->_unorderedlist($this->_clean_list($this->v));
+        return $this;
+    }
     function length() {
         if (is_scalar($this->v)) $this->v = strlen((string)$this->v);
         else $this->v = count($this->v);
@@ -387,8 +463,23 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function escapejs() {
-        // Thanks Heine!: http://drupal.org/node/479368#pift-results-479368-3198886-3198886.
-        $replace_pairs = array('\\' => '\u005C', '"' => '\u0022', "\x00" => '\u0000', "\x01" => '\u0001', "\x02" => '\u0002', "\x03" => '\u0003', "\x04" => '\u0004', "\x05" => '\u0005', "\x06" => '\u0006', "\x07" => '\u0007', "\x08" => '\u0008', "\x09" => '\u0009', "\x0a" => '\u000A', "\x0b" => '\u000B', "\x0c" => '\u000C', "\x0d" => '\u000D', "\x0e" => '\u000E', "\x0f" => '\u000F', "\x10" => '\u0010', "\x11" => '\u0011', "\x12" => '\u0012', "\x13" => '\u0013', "\x14" => '\u0014', "\x15" => '\u0015', "\x16" => '\u0016', "\x17" => '\u0017', "\x18" => '\u0018', "\x19" => '\u0019', "\x1a" => '\u001A', "\x1b" => '\u001B', "\x1c" => '\u001C', "\x1d" => '\u001D', "\x1e" => '\u001E', "\x1f" => '\u001F', "'" => '\u0027', '<' => '\u003C', '>' => '\u003E', '&' => '\u0026', '/' => '\u002F', "\xe2\x80\xa8" => '\u2028', "\xe2\x80\xa9" => '\u2029',);       
+        // Thanks Heine!: http://drupal.org/node/479368#pift-results-479368-3198
+        // 886-3198886.
+        $replace_pairs = array('\\' => '\u005C', '"' => '\u0022', 
+            "\x00" => '\u0000', "\x01" => '\u0001', "\x02" => '\u0002',
+            "\x03" => '\u0003', "\x04" => '\u0004', "\x05" => '\u0005',
+            "\x06" => '\u0006', "\x07" => '\u0007', "\x08" => '\u0008',
+            "\x09" => '\u0009', "\x0a" => '\u000A', "\x0b" => '\u000B',
+            "\x0c" => '\u000C', "\x0d" => '\u000D', "\x0e" => '\u000E',
+            "\x0f" => '\u000F', "\x10" => '\u0010', "\x11" => '\u0011',
+            "\x12" => '\u0012', "\x13" => '\u0013', "\x14" => '\u0014',
+            "\x15" => '\u0015', "\x16" => '\u0016', "\x17" => '\u0017',
+            "\x18" => '\u0018', "\x19" => '\u0019', "\x1a" => '\u001A',
+            "\x1b" => '\u001B', "\x1c" => '\u001C', "\x1d" => '\u001D',
+            "\x1e" => '\u001E', "\x1f" => '\u001F', "'" => '\u0027',
+            '<' => '\u003C', '>' => '\u003E', '&' => '\u0026',
+            '/' => '\u002F', "\xe2\x80\xa8" => '\u2028',
+            "\xe2\x80\xa9" => '\u2029',);
         return $this->filter_apply(function($v) use($replace_pairs) {
             return strtr($v, $replace_pairs);
         });
@@ -409,7 +500,7 @@ class DtlIter implements Iterator, ArrayAccess {
             if (!is_numeric($v)) return '';
             if (!is_numeric($ds)) $ds = '-1';
             $ds = (string)$ds;
-            $hide_zeros = True;
+            $hide_zeros = true;
             if ($ds) {
                 if ($ds[0] == '-') $ds = ltrim($ds, '-');
                 else $hide_zeros = False;
@@ -464,7 +555,7 @@ class DtlIter implements Iterator, ArrayAccess {
              }, $v);
     }
     function urlize() {
-        $this->autoescape_off_until_tostring = TRUE;
+        $this->autoescape_off_until_tostring = true;
         return $this->filter_apply(function($v) {
             return DtlIter::_urlize($v);
         });
@@ -473,7 +564,7 @@ class DtlIter implements Iterator, ArrayAccess {
         // TODO: This passes the tests but also truncates existing html
         // addresses which is probably not the desired behavior. Change _urlize
         // to support truncate.
-        $this->autoescape_off_until_tostring = TRUE;
+        $this->autoescape_off_until_tostring = true;
         return $this->filter_apply(function($v) use ($len) {
             $v = DtlIter::_urlize($v);
             return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
@@ -493,8 +584,10 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function truncatewordshtml($n) {
-        $this->autoescape_off_until_tostring = TRUE;
+        $this->autoescape_off_until_tostring = true;
         return $this->filter_apply(function($v) use($n) {
+            // Strip tags, explode words and count the number of chars of the
+            // first n words. Then use cakePHP magic function.
             if ($n == 0) return '';
             $parts = explode(' ', strip_tags($v));
             $found_words = 0;
@@ -565,7 +658,7 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function removetags() {
-        $this->autoescape_off_until_tostring = TRUE;
+        $this->autoescape_off_until_tostring = true;
         $args = func_get_args();
         if (empty($args)) return $this;
         $tags = implode('|', $args);
@@ -574,7 +667,7 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function linebreaks() {
-        $this->autoescape_off_until_tostring = TRUE;
+        $this->autoescape_off_until_tostring = true;
         return $this->filter_apply(function($v) {
             $v = preg_replace('#\r\n|\r|\n#', "\n", $v);
             $paragrahps = preg_split('#\n{2,}#', $v);
@@ -585,7 +678,7 @@ class DtlIter implements Iterator, ArrayAccess {
         });
     }
     function linebreaksbr() {
-        $this->autoescape_off_until_tostring = TRUE;
+        $this->autoescape_off_until_tostring = true;
         return $this->filter_apply(function($v) {
             return nl2br($v);
         });
@@ -617,13 +710,13 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function phone2numeric() {
         return $this->filter_apply(function($v) {
-            $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2', 'd' => '3', 'e' => '3', 'f' => '3', 'g' => '4', 'h' => '4', 'i' => '4', 'j' => '5', 'k' => '5', 'l' => '5', 'm' => '6', 'n' => '6', 'o' => '6', 'p' => '7', 'q' => '7', 'r' => '7', 's' => '7', 't' => '8', 'u' => '8', 'v' => '8', 'w' => '9', 'x' => '9', 'y' => '9', 'z' => '9');
+            $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2',
+                'd' => '3', 'e' => '3', 'f' => '3', 'g' => '4', 'h' => '4',
+                'i' => '4', 'j' => '5', 'k' => '5', 'l' => '5', 'm' => '6',
+                'n' => '6', 'o' => '6', 'p' => '7', 'q' => '7', 'r' => '7',
+                's' => '7', 't' => '8', 'u' => '8', 'v' => '8', 'w' => '9',
+                'x' => '9', 'y' => '9', 'z' => '9');
             return strtr(strtolower($v), $replace_pairs);
         });
-    }
-    function escape() {
-        $this->autoescape_off_until_tostring = false;
-        $this->autoescape = true;
-        return $this;
     }
 }
