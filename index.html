@@ -1,80 +1,154 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to PHP Django Template Language Iterator’s documentation! &mdash; PHP Django Template Language Iterator v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PHP Django Template Language Iterator v0.1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">PHP Django Template Language Iterator v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
 
-	<title>runekaagaard/php-dtl-iterator @ GitHub</title>
-	
-	<style type="text/css">
-		body {
-  		margin-top: 1.0em;
-  		background-color: #891482;
-		  font-family: "Helvetica,Arial,FreeSans";
-  		color: #ffffff;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-		h1 { font-size: 3.8em; color: #76eb7d; margin-bottom: 3px; }
-		h1 .small { font-size: 0.4em; }
-		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #76eb7d; }
-    h3 { text-align: center; color: #76eb7d; }
-    a { color: #76eb7d; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-	</style>
-	
-</head>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-php-django-template-language-iterator-s-documentation">
+<h1>Welcome to PHP Django Template Language Iterator&#8217;s documentation!<a class="headerlink" href="#welcome-to-php-django-template-language-iterator-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>The &#8220;PHP Django Template Language Iterator&#8221; (DTLI) is a standard PHP iterator
+class that accepts an array of arrays or objects. It lets you iterate over it
+like you would a normal array. But instead of just being able to access the raw
+value it also provides access to a large range of utility functions that
+manipulates or asks questions about the value in various ways. The functions
+provided are almost directly ported from the Django Template Language.</p>
+</div>
+<div class="section" id="basic-usage">
+<h1>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
+<p>Instantiation is as simple as:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+            <span class="k">array</span><span class="p">(</span><span class="s1">&#39;title&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;first title&#39;</span><span class="p">),</span>
+            <span class="k">array</span><span class="p">(</span><span class="s1">&#39;title&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;second title&#39;</span><span class="p">),</span>
+        <span class="p">);</span>
+<span class="nv">$items</span> <span class="o">=</span> <span class="k">new</span> <span class="p">(</span><span class="nx">DtlIter</span><span class="p">(</span><span class="nv">$data</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Now <tt class="docutils literal"><span class="pre">$items</span></tt> can be iterated as one normally would:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?</span><span class="k">foreach</span><span class="p">(</span><span class="nv">$items</span> <span class="k">as</span> <span class="nv">$i</span><span class="p">)</span><span class="o">:?&gt;</span>
+    <span class="o">&lt;?=</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?</span><span class="k">endforeach</span><span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Both array and object notation are supported so these two lines are exactly the
+same:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Nesting goes arbitrarily deep:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">key1</span><span class="o">-&gt;</span><span class="na">key2</span><span class="o">-&gt;</span><span class="na">key3</span><span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">][</span><span class="s1">&#39;key2&#39;</span><span class="p">][</span><span class="s1">&#39;key2&#39;</span><span class="p">]</span><span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Important to note is that when <tt class="docutils literal"><span class="pre">$i-&gt;title</span></tt> is accessed the returned value is
+not a string (e.g. &#8216;first title&#8217;) but an instance of the DtlIter class itself.
+Only when used with <tt class="docutils literal"><span class="pre">echo</span> <span class="pre">$i-&gt;title</span></tt> or <tt class="docutils literal"><span class="pre">&lt;?=$i-&gt;title?&gt;</span></tt> the __toString()
+method is called and the output will be a string as expected. In other cases
+you can access the __toString() value by appending an <tt class="docutils literal"><span class="pre">-&gt;_</span></tt> and if you want
+to access the actual value by appending a <tt class="docutils literal"><span class="pre">-&gt;v</span></tt>:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">echo</span> <span class="nx">type</span><span class="p">(</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="p">);</span> <span class="c1">// DtlIter.</span>
+<span class="k">echo</span> <span class="nx">type</span><span class="p">(</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="o">-&gt;</span><span class="na">_</span><span class="p">);</span> <span class="c1">// String.</span>
+<span class="k">echo</span> <span class="nx">type</span><span class="p">(</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">titles</span><span class="o">-&gt;</span><span class="na">v</span><span class="p">);</span> <span class="c1">// Array.</span>
+</pre></div>
+</div>
+<p>This also means that you can&#8217;t access keys named &#8220;_&#8221; and &#8220;v&#8221; in your arrays as
+the magic values will take precedence.</p>
+</div>
+<div class="section" id="filter-reference">
+<h1>Filter reference<a class="headerlink" href="#filter-reference" title="Permalink to this headline">¶</a></h1>
+<p>Stub.</p>
+</div>
+<div class="section" id="navigation">
+<h1>Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference external" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference external" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
 
-<body>
-  <a href="http://github.com/runekaagaard/php-dtl-iterator"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-  <div id="container">
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="#">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Welcome to PHP Django Template Language Iterator&#8217;s documentation!</a></li>
+<li><a class="reference external" href="#basic-usage">Basic usage</a></li>
+<li><a class="reference external" href="#filter-reference">Filter reference</a></li>
+<li><a class="reference external" href="#navigation">Navigation</a></li>
+</ul>
 
-    <div class="download">
-      <a href="http://github.com/runekaagaard/php-dtl-iterator/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/runekaagaard/php-dtl-iterator/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
     </div>
-
-    <h1><a href="http://github.com/runekaagaard/php-dtl-iterator">php-dtl-iterator</a>
-      <span class="small">by <a href="http://github.com/runekaagaard">runekaagaard</a></span></h1>
-
-    <div class="description">
-      A PHP iterator that supplies a lot of the same possibilities than the Django template language.
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">PHP Django Template Language Iterator v0.1 documentation</a> &raquo;</li> 
+      </ul>
     </div>
-
-    <h2>Authors</h2>
-<p>runekaagaard (rumi.kg@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p> (rumi.kg@gmail.com)<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/runekaagaard/php-dtl-iterator/zipball/master">zip</a> or
-      <a href="http://github.com/runekaagaard/php-dtl-iterator/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/runekaagaard/php-dtl-iterator</pre>
-    </p>
-
     <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/runekaagaard/php-dtl-iterator">runekaagaard/php-dtl-iterator</a>
+      &copy; Copyright 2010, Rune Kaagaard.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
     </div>
-
-  </div>
-
-  
-</body>
+  </body>
 </html>
