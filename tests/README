@@ -1,2 +1,2 @@
 To run the tests use:
-    pear run-tests
+    pear run-tests -r
