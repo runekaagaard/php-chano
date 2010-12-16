@@ -40,13 +40,15 @@ Important to note is that when ``$i->title`` is accessed the returned value is
 not a string (e.g. 'first title') but an instance of the DtlIter class itself.
 Only when used with ``echo $i->title`` or ``<?=$i->title?>`` the __toString()
 method is called and the output will be a string as expected. In other cases
-you can access the __toString() value by prefixing an ``_`` and if you
-want to access the actual value by prefixing a ``v``::
+you can access the __toString() value by appending an ``->_`` and if you want 
+to access the actual value by appending a ``->v``::
 
     echo type($i->title); // DtlIter.
     echo type($i->title->_); // String.
     echo type($i->titles->v); // Array.
 
+This also means that you can't access keys named "_" and "v" in your arrays as
+the magic values will take precedence.
 
 Filter reference
 ================
