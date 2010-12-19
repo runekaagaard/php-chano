@@ -91,7 +91,222 @@ the magic values will take precedence.</p>
 </div>
 <div class="section" id="filter-reference">
 <h1>Filter reference<a class="headerlink" href="#filter-reference" title="Permalink to this headline">¶</a></h1>
-<p>Stub.</p>
+<div class="section" id="flags">
+<h2>Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h2>
+<p>Sets one or more boolean values on the DtlIter class. Chainable.</p>
+<div class="section" id="autoescapeon">
+<h3>autoescapeon()<a class="headerlink" href="#autoescapeon" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="autoescapeoff">
+<h3>autoescapeoff()<a class="headerlink" href="#autoescapeoff" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="escape">
+<h3>escape()<a class="headerlink" href="#escape" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="questions">
+<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<p>Conditionally returns a boolean based on value of current item. All questions
+are nonchainable.</p>
+<div class="section" id="emptyor-default">
+<h3>emptyor($default)<a class="headerlink" href="#emptyor-default" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="isfirst">
+<h3>isfirst()<a class="headerlink" href="#isfirst" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="islast">
+<h3>islast()<a class="headerlink" href="#islast" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="haschanged">
+<h3>haschanged()<a class="headerlink" href="#haschanged" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="same">
+<h3>same()<a class="headerlink" href="#same" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="divisibleby-divisor">
+<h3>divisibleby($divisor)<a class="headerlink" href="#divisibleby-divisor" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h2>
+<p>Returns value of current item in various ways. Unchainable.</p>
+<div class="section" id="safe">
+<h3>safe()<a class="headerlink" href="#safe" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="forceescape">
+<h3>forceescape()<a class="headerlink" href="#forceescape" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="counters">
+<h2>Counters<a class="headerlink" href="#counters" title="Permalink to this headline">¶</a></h2>
+<p>Different methods of counting to/from the current item. Chainable. Works on the
+base instance, ie. you don&#8217;t have to ask for a key first.</p>
+<div class="section" id="counter">
+<h3>counter()<a class="headerlink" href="#counter" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="counter0">
+<h3>counter0()<a class="headerlink" href="#counter0" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="revcounter">
+<h3>revcounter()<a class="headerlink" href="#revcounter" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="revcounter0">
+<h3>revcounter0()<a class="headerlink" href="#revcounter0" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="selectors">
+<h2>Selectors<a class="headerlink" href="#selectors" title="Permalink to this headline">¶</a></h2>
+<p>One of given arguments are conditionally returned. Chainable. Works on base
+instance too.</p>
+<div class="section" id="firstof">
+<h3>firstof()<a class="headerlink" href="#firstof" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="cycle">
+<h3>cycle()<a class="headerlink" href="#cycle" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="other-nonchainable-commands">
+<h2>Other nonchainable commands<a class="headerlink" href="#other-nonchainable-commands" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="length">
+<h3>length()<a class="headerlink" href="#length" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="filters">
+<h2>Filters<a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h2>
+<p>Modifies the value of the current item. Chainable.</p>
+<div class="section" id="pluralize-a-s-b-null">
+<h3>pluralize($a=&#8217;s&#8217;, $b=null)<a class="headerlink" href="#pluralize-a-s-b-null" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="unorderedlist">
+<h3>unorderedlist()<a class="headerlink" href="#unorderedlist" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="striptags">
+<h3>striptags()<a class="headerlink" href="#striptags" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="vd">
+<h3>vd()<a class="headerlink" href="#vd" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="now-format">
+<h3>now($format)<a class="headerlink" href="#now-format" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="widthratio-range-in-range-out">
+<h3>widthratio($range_in, $range_out)<a class="headerlink" href="#widthratio-range-in-range-out" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="add-amount">
+<h3>add($amount)<a class="headerlink" href="#add-amount" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="addslashes">
+<h3>addslashes()<a class="headerlink" href="#addslashes" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="capfirst">
+<h3>capfirst()<a class="headerlink" href="#capfirst" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="upper">
+<h3>upper()<a class="headerlink" href="#upper" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="center-width">
+<h3>center($width)<a class="headerlink" href="#center-width" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="ljust-width">
+<h3>ljust($width)<a class="headerlink" href="#ljust-width" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="rjust-width">
+<h3>rjust($width)<a class="headerlink" href="#rjust-width" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="cut-str">
+<h3>cut($str)<a class="headerlink" href="#cut-str" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="date-format">
+<h3>date($format)<a class="headerlink" href="#date-format" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="time-format">
+<h3>time($format)<a class="headerlink" href="#time-format" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="filesizeformat">
+<h3>filesizeformat()<a class="headerlink" href="#filesizeformat" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="yesno-yes-null-no-null-maybe-null">
+<h3>yesno($yes=null, $no=null, $maybe=null)<a class="headerlink" href="#yesno-yes-null-no-null-maybe-null" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="wordwrap-width">
+<h3>wordwrap($width)<a class="headerlink" href="#wordwrap-width" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="wordcount">
+<h3>wordcount()<a class="headerlink" href="#wordcount" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="len">
+<h3>len()<a class="headerlink" href="#len" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="stringformat-format">
+<h3>stringformat($format)<a class="headerlink" href="#stringformat-format" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="escapejs">
+<h3>escapejs()<a class="headerlink" href="#escapejs" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="first">
+<h3>first()<a class="headerlink" href="#first" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="fixampersands">
+<h3>fixampersands()<a class="headerlink" href="#fixampersands" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="floatformat-ds-null">
+<h3>floatformat($ds=null)<a class="headerlink" href="#floatformat-ds-null" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="getdigit-n">
+<h3>getdigit($n)<a class="headerlink" href="#getdigit-n" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="lower">
+<h3>lower()<a class="headerlink" href="#lower" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="title">
+<h3>title()<a class="headerlink" href="#title" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="urlize">
+<h3>urlize()<a class="headerlink" href="#urlize" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="urlizetrunc-len">
+<h3>urlizetrunc($len)<a class="headerlink" href="#urlizetrunc-len" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="truncatewords-n">
+<h3>truncatewords($n)<a class="headerlink" href="#truncatewords-n" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="truncatewordshtml-n">
+<h3>truncatewordshtml($n)<a class="headerlink" href="#truncatewordshtml-n" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="urlencode">
+<h3>urlencode()<a class="headerlink" href="#urlencode" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="iriencode">
+<h3>iriencode()<a class="headerlink" href="#iriencode" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="slice-str">
+<h3>slice($str)<a class="headerlink" href="#slice-str" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="linenumbers">
+<h3>linenumbers()<a class="headerlink" href="#linenumbers" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="removetags">
+<h3>removetags()<a class="headerlink" href="#removetags" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="linebreaks">
+<h3>linebreaks()<a class="headerlink" href="#linebreaks" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="linebreaksbr">
+<h3>linebreaksbr()<a class="headerlink" href="#linebreaksbr" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="join-glue">
+<h3>join($glue=&#8217;, &#8216;)<a class="headerlink" href="#join-glue" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="makelist">
+<h3>makelist()<a class="headerlink" href="#makelist" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="slugify">
+<h3>slugify()<a class="headerlink" href="#slugify" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="phone2numeric">
+<h3>phone2numeric()<a class="headerlink" href="#phone2numeric" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
 </div>
 <div class="section" id="navigation">
 <h1>Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h1>
@@ -110,7 +325,92 @@ the magic values will take precedence.</p>
             <ul>
 <li><a class="reference external" href="#">Welcome to PHP Django Template Language Iterator&#8217;s documentation!</a></li>
 <li><a class="reference external" href="#basic-usage">Basic usage</a></li>
-<li><a class="reference external" href="#filter-reference">Filter reference</a></li>
+<li><a class="reference external" href="#filter-reference">Filter reference</a><ul>
+<li><a class="reference external" href="#flags">Flags</a><ul>
+<li><a class="reference external" href="#autoescapeon">autoescapeon()</a></li>
+<li><a class="reference external" href="#autoescapeoff">autoescapeoff()</a></li>
+<li><a class="reference external" href="#escape">escape()</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#questions">Questions</a><ul>
+<li><a class="reference external" href="#emptyor-default">emptyor($default)</a></li>
+<li><a class="reference external" href="#isfirst">isfirst()</a></li>
+<li><a class="reference external" href="#islast">islast()</a></li>
+<li><a class="reference external" href="#haschanged">haschanged()</a></li>
+<li><a class="reference external" href="#same">same()</a></li>
+<li><a class="reference external" href="#divisibleby-divisor">divisibleby($divisor)</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#returns">Returns</a><ul>
+<li><a class="reference external" href="#safe">safe()</a></li>
+<li><a class="reference external" href="#forceescape">forceescape()</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#counters">Counters</a><ul>
+<li><a class="reference external" href="#counter">counter()</a></li>
+<li><a class="reference external" href="#counter0">counter0()</a></li>
+<li><a class="reference external" href="#revcounter">revcounter()</a></li>
+<li><a class="reference external" href="#revcounter0">revcounter0()</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#selectors">Selectors</a><ul>
+<li><a class="reference external" href="#firstof">firstof()</a></li>
+<li><a class="reference external" href="#cycle">cycle()</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#other-nonchainable-commands">Other nonchainable commands</a><ul>
+<li><a class="reference external" href="#length">length()</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#filters">Filters</a><ul>
+<li><a class="reference external" href="#pluralize-a-s-b-null">pluralize($a=&#8217;s&#8217;, $b=null)</a></li>
+<li><a class="reference external" href="#unorderedlist">unorderedlist()</a></li>
+<li><a class="reference external" href="#striptags">striptags()</a></li>
+<li><a class="reference external" href="#vd">vd()</a></li>
+<li><a class="reference external" href="#now-format">now($format)</a></li>
+<li><a class="reference external" href="#widthratio-range-in-range-out">widthratio($range_in, $range_out)</a></li>
+<li><a class="reference external" href="#add-amount">add($amount)</a></li>
+<li><a class="reference external" href="#addslashes">addslashes()</a></li>
+<li><a class="reference external" href="#capfirst">capfirst()</a></li>
+<li><a class="reference external" href="#upper">upper()</a></li>
+<li><a class="reference external" href="#center-width">center($width)</a></li>
+<li><a class="reference external" href="#ljust-width">ljust($width)</a></li>
+<li><a class="reference external" href="#rjust-width">rjust($width)</a></li>
+<li><a class="reference external" href="#cut-str">cut($str)</a></li>
+<li><a class="reference external" href="#date-format">date($format)</a></li>
+<li><a class="reference external" href="#time-format">time($format)</a></li>
+<li><a class="reference external" href="#filesizeformat">filesizeformat()</a></li>
+<li><a class="reference external" href="#yesno-yes-null-no-null-maybe-null">yesno($yes=null, $no=null, $maybe=null)</a></li>
+<li><a class="reference external" href="#wordwrap-width">wordwrap($width)</a></li>
+<li><a class="reference external" href="#wordcount">wordcount()</a></li>
+<li><a class="reference external" href="#len">len()</a></li>
+<li><a class="reference external" href="#stringformat-format">stringformat($format)</a></li>
+<li><a class="reference external" href="#escapejs">escapejs()</a></li>
+<li><a class="reference external" href="#first">first()</a></li>
+<li><a class="reference external" href="#fixampersands">fixampersands()</a></li>
+<li><a class="reference external" href="#floatformat-ds-null">floatformat($ds=null)</a></li>
+<li><a class="reference external" href="#getdigit-n">getdigit($n)</a></li>
+<li><a class="reference external" href="#lower">lower()</a></li>
+<li><a class="reference external" href="#title">title()</a></li>
+<li><a class="reference external" href="#urlize">urlize()</a></li>
+<li><a class="reference external" href="#urlizetrunc-len">urlizetrunc($len)</a></li>
+<li><a class="reference external" href="#truncatewords-n">truncatewords($n)</a></li>
+<li><a class="reference external" href="#truncatewordshtml-n">truncatewordshtml($n)</a></li>
+<li><a class="reference external" href="#urlencode">urlencode()</a></li>
+<li><a class="reference external" href="#iriencode">iriencode()</a></li>
+<li><a class="reference external" href="#slice-str">slice($str)</a></li>
+<li><a class="reference external" href="#linenumbers">linenumbers()</a></li>
+<li><a class="reference external" href="#removetags">removetags()</a></li>
+<li><a class="reference external" href="#linebreaks">linebreaks()</a></li>
+<li><a class="reference external" href="#linebreaksbr">linebreaksbr()</a></li>
+<li><a class="reference external" href="#join-glue">join($glue=&#8217;, &#8216;)</a></li>
+<li><a class="reference external" href="#makelist">makelist()</a></li>
+<li><a class="reference external" href="#slugify">slugify()</a></li>
+<li><a class="reference external" href="#phone2numeric">phone2numeric()</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference external" href="#navigation">Navigation</a></li>
 </ul>
 

@@ -33,8 +33,8 @@ clean:
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	sh _scripts/replace.sh
-	mv $(BUILDDIR)/html/*.html $(BUILDDIR)/../../
-	mv $(BUILDDIR)/html/_static $(BUILDDIR)/../../static
+	cp -r $(BUILDDIR)/html/*.html $(BUILDDIR)/../../
+	cp -r $(BUILDDIR)/html/_static $(BUILDDIR)/../../static
 
 
 	@echo
