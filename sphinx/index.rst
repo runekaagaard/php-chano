@@ -63,5 +63,5 @@ Navigation
 ==========
 
 * :ref:`genindex`
-* :ref:`search`
+
 

@@ -1,0 +1,1 @@
+Search.setIndex({desctypes:{},terms:{index:0,search:0,php:0,welcom:0,modul:0,iter:0,django:0,content:0,indic:0,tabl:0,languag:0,document:0,templag:0,coolne:0,page:0},titles:["Welcome to PHP Django Templage Language Iterator&#8217;s documentation!"],modules:{},descrefs:{},filenames:["index"]})
