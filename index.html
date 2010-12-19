@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to PHP Django Templage Language Iterator’s documentation! &mdash; PHP Django Templage Language Iterator vdev documentation</title>
+    <title>Welcome to PHP Django Template Language Iterator’s documentation! &mdash; PHP Django Templage Language Iterator vdev documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -37,19 +37,66 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-php-django-templage-language-iterator-s-documentation">
-<h1>Welcome to PHP Django Templage Language Iterator&#8217;s documentation!<a class="headerlink" href="#welcome-to-php-django-templage-language-iterator-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>I am the coolnees!</p>
-<p>Contents:</p>
-<ul class="simple">
-</ul>
+  <div class="section" id="welcome-to-php-django-template-language-iterator-s-documentation">
+<h1>Welcome to PHP Django Template Language Iterator&#8217;s documentation!<a class="headerlink" href="#welcome-to-php-django-template-language-iterator-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>The &#8220;PHP Django Template Language Iterator&#8221; (DTLI) is a standard PHP iterator
+class that accepts an array of arrays or objects. It lets you iterate over it
+like you would a normal array. But instead of just being able to access the raw
+value it also provides access to a large range of utility functions that
+manipulates or asks questions about the value in various ways. The functions
+provided are almost directly ported from the Django Template Language.</p>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-usage">
+<h1>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
+<p>Instantiation is as simple as:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+            <span class="k">array</span><span class="p">(</span><span class="s1">&#39;title&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;first title&#39;</span><span class="p">),</span>
+            <span class="k">array</span><span class="p">(</span><span class="s1">&#39;title&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;second title&#39;</span><span class="p">),</span>
+        <span class="p">);</span>
+<span class="nv">$items</span> <span class="o">=</span> <span class="k">new</span> <span class="p">(</span><span class="nx">DtlIter</span><span class="p">(</span><span class="nv">$data</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Now <tt class="docutils literal"><span class="pre">$items</span></tt> can be iterated as one normally would:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?</span><span class="k">foreach</span><span class="p">(</span><span class="nv">$items</span> <span class="k">as</span> <span class="nv">$i</span><span class="p">)</span><span class="o">:?&gt;</span>
+    <span class="o">&lt;?=</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?</span><span class="k">endforeach</span><span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Both array and object notation are supported so these two lines are exactly the
+same:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Nesting goes arbitrarily deep:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">key1</span><span class="o">-&gt;</span><span class="na">key2</span><span class="o">-&gt;</span><span class="na">key3</span><span class="cp">?&gt;</span><span class="x"></span>
+<span class="cp">&lt;?</span><span class="o">=</span><span class="nv">$i</span><span class="p">[</span><span class="s1">&#39;key1&#39;</span><span class="p">][</span><span class="s1">&#39;key2&#39;</span><span class="p">][</span><span class="s1">&#39;key2&#39;</span><span class="p">]</span><span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Important to note is that when <tt class="docutils literal"><span class="pre">$i-&gt;title</span></tt> is accessed the returned value is
+not a string (e.g. &#8216;first title&#8217;) but an instance of the DtlIter class itself.
+Only when used with <tt class="docutils literal"><span class="pre">echo</span> <span class="pre">$i-&gt;title</span></tt> or <tt class="docutils literal"><span class="pre">&lt;?=$i-&gt;title?&gt;</span></tt> the __toString()
+method is called and the output will be a string as expected. In other cases
+you can access the __toString() value by appending an <tt class="docutils literal"><span class="pre">-&gt;_</span></tt> and if you want
+to access the actual value by appending a <tt class="docutils literal"><span class="pre">-&gt;v</span></tt>:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">echo</span> <span class="nx">type</span><span class="p">(</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="p">);</span> <span class="c1">// DtlIter.</span>
+<span class="k">echo</span> <span class="nx">type</span><span class="p">(</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">title</span><span class="o">-&gt;</span><span class="na">_</span><span class="p">);</span> <span class="c1">// String.</span>
+<span class="k">echo</span> <span class="nx">type</span><span class="p">(</span><span class="nv">$i</span><span class="o">-&gt;</span><span class="na">titles</span><span class="o">-&gt;</span><span class="na">v</span><span class="p">);</span> <span class="c1">// Array.</span>
+</pre></div>
+</div>
+<p>This also means that you can&#8217;t access keys named &#8220;_&#8221; and &#8220;v&#8221; in your arrays as
+the magic values will take precedence.</p>
+</div>
+<div class="section" id="filter-reference">
+<h1>Filter reference<a class="headerlink" href="#filter-reference" title="Permalink to this headline">¶</a></h1>
+<p>Stub.</p>
+</div>
+<div class="section" id="navigation">
+<h1>Navigation<a class="headerlink" href="#navigation" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><a class="reference external" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference external" href="modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference external" href="search.html"><em>Search Page</em></a></li>
 </ul>
 </div>
 
@@ -61,10 +108,10 @@
         <div class="sphinxsidebarwrapper">
             <h3><a href="#">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href="#">Welcome to PHP Django Templage Language Iterator&#8217;s documentation!</a><ul>
-</ul>
-</li>
-<li><a class="reference external" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference external" href="#">Welcome to PHP Django Template Language Iterator&#8217;s documentation!</a></li>
+<li><a class="reference external" href="#basic-usage">Basic usage</a></li>
+<li><a class="reference external" href="#filter-reference">Filter reference</a></li>
+<li><a class="reference external" href="#navigation">Navigation</a></li>
 </ul>
 
             <h3>This Page</h3>
