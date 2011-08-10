@@ -359,80 +359,113 @@ class DtlIter implements Iterator, ArrayAccess {
         $this->v = $this->_unorderedlist($this->_clean_list($this->v));
         return $this;
     }
+    
     function striptags() {
-        return $this->filter_apply(function($v) {
-            return strip_tags($v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = strip_tags($v);
+        return $this;
     }
     function vd() { var_dump($this->v); return $this; }
     function now($format) {
-        return $this->filter_apply(function($v) use ($format) {
-            return date($format);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = date($format);
+        return $this;
     }
     function widthratio($range_in, $range_out) {
-        return $this->filter_apply(function($v) use ($range_in, $range_out) {
-            return round($v / $range_in * $range_out);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = round($v / $range_in * $range_out);
+        return $this;
     }
-    function add($amount) { 
-        return $this->filter_apply(function($v) use ($amount) {
-            return $v + $amount;
-        });
+    function add($amount) {
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $v + $amount;
+        return $this;
     }
     function addslashes() {
-        return $this->filter_apply(function($v) {
-            return addslashes($v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = addslashes($v);
+        return $this;
     }
     function capfirst() {
-        return $this->filter_apply(function($v) {
-            return ucfirst($v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = ucfirst($v);
+        return $this;
     }
     function upper() {
-        return $this->filter_apply(function($v) {
-            return mb_strtoupper($v, DtlIter::$encoding);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = mb_strtoupper($v, DtlIter::$encoding);
+        return $this;
     }
     function center($width) {
-        return $this->filter_apply(function($v) use($width) {
-            return str_pad($v, $width, " ", STR_PAD_BOTH);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = str_pad($v, $width, " ", STR_PAD_BOTH);
+        return $this;
     }
     function ljust($width) {
-        return $this->filter_apply(function($v) use($width) {
-            return str_pad($v, $width, " ", STR_PAD_LEFT);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = str_pad($v, $width, " ", STR_PAD_LEFT);
+        return $this;
     }
     function rjust($width) {
-        return $this->filter_apply(function($v) use($width) {
-            return str_pad($v, $width, " ", STR_PAD_RIGHT);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = str_pad($v, $width, " ", STR_PAD_RIGHT);
+        return $this;
     }
     function cut($str) {
-        return $this->filter_apply(function($v) use ($str) {
-            return str_replace($str, '', $v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = str_replace($str, '', $v);
+        return $this;
     }
     function date($format) {
-        return $this->filter_apply(function($v) use ($format) {
-            return date($format, $v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = date($format, $v);
+        return $this;
     }
     function time($format) {
-        return $this->filter_apply(function($v) use ($format) {
-            return date($format, mktime($v));
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = date($format, mktime($v));
+        return $this;
+
+    }
+    function _filesizeformat($size) {
+        static $prefixes = array('bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
+        if (empty($size) || !is_numeric($size)) return "0 $prefixes[0]";
+        for ($i=0; round($size, 1) >= 1024 && $i<5; $size /= 1024, ++$i);
+        if ($i==0) return "$size $prefixes[0]";
+        return sprintf('%01.1f %s', $size, $prefixes[$i]);
     }
     function filesizeformat() {
-        return $this->filter_apply(function($size) {
-            $prefixes = array('bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
-            if (empty($size) || !is_numeric($size)) return "0 $prefixes[0]";
-            for ($i=0; round($size, 1) >= 1024 && $i<5; $size /= 1024, ++$i);
-            if ($i==0) return "$size $prefixes[0]";
-            return sprintf('%01.1f %s', $size, $prefixes[$i]);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_filesizeformat($v);
+        return $this;
     }
     function yesno($yes=null, $no=null, $maybe=null) {
         $choices = array(
@@ -440,31 +473,43 @@ class DtlIter implements Iterator, ArrayAccess {
             false => $no ? $no : 'no',
             null => $maybe ? $maybe : 'maybe',
         );
-        return $this->filter_apply(function($v) use ($choices, $no, $maybe) {
-            if ($v === null && $no && !$maybe) $v = False;
-            if ($v !== null) $v = (bool)$v;
-            return $choices[$v];
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) { 
+            if (!is_array($v) || $this->v === null) {
+                if ($v === null && $no && !$maybe) $v = False;
+                if ($v !== null) $v = (bool)$v;
+                $v = $choices[$v];
+            }
+        }
+        return $this;
     }
     function wordwrap($width) {
-        return $this->filter_apply(function($v) use ($width) {
-            return wordwrap($v, $width);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = wordwrap($v, $width);
+        return $this;
     }
     function wordcount() {
-        return $this->filter_apply(function($v) {
-            return str_word_count($v, 0, '0123456789');
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = str_word_count($v, 0, '0123456789');
+        return $this;
     }
     function len() {
-        return $this->filter_apply(function($v) {
-            return strlen($v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = strlen($v);
+        return $this;
     }
     function stringformat($format) {
-        return $this->filter_apply(function($v) use($format) {
-            return sprintf("%$format", $v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = sprintf("%$format", $v);
+        return $this;
     }
     function escapejs() {
         // Thanks Heine!: http://drupal.org/node/479368#pift-results-479368-3198
@@ -484,9 +529,11 @@ class DtlIter implements Iterator, ArrayAccess {
             '<' => '\u003C', '>' => '\u003E', '&' => '\u0026',
             '/' => '\u002F', "\xe2\x80\xa8" => '\u2028',
             "\xe2\x80\xa9" => '\u2029',);
-        return $this->filter_apply(function($v) use($replace_pairs) {
-            return strtr($v, $replace_pairs);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = strtr($v, $replace_pairs);
+        return $this;
     }
     function first() {
         if (!is_array($this->v)) throw new TypeNotArrayError;
@@ -495,197 +542,259 @@ class DtlIter implements Iterator, ArrayAccess {
         return $this;
     }
     function fixampersands() {
-        return $this->filter_apply(function($v) {
-            return strtr($v, '&', '&amp;');
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = strtr($v, '&', '&amp;');
+        return $this;
+    }
+    function _floatformat($v, $ds) {
+        if (!is_numeric($v)) return '';
+        if (!is_numeric($ds)) $ds = '-1';
+        $ds = (string)$ds;
+        $hide_zeros = true;
+        if ($ds) {
+            if ($ds[0] == '-') $ds = ltrim($ds, '-');
+            else $hide_zeros = False;
+        }
+        if ($hide_zeros && (int)$v == $v) return $v;
+        $ds = $ds ? $ds : 1;
+        return sprintf("%.{$ds}f", round($v, $ds));
     }
     function floatformat($ds=null) {
-        return $this->filter_apply(function($v) use($ds) {
-            if (!is_numeric($v)) return '';
-            if (!is_numeric($ds)) $ds = '-1';
-            $ds = (string)$ds;
-            $hide_zeros = true;
-            if ($ds) {
-                if ($ds[0] == '-') $ds = ltrim($ds, '-');
-                else $hide_zeros = False;
-            }
-            if ($hide_zeros && (int)$v == $v) return $v;
-            $ds = $ds ? $ds : 1;
-            return sprintf("%.{$ds}f", round($v, $ds));
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_floatformat($v, $ds);
+        return $this;
     }
-    function getdigit($n) {
-        return $this->filter_apply(function($v) use($n) {
+    function _getdigit($v, $n) {
             if (!intval($v) || !intval($n)) return $v;
             $v_s = (string)$v;
             if (!isset($v_s[$n-1])) return $v;
             else return $v_s[$n-1];
-        });
+        }
+    function getdigit($n) {
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_getdigit($v, $n);
+        return $this;
     }
     function lower() {
-        return $this->filter_apply(function($v) {
-            return mb_strtolower($v, DtlIter::$encoding);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = mb_strtolower($v, DtlIter::$encoding);
+        return $this;
     }
     function title() {
-        return $this->filter_apply(function($v) {
-            return mb_convert_case($v, MB_CASE_TITLE, DtlIter::$encoding);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = mb_convert_case($v, MB_CASE_TITLE, DtlIter::$encoding);
+        return $this;
+    }
+    function _urlize_cb1($ms) {
+        return empty($ms[2]) ? $ms[0]
+               : "$ms[1]<a href=\"$ms[2]\" rel=\"nofollow\">$ms[2]</a>";
+    }
+    function _urlize_cb2($ms) {
+        return empty($ms[2])
+               ? $ms[0]
+               : sprintf('<a href="http://%1$s" rel="nofollow">http://%1$s</a>'
+                         , trim($ms[2], '.,;:)'));
+    }
+    function _urlize_cb3($ms) {
+        return "$ms[1]<a href=\"mailto:$ms[2]@$ms[3]\">$ms[2]@$ms[3]</a>";
+    }
+    function _urlize_cb4($ms) {
+        return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
     }
     static function _urlize($v) {
         // Thanks Wordpress (I guess).
         $v = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff' 
              . '\#$%&~/=?@\[\](+-]|[.,;:](?![\s<]|(\))?([\s]|$))|(?(1)\)(?![\s<'
-             .'.,;:]|$)|\)))+)#is', function($ms) {
-                return empty($ms[2]) ? $ms[0]
-                    : "$ms[1]<a href=\"$ms[2]\" rel=\"nofollow\">$ms[2]</a>";}
+             .'.,;:]|$)|\)))+)#is', array($this, '_urlize_cb1')
              , " $v");
         $v = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.'.
-             '\-;:=,?@\[\]+]+)#is', function ($ms) { return empty($ms[2])
-                ? $ms[0]
-                : sprintf('<a href="http://%1$s" rel="nofollow">http://%1$s</a>'
-                , trim($ms[2], '.,;:)')); }, $v);
+             '\-;:=,?@\[\]+]+)#is', array($this, '_urlize_cb2'), $v);
         $v = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+'
-             . '[0-9a-z]{2,})#i', function ($ms) { return
-                    "$ms[1]<a href=\"mailto:$ms[2]@$ms[3]\">$ms[2]@$ms[3]</a>";
-                }, $v);
+             . '[0-9a-z]{2,})#i', array($this, '_urlize_cb3'), $v);
         $v = trim(preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i",
              "$1$3</a>", $v));
         if (strpos($v, 'www') !== FALSE)
             $v = str_replace(array ('>http://', '>https://'), '>', $v);
         return  preg_replace_callback('#(^| )[a-z0-9-_+]+\.(com|org|net)#',
-             function($ms) {
-                return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
-             }, $v);
+             array($this, '_urlize_cb4'), $v);
     }
     function urlize() {
         $this->autoescape_off_until_tostring = true;
-        return $this->filter_apply(function($v) {
-            return DtlIter::_urlize($v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_urlize($v);
+        return $this;
+    }
+    function _urlizetrunc_cb($ms, $len) {
+        if ($len <= 3) return $ms[1] . '...' . $ms[3];
+        if (strlen($ms[2]) <= $len) return $ms[0];
+        return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
+    }
+    function _urlizetrunc($v, $len) {
+        $v = DtlIter::_urlize($v);
+        return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
+                   array($this, '_urlizetrunc_cb'), $v);
     }
     function urlizetrunc($len) {
         // TODO: This passes the tests but also truncates existing html
         // addresses which is probably not the desired behavior. Change _urlize
         // to support truncate.
         $this->autoescape_off_until_tostring = true;
-        return $this->filter_apply(function($v) use ($len) {
-            $v = DtlIter::_urlize($v);
-            return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
-                function($ms) use ($len) {
-                    if ($len <= 3) return $ms[1] . '...' . $ms[3];
-                    if (strlen($ms[2]) <= $len) return $ms[0];
-                    return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
-                }, $v);});
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_urlizetrunc($v, $len);
+        return $this;
     }
     function truncatewords($n) {
         // Thanks banderson623: http://snippets.dzone.com/posts/show/412.
-        return $this->filter_apply(function($v) use($n) {
-            $parts = explode(' ', $v);
-            if(count($parts) > $n && $n>0)
-                return implode(' ', array_slice($parts, 0, $n)) . ' ...';
-            else return $v;
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) {
+            if (!is_array($v) || $this->v === null) {
+                $parts = explode(' ', $v);
+                if(count($parts) > $n && $n>0)
+                    $v = implode(' ', array_slice($parts, 0, $n)) . ' ...';
+            }
+        }
+        return $this;
+    }
+    function _truncatewordshtml($v, $n) {
+        // Strip tags, explode words and count the number of chars of the
+        // first n words. Then use cakePHP magic function.
+        if ($n == 0) return '';
+        $parts = explode(' ', strip_tags($v));
+        $found_words = 0;
+        $found_words_len = 0;
+        foreach ($parts as $part) {
+            $found_words_len += mb_strlen($part);
+            if (preg_match('#[\w][\w-]+[\w]#u', $part)) ++$found_words;
+            if ($found_words == $n) {
+                // Thankyou cakePHP!
+                return dtl_truncate($v, $found_words_len+4, array(
+                    'ending' => ' ...', 'exact' => true, 'html' => true,
+                ));
+            }
+            ++$found_words_len;
+        }
+        return $v;
     }
     function truncatewordshtml($n) {
         $this->autoescape_off_until_tostring = true;
-        return $this->filter_apply(function($v) use($n) {
-            // Strip tags, explode words and count the number of chars of the
-            // first n words. Then use cakePHP magic function.
-            if ($n == 0) return '';
-            $parts = explode(' ', strip_tags($v));
-            $found_words = 0;
-            $found_words_len = 0;
-            foreach ($parts as $part) {
-                $found_words_len += mb_strlen($part);
-                if (preg_match('#[\w][\w-]+[\w]#u', $part)) ++$found_words;
-                if ($found_words == $n) {
-                    // Thankyou cakePHP!
-                    return dtl_truncate($v, $found_words_len+4, array(
-                        'ending' => ' ...', 'exact' => true, 'html' => true,
-                    ));
-                }
-                ++$found_words_len;
-            }
-            return $v;
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_truncatewordshtml($v, $n);
+        return $this;
     }
     function urlencode() {
-        return $this->filter_apply(function($v) {
-            return urlencode($v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = urlencode($v);
+        return $this;
     }
     function iriencode() {
         // TODO: Keep this? Suspicious!
-        return $this->filter_apply(function($v) {
-            return str_replace('+', '%20', urlencode(urldecode($v)));
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = str_replace('+', '%20', urlencode(urldecode($v)));
+        return $this;
+    }
+    function _slice($v, $str) {
+        $ps = explode(':', $str);
+        $count = count($ps);
+        if ($count == 1) {
+            $a = $ps[0];
+            if ($a == 0) return '';
+            else return mb_substr($v, 0, $a, DtlIter::$encoding);
+        }
+        if ($count == 2) {
+            list($a,$b) = $ps;
+            return mb_substr($v, $a, $b-$a, DtlIter::$encoding);
+        }
+        if ($count == 3) {
+            list ($a, $dummy, $b) = $ps;
+            $v = mb_substr($v, $a, strlen($v), DtlIter::$encoding);
+            $len = strlen($v) - 1;
+            $result = '';
+            for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
+            return $result;
+        }
+        return '';
     }
     function slice($str) {
-        return $this->filter_apply(function($v) use($str) {
-            $ps = explode(':', $str);
-            $count = count($ps);
-            if ($count == 1) {
-                $a = $ps[0];
-                if ($a == 0) return '';
-                else return mb_substr($v, 0, $a, DtlIter::$encoding);
-            }
-            if ($count == 2) {
-                list($a,$b) = $ps;
-                return mb_substr($v, $a, $b-$a, DtlIter::$encoding);
-            }
-            if ($count == 3) {
-                list ($a, $dummy, $b) = $ps;
-                $v = mb_substr($v, $a, strlen($v), DtlIter::$encoding);
-                $len = strlen($v) - 1;
-                $result = '';
-                for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
-                return $result;
-            }
-            return '';
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_slice($v, $str);
+        return $this;
+    }
+    function _linenumbers($v) {
+        $lines = explode("\n", trim($v));
+        $strlen = strlen(count($lines));
+        $string = '';
+        $i = 1;
+        foreach ($lines as $line) {
+            $string .= 
+                str_pad($i, $strlen, '0', STR_PAD_LEFT)
+                . '. ' . $line . "\n";
+            ++$i;
+        }
+        return $string;
     }
     function linenumbers() {
-        // TODO: Make pretty. Do you feel pretty, well do you punk?.
-        return $this->filter_apply(function($v) {
-            $lines = explode("\n", trim($v));
-            $strlen = strlen(count($lines));
-            $string = '';
-            $i = 1;
-            foreach ($lines as $line) {
-                $string .= 
-                    str_pad($i, $strlen, '0', STR_PAD_LEFT)
-                    . '. ' . $line . "\n";
-                ++$i;
-            }
-            return $string;
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_linenumbers($v);
+        return $this;
     }
     function removetags() {
         $this->autoescape_off_until_tostring = true;
         $args = func_get_args();
         if (empty($args)) return $this;
         $tags = implode('|', $args);
-        return $this->filter_apply(function($v) use($tags) {
-            return preg_replace("/<\\/?($tags)(\\s+.*?>|>)/Uis", '', $v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = preg_replace("/<\\/?($tags)(\\s+.*?>|>)/Uis", '', $v);
+        return $this;
+    }
+    function _linebreaks($v) {
+        $v = preg_replace('#\r\n|\r|\n#', "\n", $v);
+        $paragrahps = preg_split('#\n{2,}#', $v);
+        $html = '';
+        foreach ($paragrahps as $p) 
+            $html .= '<p>' . str_replace("\n", '<br />', $p) . '</p>';
+        return $html;
     }
     function linebreaks() {
         $this->autoescape_off_until_tostring = true;
-        return $this->filter_apply(function($v) {
-            $v = preg_replace('#\r\n|\r|\n#', "\n", $v);
-            $paragrahps = preg_split('#\n{2,}#', $v);
-            $html = '';
-            foreach ($paragrahps as $p) 
-                $html .= '<p>' . str_replace("\n", '<br />', $p) . '</p>';
-            return $html;
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_linebreaks($v);
+        return $this;
     }
     function linebreaksbr() {
         $this->autoescape_off_until_tostring = true;
-        return $this->filter_apply(function($v) {
-            return nl2br($v);
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = nl2br($v);
+        return $this;
     }
     function join($glue=', ') {
         if (is_scalar($this->v)) return $this;
@@ -693,34 +802,41 @@ class DtlIter implements Iterator, ArrayAccess {
         return $this;
     }
     function makelist() {
-        return $this->filter_apply(function($v) {
-            $vs = str_split((string)$v);
-            if (is_int($v)) foreach ($vs as &$v) $v = (int)$v;
-            return $vs;
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) {
+            if (!is_array($v) || $this->v === null) {
+                $vs = str_split((string)$v);
+                if (is_int($v)) foreach ($vs as &$v) $v = (int)$v;
+                $v = $vs;
+            }
+        }
     }
     function slugify() {
         // Thanks Borek! http://drupal.org/node/63924.
-        return $this->filter_apply(function($v) {
-            $v = str_replace(array(',', '\''), '', $v);
-            $v = preg_replace('#[^\\pL0-9_]+#u', '-', $v);
-            $v = preg_replace('#[-]{2,}#', '-', $v);
-            $v = trim($v, "-");
-            $v = iconv(DtlIter::$encoding, "us-ascii//TRANSLIT", $v);
-            $v = strtolower($v);
-            $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
-            return $v;
-        });
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) {
+            if (!is_array($v) || $this->v === null) {
+                $v = str_replace(array(',', '\''), '', $v);
+                $v = preg_replace('#[^\\pL0-9_]+#u', '-', $v);
+                $v = preg_replace('#[-]{2,}#', '-', $v);
+                $v = trim($v, "-");
+                $v = iconv(DtlIter::$encoding, "us-ascii//TRANSLIT", $v);
+                $v = strtolower($v);
+                $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
+            }
+        }
     }
     function phone2numeric() {
-        return $this->filter_apply(function($v) {
-            static $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2',
-                'd' => '3', 'e' => '3', 'f' => '3', 'g' => '4', 'h' => '4',
-                'i' => '4', 'j' => '5', 'k' => '5', 'l' => '5', 'm' => '6',
-                'n' => '6', 'o' => '6', 'p' => '7', 'q' => '7', 'r' => '7',
-                's' => '7', 't' => '8', 'u' => '8', 'v' => '8', 'w' => '9',
-                'x' => '9', 'y' => '9', 'z' => '9');
-            return strtr(strtolower($v), $replace_pairs);
-        });
+        static $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2',
+            'd' => '3', 'e' => '3', 'f' => '3', 'g' => '4', 'h' => '4',
+            'i' => '4', 'j' => '5', 'k' => '5', 'l' => '5', 'm' => '6',
+            'n' => '6', 'o' => '6', 'p' => '7', 'q' => '7', 'r' => '7',
+            's' => '7', 't' => '8', 'u' => '8', 'v' => '8', 'w' => '9',
+            'x' => '9', 'y' => '9', 'z' => '9');
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v) 
+            if (!is_array($v) || $this->v === null)
+                $v = strtr(strtolower($v), $replace_pairs);
+        return $this;
     }
 }
