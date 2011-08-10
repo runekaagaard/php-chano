@@ -386,7 +386,7 @@ class DtlIter implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = $v + $amount;
+                $v += $amount;
         return $this;
     }
     function addslashes() {
@@ -611,7 +611,7 @@ class DtlIter implements Iterator, ArrayAccess {
     function _urlize_cb4($ms) {
         return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
     }
-    static function _urlize($v) {
+    function _urlize($v) {
         // Thanks Wordpress (I guess).
         $v = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff' 
              . '\#$%&~/=?@\[\](+-]|[.,;:](?![\s<]|(\))?([\s]|$))|(?(1)\)(?![\s<'
@@ -636,12 +636,13 @@ class DtlIter implements Iterator, ArrayAccess {
                 $v = $this->_urlize($v);
         return $this;
     }
-    function _urlizetrunc_cb($ms, $len) {
+    function _urlizetrunc_cb($ms) {
+        $len = $this->_urlizetrunc_len;
         if ($len <= 3) return $ms[1] . '...' . $ms[3];
         if (strlen($ms[2]) <= $len) return $ms[0];
         return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
     }
-    function _urlizetrunc($v, $len) {
+    function _urlizetrunc($v) {
         $v = DtlIter::_urlize($v);
         return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
                    array($this, '_urlizetrunc_cb'), $v);
@@ -651,6 +652,7 @@ class DtlIter implements Iterator, ArrayAccess {
         // addresses which is probably not the desired behavior. Change _urlize
         // to support truncate.
         $this->autoescape_off_until_tostring = true;
+        $this->_urlizetrunc_len = $len;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
@@ -805,11 +807,12 @@ class DtlIter implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) {
             if (!is_array($v) || $this->v === null) {
-                $vs = str_split((string)$v);
-                if (is_int($v)) foreach ($vs as &$v) $v = (int)$v;
-                $v = $vs;
+                $_vs = str_split((string)$v);
+                if (is_int($v)) foreach ($_vs as &$_v) $_v = (int)$_v;
+                $v = $_vs;
             }
         }
+        return $this;
     }
     function slugify() {
         // Thanks Borek! http://drupal.org/node/63924.
@@ -825,6 +828,7 @@ class DtlIter implements Iterator, ArrayAccess {
                 $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
             }
         }
+        return $this;
     }
     function phone2numeric() {
         static $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2',
