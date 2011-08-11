@@ -2,8 +2,11 @@
 
 Welcome to the documentation for Chano.
 =================================================================
+This page is a stub. See documentation on the Django filters here
+https://docs.djangoproject.com/en/dev/topics/templates/.
 
-Chanoe is a standard PHP iterator class that accepts an array of things. It lets 
+
+Chano is a standard PHP iterator class that accepts an array of things. It lets 
 you iterate over it like you would a normal array. 
 
 But instead of just being able to access the raw value it also provides access 
