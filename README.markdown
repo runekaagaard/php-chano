@@ -1,5 +1,4 @@
-Chano
-=====================
+## Chano ##
 
 An iterator class that takes an array of things as an input and supplies
 capabilities resembling the Django Template Language.
@@ -8,8 +7,7 @@ Filters are chainable where it makes sense.
 
 Still in beta.
 
-Example
--------
+## Example ##
 Also check out the the tests. The following is a example of usage::
 
 ```php
