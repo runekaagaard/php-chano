@@ -2,7 +2,7 @@
 Testing chaining capabilities.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../Chano.php';
+include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = array(
     array('d' => 219823498374),
     array('d' => 2234832748),

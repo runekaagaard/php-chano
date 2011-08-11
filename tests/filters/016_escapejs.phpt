@@ -2,7 +2,7 @@
 A generated testfile for the "escapejs" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../Chano.php';
+include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = new Chano(array(array('input' => '\\ : backslashes, too')));
 foreach ($items as $i) echo $i->input->escapejs();
 --EXPECT--

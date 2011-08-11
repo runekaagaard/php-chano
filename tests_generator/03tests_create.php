@@ -14,7 +14,7 @@ A generated testfile for the "<?=$t['filter']?>" filter.
 --FILE--
 <?='<?php'?>
 
-include dirname(__FILE__) . '/../../Chano.php';
+include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = new Chano(array(array('input' => <?=var_export($v)?>)));
 foreach ($items as $i) echo $i->input-><?=$t['filter']?>(<?=$args_as_string?>);
 --EXPECT--
