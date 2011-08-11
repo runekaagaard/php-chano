@@ -6,7 +6,7 @@ include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = new Chano(array(array('input' => '')));
 try {
     foreach ($items as $i) echo $i->input->first();
-} catch (Chano_TypeNotArrayError $e) {
+} catch (Chano_TypeNotTraversableError $e) {
     die('caught!');
 }
 --EXPECT--

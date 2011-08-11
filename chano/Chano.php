@@ -1,10 +1,6 @@
 <?php
-// Errors on. Can be omitted by setting CHANO_DISABLE_ERROR_SETTINGS to true.
-if (!(defined('CHANO_DISABLE_ERROR_SETTINGS')
-&& CHANO_DISABLE_ERROR_SETTINGS === true)) {
-    error_reporting(E_ALL|E_STRICT);
-    ini_set('display_errors', 1);
-}
+error_reporting(E_ALL|E_STRICT);
+ini_set('display_errors', 1);
 
 // Includes.
 require realpath(dirname(__FILE__) . '/lib/text.php');
@@ -12,7 +8,9 @@ require realpath(dirname(__FILE__) . '/lib/text.php');
 // Exceptions.
 class Chano_ReadOnlyError extends Exception {}
 class Chano_NotImplementedError extends Exception {}
-class Chano_TypeNotArrayError extends Exception {}
+class Chano_TypeNotTraversableError extends Exception {}
+class Chano_TypeNotComplexError extends Exception {}
+class Chano_ValueIsEmptyError extends Exception {}
 
 /**
  * An iterator that takes an array of arrays as an input and supplies
@@ -26,7 +24,7 @@ class Chano_TypeNotArrayError extends Exception {}
  * 1) While the filter tests are pretty good, more tests of more general nature
  * are needed.
  * 2) Create proper documentation in restructured text.
- * 4) Make it work for array of objects too.
+ * 3) Make it work for other kind of iterators than arrays.
  *
  * @codestyle
  *
@@ -51,7 +49,7 @@ class Chano implements Iterator, ArrayAccess {
     public $v = self::INITIAL;
     
     // Private values.
-    const INITIAL = -9892895829385;
+    const INITIAL = '__CHANO_INITIAL__';
     private $count = 0;
     private $i = 0;
     private $items;
@@ -72,26 +70,42 @@ class Chano implements Iterator, ArrayAccess {
      *   Supported options are:
      *     'encoding': Defaults to 'utf-8'.
      */
-    function  __construct($items, array $options=array()) {
-        $default = array('encoding' => self::$encoding);
-        $options = array_merge($default, $options);
-        self::$encoding = $options['encoding'];
+    function  __construct($items) {
         $this->items = $items;
         $this->count = count($items) - 1;
     }
     function  __toString() {
-        $this->lookup_path_reset();
-        $s = $this->out();
-        $this->v = self::INITIAL;
-        return (string)$s;
+        return $this->out($this->reset_v());
     }
-    function out($escape = null) {
+    private function out($v, $escape=null) {
         if ($escape === null) $escape = $this->autoescape;
         $s = !$this->autoescape_off_until_tostring && $escape
-            ? htmlspecialchars((string)$this->v, ENT_NOQUOTES, self::$encoding)
-            : (string)$this->v;
+            ? htmlspecialchars((string)$v, ENT_NOQUOTES, self::$encoding)
+            : (string)$v;
         $this->autoescape_off_until_tostring = FALSE;
         return (string)$s;
+    }
+
+    /**
+     * Resets and returns current value.
+     *
+     * @return mixed
+     */
+    private function reset_v() {
+        $value = $this->v;
+        $this->v = self::INITIAL;
+        $this->lookup_path_reset();
+        return $value;
+    }
+    /**
+     * Resets settings for filters that does not wait for the __toString()
+     * method being called to return calue.
+     *
+     * @return mixed
+     */
+    private function reset_filter() {
+        $this->autoescape_off_until_tostring = FALSE;
+        return $this->reset_v();
     }
     
     /*
@@ -139,8 +153,14 @@ class Chano implements Iterator, ArrayAccess {
     
     function offsetGet($o) {
         if ($o == '_') return $this->__toString();
-        if ($this->v == self::INITIAL) $this->v = $this->current[$o];
-        else $this->v = $this->v[$o];
+
+        if ($this->v == self::INITIAL) $v = $this->current;
+        else $v = $this->v;
+
+        if (is_object($v)) $this->v = $v->$o;
+        elseif (is_array($v)) $this->v = $v[$o];
+        else throw new Chano_TypeNotComplexError;
+
         $this->lookup_add($o);
         return $this;
     }
@@ -160,36 +180,7 @@ class Chano implements Iterator, ArrayAccess {
         $this->v = call_user_func_array(array($this->current, $name), $args);
         return $this;
     }
-
-    /**
-     * Resets settings for filters that does not wait for the __toString()
-     * method being called to return calue.
-     *
-     * @todo Fix code duplication with __toString() and out() methods.
-     * @return mixed
-     */
-    function filter_reset() {
-        $value = $this->v;
-        $this->v = self::INITIAL;
-        $path = $this->lookup_path_reset();
-        $this->autoescape_off_until_tostring = FALSE;
-        return $value;
-    }
-    /**
-     * Appplies a filter function to the value of current row taking into
-     * account if said value is scalar or arrary.
-     *
-     * @param function $function
-     * @return $this
-     */
-    function filter_apply($function) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
-        foreach($vs as &$v) 
-            if (!is_array($v) || $this->v === null)
-                $v = $function($v);
-        return $this;
-    }
-
+    
     ////////////////////////////////////////////////////////////////////////////
     // Below this line are the methods that are part of the template api.     //
     ////////////////////////////////////////////////////////////////////////////
@@ -218,7 +209,7 @@ class Chano implements Iterator, ArrayAccess {
      */
     
     function emptyor($default) {
-        $value = $this->filter_reset();
+        $value = $this->reset_filter();
         return empty($value) ? $default : $value;
     }
     function isfirst() { return $this->i === 0; }
@@ -236,7 +227,7 @@ class Chano implements Iterator, ArrayAccess {
             $this->previous_lookups[$path] == $this->lookups[$path];
     }
     function divisibleby($divisor) {
-        return ($this->filter_reset() % $divisor) === 0;
+        return ($this->reset_filter() % $divisor) === 0;
     }
 
     /*
@@ -245,9 +236,9 @@ class Chano implements Iterator, ArrayAccess {
      * Returns value of current item in various ways. Unchainable.
      */
 
-    function safe() { return $this->out(false); }
+    function safe() { return $this->out($this->v, false); }
     function forceescape() {
-        return htmlentities($this->filter_reset(), null, self::$encoding);
+        return htmlentities($this->reset_filter(), null, self::$encoding);
     }
 
     /*
@@ -311,7 +302,7 @@ class Chano implements Iterator, ArrayAccess {
      * Other nonchainable commands.
      */
     function length() {
-        $v = $this->filter_reset();
+        $v = $this->reset_filter();
         if (is_scalar($v)) return strlen((string)$v);
         else return count($v);
     }
@@ -415,7 +406,7 @@ class Chano implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = mb_strtoupper($v, Chano::$encoding);
+                $v = mb_strtoupper($v, self::$encoding);
         return $this;
     }
     function center($width) {
@@ -544,9 +535,23 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
     function first() {
-        if (!is_array($this->v)) throw new Chano_TypeNotArrayError;
-        reset($this->v);
-        $this->v = current($this->v);
+        if (is_array($this->v)) {
+            if (empty($this->v)) throw new Chano_ValueIsEmptyError;
+            reset($this->v);
+            $this->v = current($this->v);
+        } elseif ($this->v instanceof stdClass 
+        || $this->v instanceof Traversable) {
+            $has_value = false;
+            foreach ($this->v as $v) {
+                $has_value = true;
+                $this->v = $v;
+                break;
+            }
+            if (!$has_value) throw new Chano_ValueIsEmptyError;
+        } else {
+            throw new Chano_TypeNotTraversableError;
+        }
+        
         return $this;
     }
     function fixampersands() {
@@ -593,7 +598,7 @@ class Chano implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = mb_strtolower($v, Chano::$encoding);
+                $v = mb_strtolower($v, self::$encoding);
         return $this;
     }
     function title() {
@@ -603,7 +608,7 @@ class Chano implements Iterator, ArrayAccess {
                 // Some PHP 5.2.x versions have problems with single quotes,
                 // interpreting them as spaces. Fix.
                 $v = str_replace("'", '__SINGLEQUOTE', $v);
-                $v = mb_convert_case($v, MB_CASE_TITLE, Chano::$encoding);
+                $v = mb_convert_case($v, MB_CASE_TITLE, self::$encoding);
                 $v = str_ireplace('__SINGLEQUOTE', "'", $v);
             }
         }
@@ -657,7 +662,7 @@ class Chano implements Iterator, ArrayAccess {
         return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
     }
     function _urlizetrunc($v) {
-        $v = Chano::_urlize($v);
+        $v = self::_urlize($v);
         return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
                    array($this, '_urlizetrunc_cb'), $v);
     }
@@ -742,15 +747,15 @@ class Chano implements Iterator, ArrayAccess {
         if ($count == 1) {
             $a = $ps[0];
             if ($a == 0) return '';
-            else return mb_substr($v, 0, $a, Chano::$encoding);
+            else return mb_substr($v, 0, $a, self::$encoding);
         }
         if ($count == 2) {
             list($a,$b) = $ps;
-            return mb_substr($v, $a, $b-$a, Chano::$encoding);
+            return mb_substr($v, $a, $b-$a, self::$encoding);
         }
         if ($count == 3) {
             list ($a, $dummy, $b) = $ps;
-            $v = mb_substr($v, $a, strlen($v), Chano::$encoding);
+            $v = mb_substr($v, $a, strlen($v), self::$encoding);
             $len = strlen($v) - 1;
             $result = '';
             for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
@@ -845,7 +850,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = preg_replace('#[^\\pL0-9_]+#u', '-', $v);
                 $v = preg_replace('#[-]{2,}#', '-', $v);
                 $v = trim($v, "-");
-                $v = iconv(Chano::$encoding, "us-ascii//TRANSLIT", $v);
+                $v = iconv(self::$encoding, "us-ascii//TRANSLIT", $v);
                 $v = strtolower($v);
                 $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
             }
