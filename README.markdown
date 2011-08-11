@@ -37,7 +37,7 @@ $items = new Chano(array(
     <div class="movies <?=$i->cycle('odd', 'even')?>">
         <h1><?=$i->title->capfirst()->ljust(20)?></h1>
         <p>
-            <strong>Rating<?=$i->ratings->pluralize()?>:</strong><?=$i->ratings->join()->_?>    
+            <strong>Rating<?=$i->ratings->pluralize()?>:</strong><?=$i->ratings->join()?>    
         </p>
         <p>
             <ul>
