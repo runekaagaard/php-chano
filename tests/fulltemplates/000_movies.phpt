@@ -2,8 +2,8 @@
 Testing rendering of a simple template.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../DtlIter.php';
-$items = new DtlIter(array(
+include dirname(__FILE__) . '/../../Chano.php';
+$items = new Chano(array(
     array(
         'title' => 'I am legend',
         'ratings' => array(45,56,23,89,12),

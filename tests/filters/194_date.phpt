@@ -2,12 +2,12 @@
 Testing chaining capabilities.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../DtlIter.php';
+include dirname(__FILE__) . '/../../Chano.php';
 $items = array(
     array('d' => 219823498374),
     array('d' => 2234832748),
 );
-foreach (new DtlIter($items) as $i) {
+foreach (new Chano($items) as $i) {
     echo $i->d->date('c') . "\n";
     echo $i->d->date('c')->cut("1904") . "\n";
 }

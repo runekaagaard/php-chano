@@ -2,11 +2,11 @@
 A generated testfile for the "first" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../DtlIter.php';
-$items = new DtlIter(array(array('input' => '')));
+include dirname(__FILE__) . '/../../Chano.php';
+$items = new Chano(array(array('input' => '')));
 try {
     foreach ($items as $i) echo $i->input->first();
-} catch (TypeNotArrayError $e) {
+} catch (Chano_TypeNotArrayError $e) {
     die('caught!');
 }
 --EXPECT--

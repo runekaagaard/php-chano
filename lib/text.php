@@ -18,7 +18,7 @@
  * @access public
  * @link http://book.cakephp.org/view/1469/Text#truncate-1625
  */
-function dtl_truncate($text, $length = 100, $options = array()) {
+function chano_truncate($text, $length = 100, $options = array()) {
     $default = array(
             'ending' => '...', 'exact' => true, 'html' => false
     );

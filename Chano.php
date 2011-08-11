@@ -1,15 +1,18 @@
 <?php
-// Errors on.
-error_reporting(E_ALL|E_STRICT);
-ini_set('display_errors', 1);
+// Errors on. Can be omitted by setting CHANO_DISABLE_ERROR_SETTINGS to true.
+if (!(defined('CHANO_DISABLE_ERROR_SETTINGS')
+&& CHANO_DISABLE_ERROR_SETTINGS === true)) {
+    error_reporting(E_ALL|E_STRICT);
+    ini_set('display_errors', 1);
+}
 
 // Includes.
 require realpath(dirname(__FILE__) . '/lib/text.php');
 
 // Exceptions.
-class ReadOnlyError extends Exception {}
-class NotImplementedError extends Exception {}
-class TypeNotArrayError extends Exception {}
+class Chano_ReadOnlyError extends Exception {}
+class Chano_NotImplementedError extends Exception {}
+class Chano_TypeNotArrayError extends Exception {}
 
 /**
  * An iterator that takes an array of arrays as an input and supplies
@@ -35,7 +38,7 @@ class TypeNotArrayError extends Exception {}
  *   * Not adding docblocks to (for me) obvious stuff.
  *   * Skipping default "public" keywords.
  */
-class DtlIter implements Iterator, ArrayAccess {
+class Chano implements Iterator, ArrayAccess {
     /**
      * The encoding used in charset sensitive filters.
      * @var string
@@ -141,9 +144,9 @@ class DtlIter implements Iterator, ArrayAccess {
         $this->lookup_add($o);
         return $this;
     }
-    function offsetExists($offset) { throw new NotImplementedError; }
-    function offsetSet($offset, $value) { throw new ReadOnlyError; }
-    function offsetUnset($offset) { throw new ReadOnlyError; }
+    function offsetExists($offset) { throw new Chano_NotImplementedError; }
+    function offsetSet($offset, $value) { throw new Chano_ReadOnlyError; }
+    function offsetUnset($offset) { throw new Chano_ReadOnlyError; }
 
     /**
      * Implementation of __get magic method.
@@ -189,7 +192,7 @@ class DtlIter implements Iterator, ArrayAccess {
     /*
      * Flags.
      *
-     * Sets one or more boolean values on the DtlIter class. Chainable.
+     * Sets one or more boolean values on the Chano class. Chainable.
      *
      * Sets autoescape on output on/off.
      */
@@ -407,7 +410,7 @@ class DtlIter implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = mb_strtoupper($v, DtlIter::$encoding);
+                $v = mb_strtoupper($v, Chano::$encoding);
         return $this;
     }
     function center($width) {
@@ -536,7 +539,7 @@ class DtlIter implements Iterator, ArrayAccess {
         return $this;
     }
     function first() {
-        if (!is_array($this->v)) throw new TypeNotArrayError;
+        if (!is_array($this->v)) throw new Chano_TypeNotArrayError;
         reset($this->v);
         $this->v = current($this->v);
         return $this;
@@ -585,7 +588,7 @@ class DtlIter implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = mb_strtolower($v, DtlIter::$encoding);
+                $v = mb_strtolower($v, Chano::$encoding);
         return $this;
     }
     function title() {
@@ -595,7 +598,7 @@ class DtlIter implements Iterator, ArrayAccess {
                 // Some PHP 5.2.x versions have problems with single quotes,
                 // interpreting them as spaces. Fix.
                 $v = str_replace("'", '__SINGLEQUOTE', $v);
-                $v = mb_convert_case($v, MB_CASE_TITLE, DtlIter::$encoding);
+                $v = mb_convert_case($v, MB_CASE_TITLE, Chano::$encoding);
                 $v = str_ireplace('__SINGLEQUOTE', "'", $v);
             }
         }
@@ -649,7 +652,7 @@ class DtlIter implements Iterator, ArrayAccess {
         return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
     }
     function _urlizetrunc($v) {
-        $v = DtlIter::_urlize($v);
+        $v = Chano::_urlize($v);
         return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
                    array($this, '_urlizetrunc_cb'), $v);
     }
@@ -689,7 +692,7 @@ class DtlIter implements Iterator, ArrayAccess {
             if (preg_match('#[\w][\w-]+[\w]#u', $part)) ++$found_words;
             if ($found_words == $n) {
                 // Thankyou cakePHP!
-                return dtl_truncate($v, $found_words_len+4, array(
+                return chano_truncate($v, $found_words_len+4, array(
                     'ending' => ' ...', 'exact' => true, 'html' => true,
                 ));
             }
@@ -726,15 +729,15 @@ class DtlIter implements Iterator, ArrayAccess {
         if ($count == 1) {
             $a = $ps[0];
             if ($a == 0) return '';
-            else return mb_substr($v, 0, $a, DtlIter::$encoding);
+            else return mb_substr($v, 0, $a, Chano::$encoding);
         }
         if ($count == 2) {
             list($a,$b) = $ps;
-            return mb_substr($v, $a, $b-$a, DtlIter::$encoding);
+            return mb_substr($v, $a, $b-$a, Chano::$encoding);
         }
         if ($count == 3) {
             list ($a, $dummy, $b) = $ps;
-            $v = mb_substr($v, $a, strlen($v), DtlIter::$encoding);
+            $v = mb_substr($v, $a, strlen($v), Chano::$encoding);
             $len = strlen($v) - 1;
             $result = '';
             for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
@@ -829,7 +832,7 @@ class DtlIter implements Iterator, ArrayAccess {
                 $v = preg_replace('#[^\\pL0-9_]+#u', '-', $v);
                 $v = preg_replace('#[-]{2,}#', '-', $v);
                 $v = trim($v, "-");
-                $v = iconv(DtlIter::$encoding, "us-ascii//TRANSLIT", $v);
+                $v = iconv(Chano::$encoding, "us-ascii//TRANSLIT", $v);
                 $v = strtolower($v);
                 $v = preg_replace('#[^-a-z0-9_]+#', '', $v);
             }

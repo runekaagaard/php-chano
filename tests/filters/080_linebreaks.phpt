@@ -2,8 +2,8 @@
 A generated testfile for the "linebreaks" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../DtlIter.php';
-$items = new DtlIter(array(array('input' => 'line 1
+include dirname(__FILE__) . '/../../Chano.php';
+$items = new Chano(array(array('input' => 'line 1
 line 2')));
 foreach ($items as $i) echo $i->input->linebreaks();
 --EXPECT--

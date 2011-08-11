@@ -1,5 +1,5 @@
 <?php
-require realpath(dirname(__FILE__)) . '/DtlIter.php';
+require realpath(dirname(__FILE__)) . '/Chano.php';
 
 $items = array(
         array('id' => 1, 'titles' => array('Main' =>"<a'", 'Sub'=> '2'),
@@ -12,7 +12,7 @@ $items = array(
             'body' => '', 'a'=> 0, 'b' => null, 'c' => false, 'x' => 120),
 );
 ?>
-<?foreach(new DtlIter($items) as $i):?>
+<?foreach(new Chano($items) as $i):?>
  <?=$i->body?>
  <?=$i['titles']['Main']?><?if($i['titles']['Main']->haschanged()):?>changed<?endif?>
  <?=$i->body?>
@@ -44,7 +44,7 @@ $items = array(
 );
 ?>
  
-<?foreach(new DtlIter($items) as $i):?>
+<?foreach(new Chano($items) as $i):?>
 <?=$i->a->cut('<')?>
  / <?=$i->d->date('D d M Y');?>
  / <?if($i->n->divisibleby(3)):?><?=$i->n?> is div. by 3<?endif?>
