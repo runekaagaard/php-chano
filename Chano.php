@@ -155,6 +155,11 @@ class Chano implements Iterator, ArrayAccess {
      * @return mixed
      */
     function  __get($name) { return $this->offsetGet($name); }
+    
+    function __call($name, $args) {
+        $this->v = call_user_func_array(array($this->current, $name), $args);
+        return $this;
+    }
 
     /**
      * Resets settings for filters that does not wait for the __toString()
@@ -706,6 +711,14 @@ class Chano implements Iterator, ArrayAccess {
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
                 $v = $this->_truncatewordshtml($v, $n);
+        return $this;
+    }
+    function truncatechars($length, $ellipsis='...') {
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v)
+            if (!is_array($v) || $this->v === null)
+                if (strlen($v) > $length)
+                    $v = substr($v, 0, $length - strlen($ellipsis)) . $ellipsis;
         return $this;
     }
     function urlencode() {
