@@ -4,11 +4,16 @@ Testing chaining capabilities.
 <?php
 include dirname(__FILE__) . '/../../DtlIter.php';
 $items = array(
-    array('d' => '9823498374'),
-    array('d' => '2234832748'),
+    array('d' => 219823498374),
+    array('d' => 2234832748),
 );
-foreach (new DtlIter($items) as $i)
-    echo $i->date('c');
-    echo $i->date('c')->cut('1919');
+foreach (new DtlIter($items) as $i) {
+    echo $i->d->date('c') . "\n";
+    echo $i->d->date('c')->cut("1904") . "\n";
+}
 --EXPECT--
-1919-09-27T20:41:43+01:001919-09-27T20:41:43+01:00-09-27T20:41:43+01:00
+1994-09-21T18:51:18+02:00
+1994-09-21T18:51:18+02:00
+1904-09-19T21:24:12+01:00
+-09-19T21:24:12+01:00
+

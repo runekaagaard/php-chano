@@ -442,7 +442,7 @@ class DtlIter implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = date($format, $v);
+                $v = date($format, (int)$v);
         return $this;
     }
     function time($format) {
@@ -487,7 +487,7 @@ class DtlIter implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = wordwrap($v, $width);
+                $v = wordwrap($v, $width, "\n", true);
         return $this;
     }
     function wordcount() {
@@ -590,9 +590,15 @@ class DtlIter implements Iterator, ArrayAccess {
     }
     function title() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
-        foreach($vs as &$v) 
-            if (!is_array($v) || $this->v === null)
+        foreach($vs as &$v) {
+            if (!is_array($v) || $this->v === null) {
+                // Some PHP 5.2.x versions have problems with single quotes,
+                // interpreting them as spaces. Fix.
+                $v = str_replace("'", '__SINGLEQUOTE', $v);
                 $v = mb_convert_case($v, MB_CASE_TITLE, DtlIter::$encoding);
+                $v = str_ireplace('__SINGLEQUOTE', "'", $v);
+            }
+        }
         return $this;
     }
     function _urlize_cb1($ms) {
