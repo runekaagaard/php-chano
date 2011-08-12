@@ -52,23 +52,36 @@ foreach ($methods as $method) {
 
 <? $rst .= ob_get_clean();
 
-    $tags = $docblox->getTags();
-
-    if (count($tags) > 1) {
+    $tags = $docblox->getTagsByName('param');
+    if (!empty($tagss)) {
         $rst .=
 "
 Arguments
 ~~~~~~~~~
 
 ";
-    }
-    foreach ($tags as $tag) {
-        list($name, $content) = array($tag->getName(), $tag->getContent());
-        if ($name == 'chanotype') continue;
-        $rst .= "- ``$name`` - $content";
-        
-    }
     
+        foreach ($tags as $tag) {
+            list($name, $content) = array($tag->getName(), $tag->getContent());
+            $rst .= "- ``$name`` - $content";
+        }
+    }
+
+    $tags = $docblox->getTagsByName('return');
+    if (!empty($tagss)) {
+        $rst .=
+"
+Returns
+~~~~~~~
+
+";
+    
+        foreach ($tags as $tag) {
+            list($name, $content) = array($tag->getName(), $tag->getContent());
+            $rst .= "- ``$name`` - $content";
+        }
+    }
+
 
     $prev_chanotype = $chanotype_tag;
 }
