@@ -68,8 +68,7 @@ foreach ($methods as $method) {
     if (!empty($tags)) {
         $rst .=
 "
-Arguments
-~~~~~~~~~
+Arguments:
 
 ";
     

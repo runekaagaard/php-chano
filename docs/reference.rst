@@ -109,8 +109,7 @@ Example::
 
     You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
 
-Arguments
-~~~~~~~~~
+Arguments:
 
 - ``string $a``
 - ``string $b``
