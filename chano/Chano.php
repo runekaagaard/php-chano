@@ -11,6 +11,7 @@ class Chano_NotImplementedError extends Exception {}
 class Chano_TypeNotTraversableError extends Exception {}
 class Chano_TypeNotComplexError extends Exception {}
 class Chano_ValueIsEmptyError extends Exception {}
+class Chano_NoMatchingIteratorFoundError extends Exception {}
 
 /**
  * An iterator that takes an array of arrays as an input and supplies
@@ -42,14 +43,17 @@ class Chano implements Iterator, ArrayAccess {
      * @var string
      */
     static $encoding = 'utf-8';
+    static $iterators;
+
     /**
      * The value of the current item after filters has been applied.
      * @var scalar/array
      */
     public $v = self::INITIAL;
-    
+
     // Private values.
     const INITIAL = '__CHANO_INITIAL__';
+    private $iterator;
     private $count = 0;
     private $i = 0;
     private $items;
@@ -65,14 +69,12 @@ class Chano implements Iterator, ArrayAccess {
      * options as second.
      * 
      * @param array $items
-     *   Array of arrays or an iterator giving arrays. Must be countable.
-     * @param array $options
-     *   Supported options are:
-     *     'encoding': Defaults to 'utf-8'.
+     *   Accepts an array, object, iterator, etc. giving arrays or objects. The
+     *   given value is responsible for being countable for any of the filters
+     *   using that feature to be used.
      */
     function  __construct($items) {
-        $this->items = $items;
-        $this->count = count($items) - 1;
+        $this->set_iterator($items);
     }
     function  __toString() {
         return $this->out($this->reset_v());
@@ -97,6 +99,7 @@ class Chano implements Iterator, ArrayAccess {
         $this->lookup_path_reset();
         return $value;
     }
+
     /**
      * Resets settings for filters that does not wait for the __toString()
      * method being called to return calue.
@@ -111,20 +114,33 @@ class Chano implements Iterator, ArrayAccess {
     /*
      * Implementation of Iterator interface.
      */
-    
-    function rewind() { $this->i = 0; }
+
+    static function register_iterator($class) {
+        self::$iterators[] = $class;
+    }
+
+    private function set_iterator($items) {
+        foreach (self::$iterators as $iterator) {
+            if ($iterator::is_match($items)) {
+                $this->iterator = $iterator::get_instance($items);
+                return true;
+            }
+        }
+        throw new Chano_NoMatchingIteratorFoundError;
+    }
+    function rewind() { $this->iterator->rewind(); }
     function current() {
-        $this->current = current($this->items);
+        $this->current = $this->iterator->current();
         return $this;
     }
-    function key() { return $this->i; }
+    function key() { return $this->iterator->key(); }
     function next() {
         $this->lookup_next();
-        $this->current = next($this->items);
+        $this->current = $this->iterator->next();
         ++$this->i;
     }
     function valid() {
-        return isset($this->items[$this->i]);
+        return $this->iterator->valid();
     }
 
     /*
@@ -213,7 +229,7 @@ class Chano implements Iterator, ArrayAccess {
         return empty($value) ? $default : $value;
     }
     function isfirst() { return $this->i === 0; }
-    function islast() { return $this->i === $this->count; }
+    function islast() { return $this->i === $this->iterator->count(); }
     function haschanged() {
         $this->v = self::INITIAL;
         $path = $this->lookup_path_reset();
@@ -257,11 +273,11 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
     function revcounter() {
-        $this->v = $this->count - $this->i + 1;
+        $this->v = $this->iterator->count() - $this->i;
         return $this;
     }
     function revcounter0() {
-        $this->v = $this->count - $this->i;
+        $this->v = $this->iterator->count() - $this->i - 1;
         return $this;
     }
     
@@ -614,23 +630,23 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $this;
     }
-    function _urlize_cb1($ms) {
+    private function _urlize_cb1($ms) {
         return empty($ms[2]) ? $ms[0]
                : "$ms[1]<a href=\"$ms[2]\" rel=\"nofollow\">$ms[2]</a>";
     }
-    function _urlize_cb2($ms) {
+    private function _urlize_cb2($ms) {
         return empty($ms[2])
                ? $ms[0]
                : sprintf('<a href="http://%1$s" rel="nofollow">http://%1$s</a>'
                          , trim($ms[2], '.,;:)'));
     }
-    function _urlize_cb3($ms) {
+    private function _urlize_cb3($ms) {
         return "$ms[1]<a href=\"mailto:$ms[2]@$ms[3]\">$ms[2]@$ms[3]</a>";
     }
-    function _urlize_cb4($ms) {
+    private function _urlize_cb4($ms) {
         return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
     }
-    function _urlize($v) {
+    private function _urlize($v) {
         // Thanks Wordpress (I guess).
         $v = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff' 
              . '\#$%&~/=?@\[\](+-]|[.,;:](?![\s<]|(\))?([\s]|$))|(?(1)\)(?![\s<'
@@ -655,7 +671,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_urlize($v);
         return $this;
     }
-    function _urlizetrunc_cb($ms) {
+    private function _urlizetrunc_cb($ms) {
         $len = $this->_urlizetrunc_len;
         if ($len <= 3) return $ms[1] . '...' . $ms[3];
         if (strlen($ms[2]) <= $len) return $ms[0];
@@ -690,7 +706,7 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $this;
     }
-    function _truncatewordshtml($v, $n) {
+    private function _truncatewordshtml($v, $n) {
         // Strip tags, explode words and count the number of chars of the
         // first n words. Then use cakePHP magic function.
         if ($n == 0) return '';
@@ -741,7 +757,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = str_replace('+', '%20', urlencode(urldecode($v)));
         return $this;
     }
-    function _slice($v, $str) {
+    private function _slice($v, $str) {
         $ps = explode(':', $str);
         $count = count($ps);
         if ($count == 1) {
@@ -770,7 +786,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_slice($v, $str);
         return $this;
     }
-    function _linenumbers($v) {
+    private function _linenumbers($v) {
         $lines = explode("\n", trim($v));
         $strlen = strlen(count($lines));
         $string = '';
@@ -871,3 +887,5 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
 }
+
+require realpath(dirname(__FILE__) . '/lib/iterators.php');
