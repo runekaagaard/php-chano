@@ -16,6 +16,16 @@ _____
 Sets one or more boolean values on the Chano class. Chainable.
 
 ";
+
+$filter =
+"
+Filters
+_____
+
+Modifies the value of the current item. Chainable.
+
+";
+
 $methods = get_class_methods('Chano');
 
 $rst =
