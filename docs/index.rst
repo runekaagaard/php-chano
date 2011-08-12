@@ -15,7 +15,8 @@ the value in various ways. The functions provided are almost directly ported
 from the Django Template Language.
 
 .. toctree::
-
+   :maxdepth: 1
+   
    reference
    
 Basic usage

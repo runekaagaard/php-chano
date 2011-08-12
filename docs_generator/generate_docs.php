@@ -11,7 +11,7 @@ require CHANO_GENDOC_BASEPATH . '/bootstrap_docblox.php';
 $flag =
 "
 Flags
-=====
+_____
 
 Sets one or more boolean values on the Chano class. Chainable.
 

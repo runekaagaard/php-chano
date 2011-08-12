@@ -9,7 +9,7 @@ Chano's flags, filters, questions, counters, selectors
 Read all about it in the sections below.
 
 Flags
-=====
+_____
 
 Sets one or more boolean values on the Chano class. Chainable.
 
