@@ -21,13 +21,11 @@ $methods = get_class_methods('Chano');
 $rst =
 ".. highlight:: php
 
-Chano reference
+Chano functions
 ===============
 
-Chano's flags, filters, questions, counters, selectors
-------------------------------------------------------
+Stub. Describe the different types here.
 
-Read all about it in the sections below.
 ";
 $prev_chanotype = false;
 foreach ($methods as $method) {
