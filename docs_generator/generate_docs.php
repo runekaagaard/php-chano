@@ -21,8 +21,11 @@ $methods = get_class_methods('Chano');
 $rst =
 ".. highlight:: php
 
+Chano reference
+===============
+
 Chano's flags, filters, questions, counters, selectors
-======================================================
+------------------------------------------------------
 
 Read all about it in the sections below.
 ";
@@ -42,7 +45,7 @@ foreach ($methods as $method) {
 
 ?><?=$method?>
 
-<?=str_repeat('-', strlen($method))?>
+<?=str_repeat('+', strlen($method))?>
 
 
 <?=$docblox->getShortDescription()?>

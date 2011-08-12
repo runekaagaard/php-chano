@@ -1,7 +1,10 @@
 .. highlight:: php
 
+Chano reference
+===============
+
 Chano's flags, filters, questions, counters, selectors
-======================================================
+------------------------------------------------------
 
 Read all about it in the sections below.
 
@@ -11,7 +14,7 @@ Flags
 Sets one or more boolean values on the Chano class. Chainable.
 
 autoescapeon
-------------
+++++++++++++
 
 Switches auto-escaping behavior. This is only usefull when the
 ``autoescapeoff()`` flag has been called as the default behavior of Chano

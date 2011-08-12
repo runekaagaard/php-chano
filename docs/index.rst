@@ -14,8 +14,6 @@ to a large range of utility functions that manipulates or asks questions about
 the value in various ways. The functions provided are almost directly ported 
 from the Django Template Language.
 
-== Toc ==
-
 .. toctree::
 
    reference
