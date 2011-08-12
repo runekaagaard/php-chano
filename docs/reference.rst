@@ -36,3 +36,28 @@ Returns
 ~~~~~~~
 
 - ``Chano instance``
+Flags
+_____
+
+Sets one or more boolean values on the Chano class. Chainable.
+
+autoescapeoff
++++++++++++++
+
+Switches off the default auto-escaping behavior. This means that all
+output until the end or until ``autoescapeon()`` is called will not be
+escaped unless ``escape()`` is specifically called.
+
+Sample usage::
+
+    <?foreach(new Chano($items) as $item)?>
+        <?=$item->autoescapeoff()->body?>
+        <?=$item->comments?>
+        <?=$item->autoescapeon()?>
+        <?=$item->title?>
+    <?endforeach?>
+
+Returns
+~~~~~~~
+
+- ``Chano instance``

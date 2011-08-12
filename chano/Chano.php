@@ -232,7 +232,26 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function autoescapeon() { $this->autoescape = true; return $this; }
+
+    /**
+     * Switches off the default auto-escaping behavior. This means that all
+     * output until the end or until ``autoescapeon()`` is called will not be
+     * escaped unless ``escape()`` is specifically called.
+     *
+     * Sample usage::
+     *
+     *     <?foreach(new Chano($items) as $item)?>
+     *         <?=$item->autoescapeoff()->body?>
+     *         <?=$item->comments?>
+     *         <?=$item->autoescapeon()?>
+     *         <?=$item->title?>
+     *     <?endforeach?>
+     *
+     * @chanotype flag
+     * @return Chano instance
+     */
     function autoescapeoff() { $this->autoescape = false; return $this; }
+    
     function escape() {
         $this->autoescape_off_until_tostring = false;
         $this->autoescape = true;
