@@ -78,7 +78,7 @@ Returns
     
         foreach ($tags as $tag) {
             list($name, $content) = array($tag->getName(), $tag->getContent());
-            $rst .= "- ``$content``";
+            $rst .= "- ``$content``\n\n";
         }
     }
 

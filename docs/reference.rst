@@ -35,7 +35,9 @@ Sample usage::
 Returns
 ~~~~~~~
 
-- ``Chano instance``autoescapeoff
+- ``Chano instance``
+
+autoescapeoff
 +++++++++++++
 
 Switches off the default auto-escaping behavior. This means that all
@@ -55,3 +57,5 @@ Returns
 ~~~~~~~
 
 - ``Chano instance``
+
+
