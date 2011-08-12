@@ -33,11 +33,8 @@ Sample usage::
         <?=$item->autoescapeon()?>
         <?=$item->title?>
     <?endforeach?>
-
-Returns
-~~~~~~~
-
-- ``Chano instance``
+*Returns*
+  ``Chano instance``
 
 .. _autoescapeoff:
 
@@ -56,10 +53,7 @@ Sample usage::
         <?=$item->autoescapeon()?>
         <?=$item->title?>
     <?endforeach?>
-
-Returns
-~~~~~~~
-
-- ``Chano instance``
+*Returns*
+  ``Chano instance``
 
 

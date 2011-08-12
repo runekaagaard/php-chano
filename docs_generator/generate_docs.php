@@ -71,16 +71,9 @@ Arguments
 
     $tags = $docblox->getTagsByName('return');
     if (!empty($tags)) {
-        $rst .=
-"
-Returns
-~~~~~~~
-
-";
-    
         foreach ($tags as $tag) {
             list($name, $content) = array($tag->getName(), $tag->getContent());
-            $rst .= "- ``$content``\n\n";
+            $rst .= "*Returns*\n  ``$content``\n\n";
         }
     }
 
