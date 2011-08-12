@@ -63,6 +63,7 @@ class Chano implements Iterator, ArrayAccess {
     private $previous_lookups = array();
     private $autoescape = true;
     private $autoescape_off_until_tostring = false;
+    private $autoescapeoff_overridden = false;
 
     /**
      * Takes an array of arrays as first parameter and an optional array of
@@ -79,12 +80,17 @@ class Chano implements Iterator, ArrayAccess {
     function  __toString() {
         return $this->out($this->reset_v());
     }
+    private function _escape($s) {
+        return htmlspecialchars((string)$s, ENT_NOQUOTES, self::$encoding);
+    }
     private function out($v, $escape=null) {
         if ($escape === null) $escape = $this->autoescape;
-        $s = !$this->autoescape_off_until_tostring && $escape
-            ? htmlspecialchars((string)$v, ENT_NOQUOTES, self::$encoding)
+        $s = (!$this->autoescape_off_until_tostring && $escape) ||
+        $this->autoescapeoff_overridden
+            ? $this->_escape($v)
             : (string)$v;
-        $this->autoescape_off_until_tostring = FALSE;
+        $this->autoescape_off_until_tostring = false;
+        $this->autoescapeoff_overridden = false;
         return (string)$s;
     }
 
@@ -217,7 +223,7 @@ class Chano implements Iterator, ArrayAccess {
      * applied to it before placing the result into the output (but after any
      * filters have been applied).
      *
-     * The only exceptions to this rule is the ``safe()`` method.
+     * The only exceptions to this rule is the :ref:`safe` method.
      *
      * Sample usage::
      *
@@ -236,25 +242,39 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * Switches off the default auto-escaping behavior. This means that all
      * output until the end or until :ref:`autoescapeon` is called will not be
-     * escaped unless ``escape()`` is specifically called.
+     * escaped unless :ref:`escape` is specifically called.
      *
      * Sample usage::
      *
      *     <?foreach(new Chano($items) as $item)?>
      *         <?=$item->autoescapeoff()->body?>
-     *         <?=$item->comments?>
+     *         <?=$item->comments?> <!-- body and comments are not escaped -->
      *         <?=$item->autoescapeon()?>
-     *         <?=$item->title?>
+     *         <?=$item->title?> <!-- title is escaped -->
      *     <?endforeach?>
      *
      * @chanotype flag
      * @return Chano instance
      */
     function autoescapeoff() { $this->autoescape = false; return $this; }
-    
+
+    /**
+     * Forces escaping on the next output, i.e. when __toString() is called,
+     * overruling the ref:`autoescapeoff` a single time.
+     *
+     * * Sample usage::
+     *
+     *     <?foreach(new Chano($items) as $item)?>
+     *         <?=$item->autoescapeoff()?>
+     *         <?=$item->escape()->body?> <!-- body is escaped -->
+     *         <?=$item->comments?> <!-- comments is not -->
+     *     <?endforeach?>
+     * 
+     * @chanotype flag
+     * return Chano instance
+     */
     function escape() {
-        $this->autoescape_off_until_tostring = false;
-        $this->autoescape = true;
+        $this->autoescapeoff_overridden = true;
         return $this;
     }
 
@@ -295,7 +315,12 @@ class Chano implements Iterator, ArrayAccess {
 
     function safe() { return $this->out($this->v, false); }
     function forceescape() {
-        return htmlentities($this->reset_filter(), null, self::$encoding);
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        foreach($vs as &$v)
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_escape($this->reset_filter());
+        $this->autoescape_off_until_tostring = true;
+        return $this;
     }
 
     /*

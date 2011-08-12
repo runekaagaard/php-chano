@@ -6,4 +6,4 @@ include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = new Chano(array(array('input' => '<some html & special characters > here ĐÅ€£')));
 foreach ($items as $i) echo $i->input->forceescape();
 --EXPECT--
-&lt;some html &amp; special characters &gt; here Đ&Aring;&euro;&pound;
+&lt;some html &amp; special characters &gt; here ĐÅ€£
