@@ -219,6 +219,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * Sample usage::
      *
+     *     <?php
      *     foreach(new Chano($items) as $item) {
      *         $item->autoescapeon();
      *     }

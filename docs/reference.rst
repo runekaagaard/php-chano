@@ -26,6 +26,7 @@ filters have been applied).
 
 Sample usage::
 
+    <?php
     foreach(new Chano($items) as $item) {
         $item->autoescapeon();
     }
