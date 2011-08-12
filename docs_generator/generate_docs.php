@@ -25,7 +25,6 @@ Chano functions
 ===============
 
 Stub. Describe the different types here.
-
 ";
 $prev_chanotype = false;
 foreach ($methods as $method) {
@@ -66,7 +65,7 @@ Arguments
     foreach ($tags as $tag) {
         list($name, $content) = array($tag->getName(), $tag->getContent());
         if ($name == 'chanotype') continue;
-        $rst .= "-$name: $content";
+        $rst .= "- $name: $content";
         
     }
     

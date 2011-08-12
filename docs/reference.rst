@@ -5,7 +5,6 @@ Chano functions
 
 Stub. Describe the different types here.
 
-
 Flags
 _____
 
@@ -32,4 +31,4 @@ Sample usage::
 Arguments
 ~~~~~~~~~
 
--return: object Chano
+- return: object Chano
