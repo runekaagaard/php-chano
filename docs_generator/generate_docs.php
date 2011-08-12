@@ -65,7 +65,7 @@ Arguments
     foreach ($tags as $tag) {
         list($name, $content) = array($tag->getName(), $tag->getContent());
         if ($name == 'chanotype') continue;
-        $rst .= "- `$name`:  $content";
+        $rst .= "- ``$name``:  $content";
         
     }
     
