@@ -40,7 +40,9 @@ foreach ($methods as $method) {
 
     ob_start();
 
-?><?=$method?>
+?>.. <?=$method?>:
+
+<?=$method?>
 
 <?=str_repeat('+', strlen($method))?>
 
