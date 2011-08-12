@@ -20,6 +20,6 @@ Table of contents
 
 .. toctree::
    :maxdepth: 1
-   
-   reference
+
    basicusage
+   reference
