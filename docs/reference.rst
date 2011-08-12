@@ -1,10 +1,3 @@
-
-Notice: Undefined variable: flag
-return Chano instance in /home/rune/workspace/php-chano/docs_generator/generate_docs.php on line 37
-
-Call Stack:
-    0.0008     342312   1. {main}() /home/rune/workspace/php-chano/docs_generator/generate_docs.php:0
-
 .. highlight:: php
 
 Chano functions
@@ -78,4 +71,7 @@ overruling the ref:`autoescapeoff` a single time.
         <?=$item->escape()->body?> <!-- body is escaped -->
         <?=$item->comments?> <!-- comments is not -->
     <?endforeach?>
+*Returns*
+  ``Chano instance``
+
 

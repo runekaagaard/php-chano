@@ -271,7 +271,7 @@ class Chano implements Iterator, ArrayAccess {
      *     <?endforeach?>
      * 
      * @chanotype flag
-     * return Chano instance
+     * @return Chano instance
      */
     function escape() {
         $this->autoescapeoff_overridden = true;
