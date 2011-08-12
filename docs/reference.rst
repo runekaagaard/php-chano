@@ -112,8 +112,8 @@ Example::
 Arguments
 ~~~~~~~~~
 
-- ``param`` - string $a
-- ``param`` - string $b
+- ``string $a``
+- ``string $b``
 *Returns*
   ``Chano instance``
 
