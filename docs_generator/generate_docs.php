@@ -65,7 +65,7 @@ foreach ($methods as $method) {
 <? $rst .= ob_get_clean();
 
     $tags = $docblox->getTagsByName('param');
-    if (!empty($tagss)) {
+    if (!empty($tags)) {
         $rst .=
 "
 Arguments

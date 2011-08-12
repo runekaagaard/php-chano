@@ -108,7 +108,11 @@ singular and plural suffix, separated by a comma.
 Example::
 
     You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
-*Returns*
+
+Arguments
+~~~~~~~~~
+
+- ``param`` - string $a- ``param`` - string $b*Returns*
   ``Chano instance``
 
 
