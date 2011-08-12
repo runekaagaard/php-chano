@@ -40,7 +40,7 @@ foreach ($methods as $method) {
 
     ob_start();
 
-?>.. <?=$method?>:
+?>.. _<?=$method?>:
 
 <?=$method?>
 

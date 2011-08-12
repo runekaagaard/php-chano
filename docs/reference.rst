@@ -10,7 +10,7 @@ _____
 
 Sets one or more boolean values on the Chano class. Chainable.
 
-.. autoescapeon:
+.. _autoescapeon:
 
 autoescapeon
 ++++++++++++
@@ -39,7 +39,7 @@ Returns
 
 - ``Chano instance``
 
-.. autoescapeoff:
+.. _autoescapeoff:
 
 autoescapeoff
 +++++++++++++
