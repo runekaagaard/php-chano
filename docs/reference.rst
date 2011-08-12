@@ -31,5 +31,4 @@ Sample usage::
 Arguments
 ~~~~~~~~~
 
-*return*
-  object Chano
+- `return`:  object Chano
