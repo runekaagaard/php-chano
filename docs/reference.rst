@@ -35,13 +35,7 @@ Sample usage::
 Returns
 ~~~~~~~
 
-- ``Chano instance``
-Flags
-_____
-
-Sets one or more boolean values on the Chano class. Chainable.
-
-autoescapeoff
+- ``Chano instance``autoescapeoff
 +++++++++++++
 
 Switches off the default auto-escaping behavior. This means that all

@@ -83,7 +83,7 @@ Returns
     }
 
 
-    $prev_chanotype = $chanotype_tag;
+    $prev_chanotype = $chanotype;
 }
 
 echo $rst . "\n";
