@@ -206,9 +206,26 @@ class Chano implements Iterator, ArrayAccess {
      *
      * Sets one or more boolean values on the Chano class. Chainable.
      *
-     * Sets autoescape on output on/off.
      */
 
+    /**
+     * Switches auto-escaping behavior. This is only usefull when the
+     * ``autoescapeoff()`` flag has been called as the default behavior of Chano
+     * is to escape all output.
+     *
+     * When auto-escaping is in effect, all variable content has HTML escaping
+     * applied to it before placing the result into the output (but after any
+     * filters have been applied).
+     *
+     * Sample usage::
+     *
+     *     foreach(new Chano($items) as $item) {
+     *         $item->autoescapeon();
+     *     }
+     *
+     * @chanotype flag
+     * @return object Chano
+     */
     function autoescapeon() { $this->autoescape = true; return $this; }
     function autoescapeoff() { $this->autoescape = false; return $this; }
     function escape() {

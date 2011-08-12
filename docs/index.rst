@@ -1,7 +1,7 @@
 .. highlight:: php
 
 Welcome to the documentation for Chano.
-=================================================================
+=======================================
 This page is a stub. See documentation on the Django filters here
 https://docs.djangoproject.com/en/dev/topics/templates/.
 
