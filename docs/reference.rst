@@ -62,7 +62,7 @@ escape
 ++++++
 
 Forces escaping on the next output, i.e. when __toString() is called,
-overruling the ref:`autoescapeoff` a single time.
+overruling the :ref:`autoescapeoff` flag a single time.
 
 * Sample usage::
 
