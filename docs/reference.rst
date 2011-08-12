@@ -32,3 +32,7 @@ Sample usage::
         <?=$item->title?>
     <?endforeach?>
 
+Returns
+~~~~~~~
+
+- ``Chano instance``

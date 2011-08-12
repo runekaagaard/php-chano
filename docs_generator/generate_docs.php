@@ -68,7 +68,7 @@ Arguments
     }
 
     $tags = $docblox->getTagsByName('return');
-    if (!empty($tagss)) {
+    if (!empty($tags)) {
         $rst .=
 "
 Returns
@@ -78,7 +78,7 @@ Returns
     
         foreach ($tags as $tag) {
             list($name, $content) = array($tag->getName(), $tag->getContent());
-            $rst .= "- ``$name`` - $content";
+            $rst .= "- ``$content``";
         }
     }
 
