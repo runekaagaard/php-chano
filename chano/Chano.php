@@ -600,6 +600,22 @@ class Chano implements Iterator, ArrayAccess {
                 $v += $amount;
         return $this;
     }
+
+    /**
+     * Adds slashes before quotes. Useful for escaping strings in CSV, for
+     * example.
+     *
+     * For example::
+     *
+     *     <?=$item->value->addslashes()?>
+     *
+     * If ``value`` is ``"I'm using Chano"``, the output will be
+     * ``"I\'m using Chano"``
+     * .
+     * @chanotype filter
+     * @param numeric $amount
+     * @return Chano instance
+     */
     function addslashes() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -607,6 +623,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = addslashes($v);
         return $this;
     }
+    
     function capfirst() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 

@@ -245,4 +245,27 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _addslashes:
+
+addslashes()
+++++++++++++
+
+Adds slashes before quotes. Useful for escaping strings in CSV, for
+example.
+
+For example::
+
+    <?=$item->value->addslashes()?>
+
+If ``value`` is ``"I'm using Chano"``, the output will be
+``"I\'m using Chano"``
+.
+
+Arguments
+
+- ``numeric $amount``
+
+*Returns*
+  ``Chano instance``
+
 
