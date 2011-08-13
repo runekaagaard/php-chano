@@ -3,6 +3,7 @@ string(27) "#function autoescapeoff#Uis"
 string(20) "#function escape#Uis"
 string(23) "#function pluralize#Uis"
 string(27) "#function unorderedlist#Uis"
+string(23) "#function striptags#Uis"
 .. highlight:: php
 
 Chano functions
@@ -153,6 +154,22 @@ then ``<?=$var->unordered_list()?>`` would render::
             <li>Illinois</li>
     </ul>
     </li>
+*Returns*
+  ``Chano instance``
+
+.. _striptags:
+
+striptags()
++++++++++++
+
+Strips all [X]HTML tags.
+
+For example::
+
+    <?=$value->striptags()?>
+
+If ``$value`` is ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the
+output will be ``"Joel is a slug"``.
 *Returns*
   ``Chano instance``
 

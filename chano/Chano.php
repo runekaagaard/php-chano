@@ -504,7 +504,20 @@ class Chano implements Iterator, ArrayAccess {
         $this->v = $this->_unorderedlist($this->_clean_list($this->v));
         return $this;
     }
-    
+
+    /**
+     * Strips all [X]HTML tags.
+     *
+     * For example::
+     *
+     *     <?=$value->striptags()?>
+     *
+     * If ``$value`` is ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the
+     * output will be ``"Joel is a slug"``.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function striptags() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
