@@ -229,4 +229,20 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _add:
+
+add($amount)
+++++++++++++
+
+Adds the given amount to the current value.
+
+If ``value`` is 2, then ``<?=$item->value->add(2)?>`` will render 4.
+
+Arguments
+
+- ``numeric $amount``
+
+*Returns*
+  ``Chano instance``
+
 

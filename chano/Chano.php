@@ -589,6 +589,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * If ``value`` is 2, then ``<?=$item->value->add(2)?>`` will render 4.
      *
+     * @chanotype filter
      * @param numeric $amount
      * @return Chano instance
      */
