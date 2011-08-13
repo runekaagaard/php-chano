@@ -383,12 +383,14 @@ Arguments
 date($format)
 +++++++++++++
 
-date
-^^^^
-
 Formats a date according to the given format.
 
-Uses the ``date()`` function (http://php.net/date).
+Formats follows the syntax of the ``date()`` function
+(http://php.net/date).
+
+Uses the default timezone found by the ``date_default_timezone_get()``
+function
+(http://www.php.net/manual/en/function.date-default-timezone-get.php).
 
 Available format strings:
 

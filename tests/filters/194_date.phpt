@@ -2,18 +2,18 @@
 Testing chaining capabilities.
 --FILE--
 <?php
+date_default_timezone_set('UTC');
 include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = array(
-    array('d' => 219823498374),
+    array('d' => 946684800),
     array('d' => 2234832748),
 );
 foreach (new Chano($items) as $i) {
     echo $i->d->date('c') . "\n";
-    echo $i->d->date('c')->cut("1904") . "\n";
+    echo $i->d->date('c')->cut("2040") . "\n";
 }
 --EXPECT--
-1994-09-21T18:51:18+02:00
-1994-09-21T18:51:18+02:00
-1904-09-19T21:24:12+01:00
--09-19T21:24:12+01:00
-
+2000-01-01T00:00:00+00:00
+2000-01-01T00:00:00+00:00
+2040-10-26T02:52:28+00:00
+-10-26T02:52:28+00:00

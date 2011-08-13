@@ -751,12 +751,14 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * date
-     * ^^^^
-     *
      * Formats a date according to the given format.
      *
-     * Uses the ``date()`` function (http://php.net/date).
+     * Formats follows the syntax of the ``date()`` function
+     * (http://php.net/date).
+     *
+     * Uses the default timezone found by the ``date_default_timezone_get()``
+     * function
+     * (http://www.php.net/manual/en/function.date-default-timezone-get.php).
      *
      * Available format strings:
      *
@@ -828,12 +830,19 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function date($format) {
+        static $tz = false;
+        if (!$tz) $tz = new DateTimeZone(date_default_timezone_get());
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
-        foreach($vs as &$v) 
+        foreach($vs as &$v)
             if (!is_array($v) || $this->v === null)
-                $v = date($format, (int)$v);
+                if (ctype_digit((string)$v))
+                    $v = date_create("@$v")->setTimezone($tz)->format($format);
+                else
+                    $v = date_create($v)->format($format);
         return $this;
     }
+
+    
     function time($format) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
