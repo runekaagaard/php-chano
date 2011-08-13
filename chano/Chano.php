@@ -768,9 +768,6 @@ class Chano implements Iterator, ArrayAccess {
      *     b                 Month, textual, 3 letters, lowercase.     ``'jan'``
      *     B                 Not implemented.
      *     c                 ISO 8601 format. (Note: unlike others     ``2008-01-02T10:30:00.000123+02:00``,
-     *                       formatters, such as "Z", "O" or "r",      or ``2008-01-02T10:30:00.000123`` if the datetime is naive
-     *                       the "c" formatter will not add timezone
-     *                       offset if value is a `naive datetime`_.)
      *     d                 Day of the month, 2 digits with           ``'01'`` to ``'31'``
      *                       leading zeros.
      *     D                 Day of the week, textual, 3 letters.      ``'Fri'``
