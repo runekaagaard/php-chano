@@ -613,7 +613,6 @@ class Chano implements Iterator, ArrayAccess {
      * ``"I\'m using Chano"``
      * .
      * @chanotype filter
-     * @param numeric $amount
      * @return Chano instance
      */
     function addslashes() {
@@ -623,7 +622,19 @@ class Chano implements Iterator, ArrayAccess {
                 $v = addslashes($v);
         return $this;
     }
-    
+
+    /**
+     * Capitalizes the first character of the value.
+     *
+     * For example::
+     *
+     *     <?=$item->value->capfirst()?>
+     *
+     * If ``value`` is ``"chano"``, the output will be ``"Chano"``.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function capfirst() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -631,6 +642,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = ucfirst($v);
         return $this;
     }
+    
     function upper() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 

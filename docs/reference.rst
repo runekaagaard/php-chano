@@ -261,9 +261,21 @@ If ``value`` is ``"I'm using Chano"``, the output will be
 ``"I\'m using Chano"``
 .
 
-Arguments
+*Returns*
+  ``Chano instance``
 
-- ``numeric $amount``
+.. _capfirst:
+
+capfirst()
+++++++++++
+
+Capitalizes the first character of the value.
+
+For example::
+
+    <?=$item->value->capfirst()?>
+
+If ``value`` is ``"chano"``, the output will be ``"Chano"``.
 
 *Returns*
   ``Chano instance``
