@@ -471,7 +471,7 @@ class Chano implements Iterator, ArrayAccess {
      * Recursively takes a self-nested list and returns an HTML unordered list -
      * WITHOUT opening and closing <ul> tags.
      *
-     * The list is assumed to be in the proper format. For example, if ``$var``
+     * The list is assumed to be in the proper format. For example, if ``var``
      * contains::
      *
      *     array(
@@ -482,7 +482,7 @@ class Chano implements Iterator, ArrayAccess {
      *         )
      *     );
      * 
-     * then ``<?=$var->unordered_list()?>`` would render::
+     * then ``<?=$item->var->unordered_list()?>`` would render::
      *
      *     <li>States
      *     <ul>
@@ -510,7 +510,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?=$value->striptags()?>
+     *     <?=$item->value->striptags()?>
      *
      * If ``$value`` is
      * ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the output
@@ -563,9 +563,9 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <img src="bar.gif" height="10" width="<?=$value->widthratio(175, 100)?>" />
+     *     <img src="bar.gif" height="10" width="<?=$item->value->widthratio(175, 100)?>" />
      *
-     * Above, if ``$value`` is 175 and, the image in the above example will be
+     * Above, if ``value`` is 175 and, the image in the above example will be
      * 88 pixels wide
      * (because 175/200 = .875; .875 * 100 = 87.5 which is rounded up to 88).
      *
