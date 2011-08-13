@@ -312,7 +312,7 @@ If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
 
 Arguments
 
-- ``$width``
+- ``int $width``
 
 *Returns*
   ``Chano instance``
@@ -332,7 +332,7 @@ If value is Chano!, the output will be "Chano!    ".
 
 Arguments
 
-- ``$width``
+- ``int $width``
 
 *Returns*
   ``Chano instance``
@@ -352,7 +352,28 @@ If value is Chano!, the output will be "    Chano!".
 
 Arguments
 
-- ``$width``
+- ``int $width``
+
+*Returns*
+  ``Chano instance``
+
+.. _cut:
+
+cut($string)
+++++++++++++
+
+Removes all values of passed argument from the current value.
+
+For example::
+
+    <?=$item->value->cut(" ")?>
+
+If ``value`` is ``"String with spaces"``, the output will be
+``"Stringwithspaces"``.
+
+Arguments
+
+- ``string $string - The string to remove.``
 
 *Returns*
   ``Chano instance``

@@ -673,7 +673,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
      *
-     * @param $width
+     * @param int $width
      * @chanotype filter
      * @return Chano instance
      */
@@ -694,7 +694,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * If value is Chano!, the output will be "Chano!    ".
      *
-     * @param $width
+     * @param int $width
      * @chanotype filter
      * @return Chano instance
      */
@@ -715,7 +715,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * If value is Chano!, the output will be "    Chano!".
      *
-     * @param $width
+     * @param int $width
      * @chanotype filter
      * @return Chano instance
      */
@@ -726,14 +726,31 @@ class Chano implements Iterator, ArrayAccess {
                 $v = str_pad($v, $width, " ", STR_PAD_RIGHT);
         return $this;
     }
-    
-    function cut($str) {
+
+    /**
+     * Removes all values of passed argument from the current value.
+     *
+     * For example::
+     *
+     *     <?=$item->value->cut(" ")?>
+     *
+     * If ``value`` is ``"String with spaces"``, the output will be
+     * ``"Stringwithspaces"``.
+     *
+     * @param string $string
+     *   The string to remove.
+     * @chanotype filter
+     * @return Chano instance
+     */
+    function cut($string) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = str_replace($str, '', $v);
+                $v = str_replace($string, '', $v);
         return $this;
     }
+
+    
     function date($format) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
