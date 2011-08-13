@@ -663,6 +663,16 @@ class Chano implements Iterator, ArrayAccess {
                 $v = mb_strtoupper($v, self::$encoding);
         return $this;
     }
+
+    /**
+     * Centers the value in a field of a given width.
+     *
+     * For example::
+     *
+     *     <?=$item->value->center(15)?>
+     *
+     * If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
+     */
     function center($width) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -670,6 +680,8 @@ class Chano implements Iterator, ArrayAccess {
                 $v = str_pad($v, $width, " ", STR_PAD_BOTH);
         return $this;
     }
+
+    
     function ljust($width) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
