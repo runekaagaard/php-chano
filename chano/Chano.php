@@ -526,6 +526,12 @@ class Chano implements Iterator, ArrayAccess {
                 $v = strip_tags($v);
         return $this;
     }
+    /**
+     * var_dumps() the content of the current value to screen.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function vd() { var_dump($this->v); return $this; }
     function now($format) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;

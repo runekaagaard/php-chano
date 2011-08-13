@@ -4,6 +4,7 @@ string(20) "#function escape#Uis"
 string(23) "#function pluralize#Uis"
 string(27) "#function unorderedlist#Uis"
 string(23) "#function striptags#Uis"
+string(16) "#function vd#Uis"
 .. highlight:: php
 
 Chano functions
@@ -176,6 +177,18 @@ For example::
 If ``$value`` is
 ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the output
 will be ``"Joel is a slug"``.
+
+*Returns*
+  ``Chano instance``
+
+.. _vd:
+
+vd()
+++++
+
+var_dumps() the content of the current value to screen.
+
+
 
 *Returns*
   ``Chano instance``
