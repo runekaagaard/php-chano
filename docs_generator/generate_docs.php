@@ -78,6 +78,7 @@ Arguments
     
         foreach ($tags as $tag) {
             list($name, $content) = array($tag->getName(), $tag->getContent());
+            $content = str_replace("\n", ' - ', $content);
             $rst .= "- ``$content``\n";
         }
     }
