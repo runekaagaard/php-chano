@@ -556,11 +556,31 @@ class Chano implements Iterator, ArrayAccess {
                 $v = date($format);
         return $this;
     }
-    function widthratio($range_in, $range_out) {
+    /**
+     * For creating bar charts and such, this tag calculates the ratio of a
+     * given value to a maximum value, and then applies that ratio to a
+     * constant.
+     *
+     * For example::
+     *
+     *     <img src="bar.gif" height="10" width="<?=$value->widthratio(175, 100)?>" />
+     *
+     * Above, if ``$value`` is 175 and, the image in the above example will be
+     * 88 pixels wide
+     * (because 175/200 = .875; .875 * 100 = 87.5 which is rounded up to 88).
+     *
+     * @chanotype filter
+     * @param numeric $range_in
+     *   The maximum before value.
+     * @param int/float $max_out
+     *   The maximum after value.
+     * @return Chano instance
+     */
+    function widthratio($max_in, $max_out) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = round($v / $range_in * $range_out);
+                $v = round($v / $max_in * $max_out);
         return $this;
     }
     function add($amount) {

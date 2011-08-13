@@ -6,6 +6,7 @@ string(27) "#function unorderedlist#Uis"
 string(23) "#function striptags#Uis"
 string(16) "#function vd#Uis"
 string(17) "#function now#Uis"
+string(24) "#function widthratio#Uis"
 .. highlight:: php
 
 Chano functions
@@ -208,6 +209,33 @@ Example::
     Current time is: <?=$item->now("F j, Y, g:i a")?>
 
 This would display as ``"Current time is: March 10, 2001, 5:16 pm"``.
+
+*Returns*
+  ``Chano instance``
+
+.. _widthratio:
+
+widthratio($max_in, $max_out)
++++++++++++++++++++++++++++++
+
+For creating bar charts and such, this tag calculates the ratio of a
+given value to a maximum value, and then applies that ratio to a
+constant.
+
+For example::
+
+    <img src="bar.gif" height="10" width="<?=$value->widthratio(175, 100)?>" />
+
+Above, if ``$value`` is 175 and, the image in the above example will be
+88 pixels wide
+(because 175/200 = .875; .875 * 100 = 87.5 which is rounded up to 88).
+
+Arguments
+
+- ``numeric $range_in
+The maximum before value.``
+- ``int/float $max_out
+The maximum after value.``
 
 *Returns*
   ``Chano instance``
