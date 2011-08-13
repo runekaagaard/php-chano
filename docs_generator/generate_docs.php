@@ -43,7 +43,6 @@ foreach ($methods as $method) {
     $docblox = new DocBlox_Reflection_DocBlock($rf_method->getDocComment());
     $chanotype_tag = $docblox->getTagsByName('chanotype');
     if (empty($chanotype_tag)) continue;
-    var_dump("#function $method#Uis");
     preg_match("#function ($method\(.*\))#Uis", $chano_src, $ms);
     $method_sig = $ms[1];
     $chanotype = $chanotype_tag[0]->getContent();

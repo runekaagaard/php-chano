@@ -1,12 +1,3 @@
-string(26) "#function autoescapeon#Uis"
-string(27) "#function autoescapeoff#Uis"
-string(20) "#function escape#Uis"
-string(23) "#function pluralize#Uis"
-string(27) "#function unorderedlist#Uis"
-string(23) "#function striptags#Uis"
-string(16) "#function vd#Uis"
-string(17) "#function now#Uis"
-string(24) "#function widthratio#Uis"
 .. highlight:: php
 
 Chano functions
