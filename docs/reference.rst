@@ -186,7 +186,7 @@ will be ``"Joel is a slug"``.
 vd()
 ++++
 
-var_dumps() the content of the current value to screen.
+``var_dumps()`` the content of the current value to screen.
 
 
 
