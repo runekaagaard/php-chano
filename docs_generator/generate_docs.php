@@ -86,7 +86,7 @@ Arguments
     if (!empty($tags)) {
         foreach ($tags as $tag) {
             list($name, $content) = array($tag->getName(), $tag->getContent());
-            $rst .= "*Returns*\n  ``$content``\n\n";
+            $rst .= "\n*Returns*\n  ``$content``\n\n";
         }
     }
 

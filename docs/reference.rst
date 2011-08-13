@@ -39,6 +39,7 @@ Sample usage::
         <?=$item->autoescapeon()?>
         <?=$item->title?>
     <?endforeach?>
+
 *Returns*
   ``Chano instance``
 
@@ -59,6 +60,7 @@ Sample usage::
         <?=$item->autoescapeon()?>
         <?=$item->title?> <!-- title is escaped -->
     <?endforeach?>
+
 *Returns*
   ``Chano instance``
 
@@ -77,6 +79,7 @@ overruling the :ref:`autoescapeoff` flag a single time.
         <?=$item->escape()->body?> <!-- body is escaped -->
         <?=$item->comments?> <!-- comments is not -->
     <?endforeach?>
+
 *Returns*
   ``Chano instance``
 
@@ -119,6 +122,7 @@ Arguments
 
 - ``string $plural``
 - ``string $singular``
+
 *Returns*
   ``Chano instance``
 
@@ -154,6 +158,7 @@ then ``<?=$var->unordered_list()?>`` would render::
             <li>Illinois</li>
     </ul>
     </li>
+
 *Returns*
   ``Chano instance``
 
@@ -171,6 +176,7 @@ For example::
 If ``$value`` is
 ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the output
 will be ``"Joel is a slug"``.
+
 *Returns*
   ``Chano instance``
 
