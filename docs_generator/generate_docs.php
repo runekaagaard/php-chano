@@ -5,8 +5,6 @@ ini_set('display_errors', 1);
 
 date_default_timezone_set('UTC');
 $dt = new DateTime("2000-01-01");
-var_dump($dt->format("D d M Y"));
-exit(1);
 
 define('CHANO_GENDOC_BASEPATH', realpath(dirname(__FILE__)));
 
