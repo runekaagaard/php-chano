@@ -799,8 +799,8 @@ class Chano implements Iterator, ArrayAccess {
      *     N                 Month abbreviation in Associated Press    ``'Jan.'``, ``'Feb.'``, ``'March'``, ``'May'``
      *                       style. Proprietary extension.
      *     O                 Difference to Greenwich time in hours.    ``'+0200'``
-     *     P                 Time, in 12-hour hours, minutes and       ``'1 a.m.'``, ``'1:30 p.m.'``, ``'midnight'``, ``'noon'``, ``'12:30 p.m.'``
-     *                       'a.m.'/'p.m.', with minutes left off
+     *     P                 Time, in 12-hour hours, minutes and       ``'1 am'``, ``'1:30 pm'``, ``'midnight'``, ``'noon'``, ``'12:30 pm'``
+     *                       'am'/'pm', with minutes left off
      *                       if they're zero and the special-case
      *                       strings 'midnight' and 'noon' if
      *                       appropriate. Proprietary extension.
