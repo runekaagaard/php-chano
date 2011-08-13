@@ -232,7 +232,7 @@ Above, if ``$value`` is 175 and, the image in the above example will be
 
 Arguments
 
-- ``numeric $range_in - The maximum before value.``
+- ``numeric $max_in - The maximum before value.``
 - ``int/float $max_out - The maximum after value.``
 
 *Returns*

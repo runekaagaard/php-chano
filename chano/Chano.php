@@ -570,7 +570,7 @@ class Chano implements Iterator, ArrayAccess {
      * (because 175/200 = .875; .875 * 100 = 87.5 which is rounded up to 88).
      *
      * @chanotype filter
-     * @param numeric $range_in
+     * @param numeric $max_in
      *   The maximum before value.
      * @param int/float $max_out
      *   The maximum after value.
