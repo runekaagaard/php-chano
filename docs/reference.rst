@@ -168,8 +168,9 @@ For example::
 
     <?=$value->striptags()?>
 
-If ``$value`` is ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the
-output will be ``"Joel is a slug"``.
+If ``$value`` is
+``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the output
+will be ``"Joel is a slug"``.
 *Returns*
   ``Chano instance``
 
