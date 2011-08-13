@@ -672,6 +672,10 @@ class Chano implements Iterator, ArrayAccess {
      *     <?=$item->value->center(15)?>
      *
      * If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
+     *
+     * @param $width
+     * @chanotype filter
+     * @return Chano instance
      */
     function center($width) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -681,7 +685,19 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
 
-    
+    /**
+     * Left-aligns the value in a field of a given width.
+     *
+     * For example::
+     *
+     *     "<?=$item->value->ljust(10)?>"
+     *
+     * If value is Chano!, the output will be "Chano!    ".
+     *
+     * @param $width
+     * @chanotype filter
+     * @return Chano instance
+     */
     function ljust($width) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -689,6 +705,20 @@ class Chano implements Iterator, ArrayAccess {
                 $v = str_pad($v, $width, " ", STR_PAD_LEFT);
         return $this;
     }
+
+    /**
+     * Right-aligns the value in a field of a given width.
+     *
+     * For example::
+     *
+     *     "<?=$item->value->rjust(10)?>"
+     *
+     * If value is Chano!, the output will be "    Chano!".
+     *
+     * @param $width
+     * @chanotype filter
+     * @return Chano instance
+     */
     function rjust($width) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -696,6 +726,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = str_pad($v, $width, " ", STR_PAD_RIGHT);
         return $this;
     }
+    
     function cut($str) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 

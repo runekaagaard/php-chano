@@ -297,4 +297,64 @@ If ``value`` is ``"Joel is a slug"``, the output will be
 *Returns*
   ``Chano instance``
 
+.. _center:
+
+center($width)
+++++++++++++++
+
+Centers the value in a field of a given width.
+
+For example::
+
+    <?=$item->value->center(15)?>
+
+If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
+
+Arguments
+
+- ``$width``
+
+*Returns*
+  ``Chano instance``
+
+.. _ljust:
+
+ljust($width)
++++++++++++++
+
+Left-aligns the value in a field of a given width.
+
+For example::
+
+    "<?=$item->value->ljust(10)?>"
+
+If value is Chano!, the output will be "Chano!    ".
+
+Arguments
+
+- ``$width``
+
+*Returns*
+  ``Chano instance``
+
+.. _rjust:
+
+rjust($width)
++++++++++++++
+
+Right-aligns the value in a field of a given width.
+
+For example::
+
+    "<?=$item->value->rjust(10)?>"
+
+If value is Chano!, the output will be "    Chano!".
+
+Arguments
+
+- ``$width``
+
+*Returns*
+  ``Chano instance``
+
 
