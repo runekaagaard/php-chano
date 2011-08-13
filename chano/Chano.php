@@ -642,7 +642,20 @@ class Chano implements Iterator, ArrayAccess {
                 $v = ucfirst($v);
         return $this;
     }
-    
+
+    /**
+     * Converts a string into all uppercase.
+     *
+     * For example::
+     *
+     *     <?=$item->value->upper()?>
+     *
+     * If ``value`` is ``"Joel is a slug"``, the output will be
+     * ``"JOEL IS A SLUG"``.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function upper() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 

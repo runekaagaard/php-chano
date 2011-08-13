@@ -280,4 +280,21 @@ If ``value`` is ``"chano"``, the output will be ``"Chano"``.
 *Returns*
   ``Chano instance``
 
+.. _upper:
+
+upper()
++++++++
+
+Converts a string into all uppercase.
+
+For example::
+
+    <?=$item->value->upper()?>
+
+If ``value`` is ``"Joel is a slug"``, the output will be
+``"JOEL IS A SLUG"``.
+
+*Returns*
+  ``Chano instance``
+
 
