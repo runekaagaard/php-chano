@@ -8,6 +8,7 @@ define('CHANO_GENDOC_BASEPATH', realpath(dirname(__FILE__)));
 require CHANO_GENDOC_BASEPATH . '/../chano/Chano.php';
 require CHANO_GENDOC_BASEPATH . '/bootstrap_docblox.php';
 
+$chano_src = file_get_contents(CHANO_GENDOC_BASEPATH . '/../chano/Chano.php');
 $flag =
 "
 Flags
@@ -42,6 +43,9 @@ foreach ($methods as $method) {
     $docblox = new DocBlox_Reflection_DocBlock($rf_method->getDocComment());
     $chanotype_tag = $docblox->getTagsByName('chanotype');
     if (empty($chanotype_tag)) continue;
+    var_dump("#function $method#Uis");
+    preg_match("#function ($method\(.*\))#Uis", $chano_src, $ms);
+    $method_sig = $ms[1];
     $chanotype = $chanotype_tag[0]->getContent();
     if (empty($prev_chanotype) || $prev_chanotype != $chanotype) {
         $rst .= $$chanotype;
@@ -50,11 +54,11 @@ foreach ($methods as $method) {
 
     ob_start();
 
-?>.. _<?=$method?>:
+?>.. _<?=$method_sig?>:
 
 <?=$method?>
 
-<?=str_repeat('+', strlen($method))?>
+<?=str_repeat('+', strlen($method_sig))?>
 
 
 <?=$docblox->getShortDescription()?>

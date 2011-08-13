@@ -25,7 +25,6 @@ class Chano_NoMatchingIteratorFoundError extends Exception {}
  * 1) While the filter tests are pretty good, more tests of more general nature
  * are needed.
  * 2) Create proper documentation in restructured text.
- * 3) Make it work for other kind of iterators than arrays.
  *
  * @codestyle
  *
@@ -74,10 +73,10 @@ class Chano implements Iterator, ArrayAccess {
      *   given value is responsible for being countable for any of the filters
      *   using that feature to be used.
      */
-    function  __construct($items) {
+    function __construct($items) {
         $this->set_iterator($items);
     }
-    function  __toString() {
+    function __toString() {
         return $this->out($this->reset_v());
     }
     private function _escape($s) {
@@ -407,27 +406,27 @@ class Chano implements Iterator, ArrayAccess {
      * If ``num_messages`` is ``2``  the output will be ``You have 2 messages.``
      *
      * For words that require a suffix other than ``'s'``, you can provide an
-     * alternate suffix as a parameter to the filter.
+     * alternate suffix as the first argument to the filter.
      *
      * Example::
      *
      *     You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
      *
      * For words that don't pluralize by simple suffix, you can specify both a
-     * singular and plural suffix, separated by a comma.
+     * singular and plural suffix as arguments.
      *
      * Example::
      *
      *     You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
      *
      * @chanotype filter
-     * @param string $a
-     * @param string $b
+     * @param string $singular
+     * @param string $plural
      * @return Chano instance
      */
-    function pluralize($a='s', $b=null) {
-        if (empty($b)) list($singular, $plural) = array('', $a);
-        else list($singular, $plural) = array($a, $b);
+    function pluralize($singular='s', $plural=null) {
+        if (empty($plural)) list($singular, $plural) = array('', $singular);
+        else list($singular, $plural) = array($singular, $plural);
         if (is_scalar($this->v)) {
             if ((int)$this->v == 0) $this->v = $plural;
             else $this->v = (int)$this->v > 1 ? $plural : $singular;

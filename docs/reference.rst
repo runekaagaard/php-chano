@@ -1,3 +1,7 @@
+string(26) "#function autoescapeon#Uis"
+string(27) "#function autoescapeoff#Uis"
+string(20) "#function escape#Uis"
+string(23) "#function pluralize#Uis"
 .. highlight:: php
 
 Chano functions
@@ -10,10 +14,10 @@ _____
 
 Sets one or more boolean values on the Chano class. Chainable.
 
-.. _autoescapeon:
+.. _autoescapeon():
 
 autoescapeon
-++++++++++++
+++++++++++++++
 
 Switches on auto-escaping behavior. This only has any effect after the
 :ref:`autoescapeoff` method has been called as the default behavior of
@@ -36,10 +40,10 @@ Sample usage::
 *Returns*
   ``Chano instance``
 
-.. _autoescapeoff:
+.. _autoescapeoff():
 
 autoescapeoff
-+++++++++++++
++++++++++++++++
 
 Switches off the default auto-escaping behavior. This means that all
 output until the end or until :ref:`autoescapeon` is called will not be
@@ -56,10 +60,10 @@ Sample usage::
 *Returns*
   ``Chano instance``
 
-.. _escape:
+.. _escape():
 
 escape
-++++++
+++++++++
 
 Forces escaping on the next output, i.e. when __toString() is called,
 overruling the :ref:`autoescapeoff` flag a single time.
@@ -80,10 +84,10 @@ _____
 
 Modifies the value of the current item. Chainable.
 
-.. _pluralize:
+.. _pluralize($singular='s', $plural=null):
 
 pluralize
-+++++++++
+++++++++++++++++++++++++++++++++++++++
 
 Returns a plural suffix if the value is not 1. By default,
 this suffix is ``'s'``.
@@ -96,14 +100,14 @@ If ``num_messages`` is ``1``, the output will be ``You have 1 message.``
 If ``num_messages`` is ``2``  the output will be ``You have 2 messages.``
 
 For words that require a suffix other than ``'s'``, you can provide an
-alternate suffix as a parameter to the filter.
+alternate suffix as the first argument to the filter.
 
 Example::
 
     You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
 
 For words that don't pluralize by simple suffix, you can specify both a
-singular and plural suffix, separated by a comma.
+singular and plural suffix as arguments.
 
 Example::
 
@@ -111,8 +115,8 @@ Example::
 
 Arguments
 
-- ``string $a``
-- ``string $b``
+- ``string $singular``
+- ``string $plural``
 *Returns*
   ``Chano instance``
 
