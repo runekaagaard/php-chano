@@ -572,7 +572,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype filter
      * @param numeric $max_in
      *   The maximum before value.
-     * @param int/float $max_out
+     * @param numeric $max_out
      *   The maximum after value.
      * @return Chano instance
      */
@@ -583,6 +583,15 @@ class Chano implements Iterator, ArrayAccess {
                 $v = round($v / $max_in * $max_out);
         return $this;
     }
+
+    /**
+     * Adds the given amount to the current value.
+     *
+     * If ``value`` is 2, then ``<?=$item->value->add(2)?>`` will render 4.
+     *
+     * @param numeric $amount
+     * @return Chano instance
+     */
     function add($amount) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
