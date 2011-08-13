@@ -386,11 +386,13 @@ date($format)
 Formats a date according to the given format.
 
 Formats follows the syntax of the ``date()`` function
-(http://php.net/date).
-
-Uses the default timezone found by the ``date_default_timezone_get()``
-function
+(http://php.net/date). The used timezone is the one found by the
+``date_default_timezone_get()`` function
 (http://www.php.net/manual/en/function.date-default-timezone-get.php).
+
+The input value can be a digit, which will be interpreted as a linux
+timestamp or a value recognized by the ``DateTime()`` class
+(http://www.php.net/manual/en/datetime.construct.php).
 
 Available format strings:
 
