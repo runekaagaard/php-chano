@@ -413,27 +413,28 @@ class Chano implements Iterator, ArrayAccess {
      *     You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
      *
      * For words that don't pluralize by simple suffix, you can specify both a
-     * singular and plural suffix as arguments.
+     * plural and singular suffix as arguments.
      *
      * Example::
      *
      *     You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
      *
      * @chanotype filter
-     * @param string $singular
      * @param string $plural
+     * @param string $singular
      * @return Chano instance
      */
-    function pluralize($singular='s', $plural=null) {
-        if (empty($plural)) list($singular, $plural) = array('', $singular);
-        else list($singular, $plural) = array($singular, $plural);
+    function pluralize($plural='s', $singular=null) {
+        if (empty($singular)) list($plural, $singular) = array('', $plural);
+        else list($plural, $singular) = array($plural, $singular);
         if (is_scalar($this->v)) {
-            if ((int)$this->v == 0) $this->v = $plural;
-            else $this->v = (int)$this->v > 1 ? $plural : $singular;
+            if ((int)$this->v == 0) $this->v = $singular;
+            else $this->v = (int)$this->v > 1 ? $singular : $plural;
         }
-        else $this->v = count($this->v) > 1 ? $plural : $singular;
+        else $this->v = count($this->v) > 1 ? $singular : $plural;
         return $this;
     }
+
     private function _clean_list($list) {
         $new_list = array();
         foreach ($list as $key => $item) {
@@ -443,6 +444,7 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $new_list;
     }
+
     private function _unorderedlist($list=null, $indent=1) {
         $html = '';
         $ws = str_repeat("\t", $indent);
@@ -464,6 +466,39 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $html;
     }
+
+    /**
+     * Recursively takes a self-nested list and returns an HTML unordered list -
+     * WITHOUT opening and closing <ul> tags.
+     *
+     * The list is assumed to be in the proper format. For example, if ``$var``
+     * contains::
+     *
+     *     array(
+     *         'States', array(
+     *             'Kansas', array(
+     *                   'Lawrence', 'Topeka'
+     *             ), 'Illinois'
+     *         )
+     *     );
+     * 
+     * then ``<?=$var->unordered_list()?>`` would render::
+     *
+     *     <li>States
+     *     <ul>
+     *             <li>Kansas
+     *             <ul>
+     *                     <li>Lawrence</li>
+     *                     <li>Topeka</li>
+     *             </ul>
+     *             </li>
+     *             <li>Illinois</li>
+     *     </ul>
+     *     </li>
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function unorderedlist() {
         $this->autoescape_off_until_tostring = true;
         $this->v = $this->_unorderedlist($this->_clean_list($this->v));

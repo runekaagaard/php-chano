@@ -2,6 +2,7 @@ string(26) "#function autoescapeon#Uis"
 string(27) "#function autoescapeoff#Uis"
 string(20) "#function escape#Uis"
 string(23) "#function pluralize#Uis"
+string(27) "#function unorderedlist#Uis"
 .. highlight:: php
 
 Chano functions
@@ -86,7 +87,7 @@ Modifies the value of the current item. Chainable.
 
 .. _pluralize:
 
-pluralize($singular='s', $plural=null)
+pluralize($plural='s', $singular=null)
 ++++++++++++++++++++++++++++++++++++++
 
 Returns a plural suffix if the value is not 1. By default,
@@ -107,7 +108,7 @@ Example::
     You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
 
 For words that don't pluralize by simple suffix, you can specify both a
-singular and plural suffix as arguments.
+plural and singular suffix as arguments.
 
 Example::
 
@@ -115,8 +116,43 @@ Example::
 
 Arguments
 
-- ``string $singular``
 - ``string $plural``
+- ``string $singular``
+*Returns*
+  ``Chano instance``
+
+.. _unorderedlist:
+
+unorderedlist()
++++++++++++++++
+
+Recursively takes a self-nested list and returns an HTML unordered list -
+WITHOUT opening and closing <ul> tags.
+
+The list is assumed to be in the proper format. For example, if ``$var``
+contains::
+
+    array(
+        'States', array(
+            'Kansas', array(
+                  'Lawrence', 'Topeka'
+            ), 'Illinois'
+        )
+    );
+
+then ``<?=$var->unordered_list()?>`` would render::
+
+    <li>States
+    <ul>
+            <li>Kansas
+            <ul>
+                    <li>Lawrence</li>
+                    <li>Topeka</li>
+            </ul>
+            </li>
+            <li>Illinois</li>
+    </ul>
+    </li>
 *Returns*
   ``Chano instance``
 
