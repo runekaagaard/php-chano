@@ -54,9 +54,9 @@ foreach ($methods as $method) {
 
     ob_start();
 
-?>.. _<?=$method_sig?>:
+?>.. _<?=$method?>:
 
-<?=$method?>
+<?=$method_sig?>
 
 <?=str_repeat('+', strlen($method_sig))?>
 

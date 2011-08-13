@@ -14,9 +14,9 @@ _____
 
 Sets one or more boolean values on the Chano class. Chainable.
 
-.. _autoescapeon():
+.. _autoescapeon:
 
-autoescapeon
+autoescapeon()
 ++++++++++++++
 
 Switches on auto-escaping behavior. This only has any effect after the
@@ -40,9 +40,9 @@ Sample usage::
 *Returns*
   ``Chano instance``
 
-.. _autoescapeoff():
+.. _autoescapeoff:
 
-autoescapeoff
+autoescapeoff()
 +++++++++++++++
 
 Switches off the default auto-escaping behavior. This means that all
@@ -60,9 +60,9 @@ Sample usage::
 *Returns*
   ``Chano instance``
 
-.. _escape():
+.. _escape:
 
-escape
+escape()
 ++++++++
 
 Forces escaping on the next output, i.e. when __toString() is called,
@@ -84,9 +84,9 @@ _____
 
 Modifies the value of the current item. Chainable.
 
-.. _pluralize($singular='s', $plural=null):
+.. _pluralize:
 
-pluralize
+pluralize($singular='s', $plural=null)
 ++++++++++++++++++++++++++++++++++++++
 
 Returns a plural suffix if the value is not 1. By default,
