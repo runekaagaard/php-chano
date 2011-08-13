@@ -756,18 +756,14 @@ class Chano implements Iterator, ArrayAccess {
      *
      * Formats a date according to the given format.
      *
-     * Uses the same format as PHP's ``date()`` function (http://php.net/date)
-     * with some custom extensions.
+     * Uses the ``date()`` function (http://php.net/date).
      *
      * Available format strings:
      *
      *     ================  ========================================  =====================
      *     Format character  Description                               Example output
      *     ================  ========================================  =====================
-     *     a                 ``'a.m.'`` or ``'p.m.'`` (Note that       ``'a.m.'``
-     *                       this is slightly different than PHP's
-     *                       output, because this includes periods
-     *                       to match Associated Press style.)
+     *     a                 ``'am'`` or ``'pm'``.                     ``'a.m.'``
      *     A                 ``'AM'`` or ``'PM'``.                     ``'AM'``
      *     b                 Month, textual, 3 letters, lowercase.     ``'jan'``
      *     B                 Not implemented.
