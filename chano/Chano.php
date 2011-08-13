@@ -535,6 +535,20 @@ class Chano implements Iterator, ArrayAccess {
      */
     function vd() { var_dump($this->v); return $this; }
 
+    /**
+     * Display the current date and/or time, using a format according to the
+     * given string. Such string can contain format specifiers characters as
+     * described in the :ref:`date` filter section.
+     *
+     * Example::
+     *
+     *     Current time is: <?=$item->now("F j, Y, g:i a")?>
+     *
+     * This would display as ``"Current time is: March 10, 2001, 5:16 pm"``.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function now($format) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 

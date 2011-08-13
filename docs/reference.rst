@@ -5,6 +5,7 @@ string(23) "#function pluralize#Uis"
 string(27) "#function unorderedlist#Uis"
 string(23) "#function striptags#Uis"
 string(16) "#function vd#Uis"
+string(17) "#function now#Uis"
 .. highlight:: php
 
 Chano functions
@@ -189,6 +190,24 @@ vd()
 ``var_dumps()`` the content of the current value to screen.
 
 
+
+*Returns*
+  ``Chano instance``
+
+.. _now:
+
+now($format)
+++++++++++++
+
+Display the current date and/or time, using a format according to the
+given string. Such string can contain format specifiers characters as
+described in the :ref:`date` filter section.
+
+Example::
+
+    Current time is: <?=$item->now("F j, Y, g:i a")?>
+
+This would display as ``"Current time is: March 10, 2001, 5:16 pm"``.
 
 *Returns*
   ``Chano instance``
