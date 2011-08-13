@@ -395,7 +395,7 @@ Available format strings:
     ================  ========================================  =====================
     Format character  Description                               Example output
     ================  ========================================  =====================
-    a                 ``'am'`` or ``'pm'``.                     ``'a.m.'``
+    a                 ``'am'`` or ``'pm'``.                     ``'am'``
     A                 ``'AM'`` or ``'PM'``.                     ``'AM'``
     b                 Month, textual, 3 letters, lowercase.     ``'jan'``
     B                 Not implemented.
