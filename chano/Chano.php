@@ -855,15 +855,6 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
 
-    
-    function time($format) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
-        foreach($vs as &$v) 
-            if (!is_array($v) || $this->v === null)
-                $v = date($format, mktime($v));
-        return $this;
-
-    }
     function _filesizeformat($size) {
         static $prefixes = array('bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
         if (empty($size) || !is_numeric($size)) return "0 $prefixes[0]";
