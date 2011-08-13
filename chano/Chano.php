@@ -759,7 +759,8 @@ class Chano implements Iterator, ArrayAccess {
      * (http://www.php.net/manual/en/function.date-default-timezone-get.php).
      *
      * The input value can be a digit, which will be interpreted as a linux
-     * timestamp or a value recognized by the ``DateTime()`` class
+     * timestamp, a ``DateTime()`` class or a string recognized by the
+     * ``DateTime()`` class
      * (http://www.php.net/manual/en/datetime.construct.php).
      *
      * Available format strings:
@@ -827,6 +828,14 @@ class Chano implements Iterator, ArrayAccess {
      *                       UTC is always positive.
      *     ================  ========================================  =====================
      *
+     * For example::
+     *
+     *     <?=$item->value->date("D d M Y")?>
+     *
+     * If ``value`` is the string "2000-01-01", a DateTime object like
+     * ``new DateTime("2000-01-01")`` or the linux timestamp integer 946684800,
+     * the output will be the string ``'Sat 01 Jan 2000'``.
+     * 
      * @param string $format
      * @chanotype filter
      * @return Chano instance
@@ -837,7 +846,9 @@ class Chano implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v)
             if (!is_array($v) || $this->v === null)
-                if (ctype_digit((string)$v))
+                if ($v instanceof DateTime)
+                    $v = $v->format($format);
+                elseif (ctype_digit((string)$v))
                     $v = date_create("@$v")->setTimezone($tz)->format($format);
                 else
                     $v = date_create($v)->format($format);
