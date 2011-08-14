@@ -1,11 +1,12 @@
-string(13) "@section flag"
-string(15) "@section filter"
 .. highlight:: php
 
 Chano functions
 ===============
 
-Stub. Describe the different types here.
+This document describes all the filters, flags, questions and other functions
+that Chano supports. Most of this documentation is adapated from
+https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
+
 
 Flags
 _____

@@ -12,24 +12,6 @@ require CHANO_GENDOC_BASEPATH . '/../chano/Chano.php';
 require CHANO_GENDOC_BASEPATH . '/bootstrap_docblox.php';
 
 $chano_src = file_get_contents(CHANO_GENDOC_BASEPATH . '/../chano/Chano.php');
-$flag =
-"
-Flags
-_____
-
-Sets one or more boolean values on the Chano class. Chainable.
-
-";
-
-$filter =
-"
-Filters
-_____
-
-Modifies the value of the current item. Chainable.
-
-";
-
 $methods = get_class_methods('Chano');
 
 $rst =
@@ -38,7 +20,10 @@ $rst =
 Chano functions
 ===============
 
-Stub. Describe the different types here.
+This document describes all the filters, flags, questions and other functions
+that Chano supports. Most of this documentation is adapated from
+https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
+
 ";
 $prev_chanotype = false;
 foreach ($methods as $method) {
@@ -52,7 +37,6 @@ foreach ($methods as $method) {
     $method_sig = $ms[1];
     $chanotype = $chanotype_tag[0]->getContent();
     if (empty($prev_chanotype) || $prev_chanotype != $chanotype) {
-        var_dump("@section $chanotype");
         preg_match("#/\*\*\n     \* @section $chanotype.*\*/#Uis", $chano_src, $ms);
         if (!empty($ms)) {
             $db = new DocBlox_Reflection_DocBlock($ms[0]);
