@@ -754,16 +754,16 @@ class Chano implements Iterator, ArrayAccess {
      * Formats a date according to the given format.
      *
      * The format must be in a syntax supported by the
-     * `date()<http://php.net/date>`_ function.
+     * `date() <http://php.net/date>`_ function.
      *
      * The used timezone is the one found by the
-     * `date_default_timezone_get()<http://www.php.net/manual/en/function.date-default-timezone-get.php>`_
+     * `date_default_timezone_get() <http://www.php.net/manual/en/function.date-default-timezone-get.php>`_
      * function.
      *
      * The input value can be a digit, which will be interpreted as a linux
      * timestamp, a ``DateTime()`` class or a string
-     * `recognized by<http://www.php.net/manual/en/datetime.formats.php>`_ the
-     * `DateTime()<http://www.php.net/manual/en/datetime.construct.php>`_
+     * `recognized by <http://www.php.net/manual/en/datetime.formats.php>`_ the
+     * `DateTime() <http://www.php.net/manual/en/datetime.construct.php>`_
      * class.
      *
      * For example::
