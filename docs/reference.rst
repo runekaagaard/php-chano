@@ -433,4 +433,35 @@ If ``value`` is 123456789, the output would be ``117.7 MB``.
 *Returns*
   ``Chano instance``
 
+.. _yesno:
+
+yesno($yes=null, $no=null, $maybe=null)
++++++++++++++++++++++++++++++++++++++++
+
+Given a string mapping values for true, false and (optionally) null,
+returns one of those strings according to the value:
+
+For example::
+
+    <?=$item->value(filesizeformat("yeah", "no", "maybe"))?>
+
+==========  ======================       ==================================
+Value       Arguments                    Outputs
+==========  ======================       ==================================
+``true``    ``("yeah", "no", "maybe")``  ``yeah``
+``false``   ``("yeah", "no", "maybe")``  ``no``
+``null``    ``("yeah", "no", "maybe")``  ``maybe``
+``nule``    ``("yeah", "no",)``          ``"no"`` (converts null to false
+                                         if no mapping for null is given)
+==========  ======================       ==================================
+
+Arguments
+
+- ``string $yes``
+- ``string $no``
+- ``string $maybe``
+
+*Returns*
+  ``Chano instance``
+
 

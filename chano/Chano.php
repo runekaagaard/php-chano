@@ -824,9 +824,26 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Given a string mapping values for true, false and (optionally) null,
+     * returns one of those strings according to the value:
      *
+     * For example::
      *
-     * @param string $format
+     *     <?=$item->value(filesizeformat("yeah", "no", "maybe"))?>
+     *
+     * ==========  ======================       ==================================
+     * Value       Arguments                    Outputs
+     * ==========  ======================       ==================================
+     * ``true``    ``("yeah", "no", "maybe")``  ``yeah``
+     * ``false``   ``("yeah", "no", "maybe")``  ``no``
+     * ``null``    ``("yeah", "no", "maybe")``  ``maybe``
+     * ``nule``    ``("yeah", "no",)``          ``"no"`` (converts null to false
+     *                                          if no mapping for null is given)
+     * ==========  ======================       ==================================
+     *
+     * @param string $yes
+     * @param string $no
+     * @param string $maybe
      * @chanotype filter
      * @return Chano instance
      */
