@@ -1011,7 +1011,7 @@ class Chano implements Iterator, ArrayAccess {
      * .. note::
      * 
      *     This is rarely useful as ampersands are automatically escaped.
-     *     See :ref:escape for more information.
+     *     See :ref:`escape` for more information.
      * 
      * Replaces ampersands with ``&amp;`` entities.
      * 
@@ -1021,15 +1021,6 @@ class Chano implements Iterator, ArrayAccess {
      * 
      * If ``value`` is ``Tom & Jerry``, the output will be ``Tom &amp; Jerry``.
      * 
-     * However, ampersands used in named entities and numeric character
-     * references will not be replaced. For example, if ``value`` is
-     * ``Caf&eacute;``, the output will *not* be ``Caf&amp;eacute;`` but
-     * remain ``Caf&eacute;``. This means that in some edge cases, such as
-     * acronyms followed by semicolons, this filter will
-     * not replace ampersands that need replacing. For example, if ``value`` is
-     * ``Contact the R&D;``, the output will remain unchanged because ``&D;``
-     * resembles a named entity.
-     *
      * @chanotype filter
      * @return Chano instance
      */
@@ -1040,6 +1031,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = strtr($v, '&', '&amp;');
         return $this;
     }
+    
     function _floatformat($v, $ds) {
         if (!is_numeric($v)) return '';
         if (!is_numeric($ds)) $ds = '-1';
@@ -1055,16 +1047,52 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * When used without an argument, rounds a floating-point number to one
+     * decimal place -- but only if there's a decimal part to be displayed.
+     * For example:
+     * 
+     * ============  ===================================  ========
+     * ``value``     Template                             Output
+     * ============  ===================================  ========
+     * ``34.23234``  ``<?$item->value->floatformat()?>``  ``34.2``
+     * ``34.00000``  ``<?$item->value->floatformat()?>``  ``34``
+     * ``34.26000``  ``<?$item->value->floatformat()?>``  ``34.3``
+     * ============  ===================================  ========
+     * 
+     * If used with a numeric integer argument, ``floatformat`` rounds a number
+     * to that many decimal places. For example:
+     * ============  ====================================  ==========
+     * ``value``     Template                                Output
+     * ============  ====================================  ==========
+     * ``34.23234``  ``<?$item->value->floatformat(3)?>``  ``34.232``
+     * ``34.00000``  ``<?$item->value->floatformat(3)?>``  ``34.000``
+     * ``34.26000``  ``<?$item->value->floatformat(3)?>``  ``34.260``
+     * ============  ====================================  ==========
+     * 
+     * If the argument passed to ``floatformat`` is negative, it will round a
+     * number to that many decimal places -- but only if there's a decimal part
+     * to be displayed. For example:
+     * 
+     * ============  =====================================  ==========
+     * ``value``     Template                               Output
+     * ============  =====================================  ==========
+     * ``34.23234``  ``<?$item->value->floatformat(-3)?>``  ``34.232``
+     * ``34.00000``  ``<?$item->value->floatformat(-3)?>``  ``34``
+     * ``34.26000``  ``<?$item->value->floatformat(-3)?>``  ``34.260``
+     * ============  =====================================  ==========
+     * 
+     * Using ``floatformat`` with no argument is equivalent to using
+     * ``floatformat`` with an argument of ``-1``.
      *
      * @param string $format
      * @chanotype filter
      * @return Chano instance
      */
-    function floatformat($ds=null) {
+    function floatformat($decimal_places=null) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = $this->_floatformat($v, $ds);
+                $v = $this->_floatformat($v, $decimal_places);
         return $this;
     }
 
