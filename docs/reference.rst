@@ -1209,6 +1209,23 @@ _____
 
 Other functions.
 
+.. _firstfull:
+
+firstfull()
++++++++++++
+
+Returns the first not empty value of the given arguments. This function
+is chainable. Works on the base instance.
+
+For example::
+
+  <?=$items->firstfull(0, null, array(), new stdClass, 42)?>
+
+Would output ``42``.
+
+Arguments
+
+- ``mixed $arg1 ... $argN - $return Chano instance``
 .. _cycle:
 
 cycle()

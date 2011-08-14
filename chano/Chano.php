@@ -1810,7 +1810,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * Would output ``42``.
      *
-     * @chanogroup other
+     * @chanotype other
      * @param mixed $arg1 ... $argN
      * $return Chano instance
      */
