@@ -210,7 +210,7 @@ class Chano implements Iterator, ArrayAccess {
      * @section flag
      *   Flags
      *   
-     *   Sets one or more boolean values on the Chano class. Chainable.
+     *   Sets a boolean option on the Chano instance. All flags are chainable.
      */
 
     /**
@@ -277,11 +277,12 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
 
-    /*
-     * Questions.
+    /**
+     * @section question
+     *   Questions
      *
-     * Conditionally returns a boolean based on value of current item. All
-     * questions are nonchainable.
+     * Conditionally returns a boolean based on the value of the current item.
+     * All questions are nonchainable.
      */
     
     function emptyor($default) {
@@ -306,12 +307,13 @@ class Chano implements Iterator, ArrayAccess {
         return ($this->reset_filter() % $divisor) === 0;
     }
 
-    /*
-     * Returns.
+    /**
+     * @section return
+     *   Returns
      *
-     * Returns value of current item in various ways. Unchainable.
+     *   Returns the value of the current item in various ways. All returns are
+     *   nonchainable.
      */
-
     function safe() { return $this->out($this->v, false); }
     function forceescape() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -322,13 +324,15 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
 
-    /*
-     * Counters.
+    /**
+     * @section counter
+     *   Counters
      *
-     * Different methods of counting to/from the current item. Chainable. Works
-     * on the base instance, ie. you don't have to ask for a key first.
+     *   Different methods of counting to/from the current item. Works on the
+     *   base instance, e.g. you don't have to ask for a key first. All counters
+     *   are chainable.
      */
-
+    
     function counter() {
         $this->v = $this->i + 1;
         return $this;
@@ -346,11 +350,12 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
     
-    /*
-     * Selectors.
+    /**
+     * @section selector
+     *   Selectors
      *
-     * One of given arguments are conditionally returned. Chainable. Works on
-     * base instance too.
+     *   One of given arguments are conditionally returned. Works on the base
+     *   instance too. All selectors are chainable.
      */
 
     function firstof() {
@@ -388,12 +393,13 @@ class Chano implements Iterator, ArrayAccess {
         else return count($v);
     }
 
-    /*
-     * Filters.
+    /**
+     * @section filter
+     *   Filters
      *
-     * Modifies the value of the current item. Chainable.
+     *   Modifies the value of the current item. All filters are chainable.
      */
-
+    
     /**
      * Returns a plural suffix if the value is not 1. By default,
      * this suffix is ``'s'``.

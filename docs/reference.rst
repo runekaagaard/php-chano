@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 Flags
 _____
 
-Sets one or more boolean values on the Chano class. Chainable.
+Sets a boolean option on the Chano instance. All flags are chainable.
 
 .. _autoescapeon:
 
@@ -79,6 +79,12 @@ overruling the :ref:`autoescapeoff` flag a single time.
 
 *Returns*
   ``Chano instance``
+
+
+Filters
+_______
+
+Modifies the value of the current item. All filters are chainable.
 
 .. _pluralize:
 
