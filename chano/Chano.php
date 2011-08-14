@@ -1517,8 +1517,24 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Displays text with line numbers.
      *
-     * @param string $format
+     * For example::
+     *
+     *     <?=$item->value->linenumbers()?>
+     *
+     * If ``value`` is::
+     *
+     *     one
+     *     two
+     *     three
+     *
+     * the output will be::
+     *
+     *     1. one
+     *     2. two
+     *     3. three
+     * 
      * @chanotype filter
      * @return Chano instance
      */
