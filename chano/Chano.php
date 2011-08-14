@@ -1391,6 +1391,7 @@ class Chano implements Iterator, ArrayAccess {
      * @param int $length
      * @param string $ellipsis
      *   Custom ellipsis character(s).
+     * @todo write tests.
      * @chanotype filter
      * @return Chano instance
      */
