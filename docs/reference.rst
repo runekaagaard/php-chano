@@ -386,25 +386,28 @@ date($format)
 Formats a date according to the given format.
 
 The format must be in a syntax supported by the
-`date() <http://php.net/date>`_ function.
+`strftime() <http://php.net/manual/en/function.strftime.php>`_ function.
 
 The used timezone is the one found by the
 `date_default_timezone_get() <http://www.php.net/manual/en/function.date-default-timezone-get.php>`_
 function.
 
+Uses the current locale as set by the `setlocale <http://php.net/manual/en/function.setlocale.php>`_
+function.
+
 The input value can be a digit, which will be interpreted as a linux
 timestamp, a ``DateTime()`` class or a string
 `recognized by <http://www.php.net/manual/en/datetime.formats.php>`_ the
-`DateTime() <http://www.php.net/manual/en/datetime.construct.php>`_
+`strtotime() <http://php.net/manual/en/function.strtotime.php>`_
 class.
 
 For example::
 
-    <?=$item->value->date("D d M Y")?>
+    <?=$item->value->date("%d %B %Y")?>
 
 If ``value`` is the string "2000-01-01", a DateTime object like
 ``new DateTime("2000-01-01")`` or the linux timestamp integer 946684800,
-the output will be the string ``'Sat 01 Jan 2000'``.
+the output will be the string ``'01 January 2000'``.
 
 Arguments
 
