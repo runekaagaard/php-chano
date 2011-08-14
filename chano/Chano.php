@@ -314,14 +314,29 @@ class Chano implements Iterator, ArrayAccess {
      * @section question
      *   Questions
      *
-     * Conditionally returns a boolean based on the value of the current item.
+     * Conditionally returns a value based on the value of the current item.
      * All questions are nonchainable.
      */
-    
+
+    /**
+     * If value evaluates to ``False``, use given default. Otherwise, use the
+     * value.
+     *
+     * For example::
+     *
+     *     <?=$item->value->default("nothing")?>
+     *
+     * If ``value`` is ``""`` (the empty string), the output will be
+     * ``nothing``.
+     *
+     * @chanotype @question
+     * @return mixed
+     */
     function emptyor($default) {
-        $value = $this->reset_filter();
-        return empty($value) ? $default : $value;
+        $v = $this->reset_filter();
+        return empty($v) ? $default : $v;
     }
+    
     function isfirst() { return $this->i === 0; }
     function islast() { return $this->i === $this->iterator->count(); }
     function haschanged() {

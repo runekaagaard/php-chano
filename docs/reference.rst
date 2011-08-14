@@ -3,8 +3,8 @@
 Chano functions
 ===============
 
-This document describes all the filters, flags, questions, counts and other
-functions that Chano supports. Most of this documentation is adapated from
+This document describes all the functions that Chano supports.
+Most of this documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 
 
@@ -118,6 +118,24 @@ to use the ``escape`` filter.
 
 *Returns*
   ``Chano instance``
+
+.. _emptyor:
+
+emptyor($default)
++++++++++++++++++
+
+If value evaluates to ``False``, use given default. Otherwise, use the
+value.
+
+For example::
+
+    <?=$item->value->default("nothing")?>
+
+If ``value`` is ``""`` (the empty string), the output will be
+``nothing``.
+
+*Returns*
+  ``mixed``
 
 
 Counters
