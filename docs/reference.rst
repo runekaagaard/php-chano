@@ -8,10 +8,12 @@ functions that Chano supports. Most of this documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 
 
-Flags
-_____
+Escaping
+________
 
-Sets a boolean option on the Chano instance. All flags are chainable.
+By default all output from Chano is escaped but this behavior can be
+modified by the functions in this section. All escaping functions are
+chainable.
 
 .. _autoescapeon:
 
@@ -66,16 +68,35 @@ Sample usage::
 escape()
 ++++++++
 
-Forces escaping on the next output, i.e. when __toString() is called,
-overruling the :ref:`autoescapeoff` flag a single time.
+Forces escaping on the next output, e.g. when __toString() is called,
+overruling the :ref:`autoescapeoff` flag a single time. When
+autoescaping is on this flag has no effect.
 
-* Sample usage::
+The opposite of `safe`_.
+
+For example::
 
     <?foreach(new Chano($items) as $item)?>
         <?=$item->autoescapeoff()?>
         <?=$item->escape()->body?> <!-- body is escaped -->
-        <?=$item->comments?> <!-- comments is not -->
+        <?=$item->comments?> <!-- comments is not escaped -->
     <?endforeach?>
+
+*Returns*
+  ``Chano instance``
+
+.. _forceescape:
+
+forceescape()
++++++++++++++
+
+Applies HTML escaping to a string (see the ``escape`` filter for
+details). This filter is applied *immediately* and returns a new, escaped
+string. This is useful in the rare cases where you need multiple escaping
+or want to apply other filters to the escaped results. Normally, you want
+to use the ``escape`` filter.
+
+
 
 *Returns*
   ``Chano instance``
