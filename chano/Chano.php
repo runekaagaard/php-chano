@@ -917,7 +917,7 @@ class Chano implements Iterator, ArrayAccess {
      * 
      * For example::
      * 
-     *     <?$item->value->stringformat:("%03d")?>
+     *     <?=$item->value->stringformat:("%03d")?>
      * 
      * If ``value`` is ``1``, the output will be ``"001"``.
      *
@@ -940,7 +940,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?$item->value->escapejs()?>
+     *     <?=$item->value->escapejs()?>
      *
      * If ``value`` is ``"testing\r\njavascript \'string" <b>escaping</b>"``,
      * the output will be
@@ -979,7 +979,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?$item->value->first()?>
+     *     <?=$item->value->first()?>
      *
      * If ``value`` is the array ``array('a', 'b', 'c')``, the output will be
      * ``'a'``.
@@ -1017,7 +1017,7 @@ class Chano implements Iterator, ArrayAccess {
      * 
      * For example::
      * 
-     *     <?$item->value->fixampersands()?>
+     *     <?=$item->value->fixampersands()?>
      * 
      * If ``value`` is ``Tom & Jerry``, the output will be ``Tom &amp; Jerry``.
      * 
@@ -1054,9 +1054,9 @@ class Chano implements Iterator, ArrayAccess {
      * ============  ===================================  ========
      * ``value``     Template                             Output
      * ============  ===================================  ========
-     * ``34.23234``  ``<?$item->value->floatformat()?>``  ``34.2``
-     * ``34.00000``  ``<?$item->value->floatformat()?>``  ``34``
-     * ``34.26000``  ``<?$item->value->floatformat()?>``  ``34.3``
+     * ``34.23234``  ``<?=$item->value->floatformat()?>``  ``34.2``
+     * ``34.00000``  ``<?=$item->value->floatformat()?>``  ``34``
+     * ``34.26000``  ``<?=$item->value->floatformat()?>``  ``34.3``
      * ============  ===================================  ========
      * 
      * If used with a numeric integer argument, ``floatformat`` rounds a number
@@ -1065,9 +1065,9 @@ class Chano implements Iterator, ArrayAccess {
      * ============  ====================================  ==========
      * ``value``     Template                              Output
      * ============  ====================================  ==========
-     * ``34.23234``  ``<?$item->value->floatformat(3)?>``  ``34.232``
-     * ``34.00000``  ``<?$item->value->floatformat(3)?>``  ``34.000``
-     * ``34.26000``  ``<?$item->value->floatformat(3)?>``  ``34.260``
+     * ``34.23234``  ``<?=$item->value->floatformat(3)?>``  ``34.232``
+     * ``34.00000``  ``<?=$item->value->floatformat(3)?>``  ``34.000``
+     * ``34.26000``  ``<?=$item->value->floatformat(3)?>``  ``34.260``
      * ============  ====================================  ==========
      * 
      * If the argument passed to ``floatformat`` is negative, it will round a
@@ -1077,9 +1077,9 @@ class Chano implements Iterator, ArrayAccess {
      * ============  =====================================  ==========
      * ``value``     Template                               Output
      * ============  =====================================  ==========
-     * ``34.23234``  ``<?$item->value->floatformat(-3)?>``  ``34.232``
-     * ``34.00000``  ``<?$item->value->floatformat(-3)?>``  ``34``
-     * ``34.26000``  ``<?$item->value->floatformat(-3)?>``  ``34.260``
+     * ``34.23234``  ``<?=$item->value->floatformat(-3)?>``  ``34.232``
+     * ``34.00000``  ``<?=$item->value->floatformat(-3)?>``  ``34``
+     * ``34.26000``  ``<?=$item->value->floatformat(-3)?>``  ``34.260``
      * ============  =====================================  ==========
      * 
      * Using ``floatformat`` with no argument is equivalent to using
@@ -1112,7 +1112,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?$item->value->get_digit(2)?>
+     *     <?=$item->value->get_digit(2)?>
      *
      * If ``value`` is ``123456789``, the output will be ``8``.
      *
@@ -1129,9 +1129,15 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Converts a string into all lowercase.
      *
+     * For example::
      *
-     * @param string $format
+     *     <?=$item->value->lower()?>
+     *
+     * If ``value`` is ``Still MAD At Yoko``, the output will be
+     * ``still mad at yoko``.
+     *
      * @chanotype filter
      * @return Chano instance
      */

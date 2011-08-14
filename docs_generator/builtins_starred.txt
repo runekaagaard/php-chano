@@ -1153,7 +1153,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->add:"2"?>
+     *     <?=$item->value->add:"2"?>
      * 
      * If ``value`` is ``4``, then the output will be ``6``.
      * 
@@ -1186,7 +1186,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->addslashes?>
+     *     <?=$item->value->addslashes?>
      * 
      * If ``value`` is ``"I'm using Django"``, the output will be ``"I\'m using Django"``.
      * 
@@ -1199,7 +1199,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->capfirst?>
+     *     <?=$item->value->capfirst?>
      * 
      * If ``value`` is ``"django"``, the output will be ``"Django"``.
      * 
@@ -1212,7 +1212,7 @@
      * 
      * For example::
      * 
-     *     "<?$item->value->center:"15"?>"
+     *     "<?=$item->value->center:"15"?>"
      * 
      * If ``value`` is ``"Django"``, the output will be ``"     Django    "``.
      * 
@@ -1225,7 +1225,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->cut:" "}}
+     *     <?=$item->value->cut:" "}}
      * 
      * If ``value`` is ``"String with spaces"``, the output will be ``"Stringwithspaces"``.
      * 
@@ -1316,7 +1316,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->date:"D d M Y"?>
+     *     <?=$item->value->date:"D d M Y"?>
      * 
      * If ``value`` is a ``datetime`` object (e.g., the result of
      * ``datetime.datetime.now()``), the output will be the string
@@ -1331,14 +1331,14 @@
      * Assuming that :setting:`USE_L10N` is ``True`` and :setting:`LANGUAGE_CODE` is,
      * for example, ``"es"``, then for::
      * 
-     *     <?$item->value->date:"SHORT_DATE_FORMAT"?>
+     *     <?=$item->value->date:"SHORT_DATE_FORMAT"?>
      * 
      * the output would be the string ``"09/01/2008"`` (the ``"SHORT_DATE_FORMAT"``
      * format specifier for the ``es`` locale as shipped with Django is ``"d/m/Y"``).
      * 
      * When used without a format string::
      * 
-     *     <?$item->value->date?>
+     *     <?=$item->value->date?>
      * 
      * ...the formatting string defined in the :setting:`DATE_FORMAT` setting will be
      * used, without applying any localization.
@@ -1357,7 +1357,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->default:"nothing"?>
+     *     <?=$item->value->default:"nothing"?>
      * 
      * If ``value`` is ``""`` (the empty string), the output will be ``nothing``.
      * 
@@ -1374,7 +1374,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->default_if_none:"nothing"?>
+     *     <?=$item->value->default_if_none:"nothing"?>
      * 
      * If ``value`` is ``None``, the output will be the string ``"nothing"``.
      * 
@@ -1388,7 +1388,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->dictsort:"name"?>
+     *     <?=$item->value->dictsort:"name"?>
      * 
      * If ``value`` is:
      * 
@@ -1428,7 +1428,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->divisibleby:"3"?>
+     *     <?=$item->value->divisibleby:"3"?>
      * 
      * If ``value`` is ``21``, the output would be ``True``.
      * 
@@ -1466,7 +1466,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->escapejs?>
+     *     <?=$item->value->escapejs?>
      * 
      * If ``value`` is ``"testing\r\njavascript \'string" <b>escaping</b>"``,
      * the output will be ``"testing\\u000D\\u000Ajavascript \\u0027string\\u0022 \\u003Cb\\u003Eescaping\\u003C/b\\u003E"``.
@@ -1481,7 +1481,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->filesizeformat?>
+     *     <?=$item->value->filesizeformat?>
      * 
      * If ``value`` is 123456789, the output would be ``117.7 MB``.
      * 
@@ -1494,7 +1494,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->first?>
+     *     <?=$item->value->first?>
      * 
      * If ``value`` is the list ``['a', 'b', 'c']``, the output will be ``'a'``.
      * 
@@ -1511,7 +1511,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->fix_ampersands?>
+     *     <?=$item->value->fix_ampersands?>
      * 
      * If ``value`` is ``Tom & Jerry``, the output will be ``Tom &amp; Jerry``.
      * 
@@ -1534,9 +1534,9 @@
      * ============  ===========================  ========
      * ``value``     Template                     Output
      * ============  ===========================  ========
-     * ``34.23234``  ``<?$item->value->floatformat?>``  ``34.2``
-     * ``34.00000``  ``<?$item->value->floatformat?>``  ``34``
-     * ``34.26000``  ``<?$item->value->floatformat?>``  ``34.3``
+     * ``34.23234``  ``<?=$item->value->floatformat?>``  ``34.2``
+     * ``34.00000``  ``<?=$item->value->floatformat?>``  ``34``
+     * ``34.26000``  ``<?=$item->value->floatformat?>``  ``34.3``
      * ============  ===========================  ========
      * 
      * If used with a numeric integer argument, ``floatformat`` rounds a number to
@@ -1545,9 +1545,9 @@
      * ============  =============================  ==========
      * ``value``     Template                       Output
      * ============  =============================  ==========
-     * ``34.23234``  ``<?$item->value->floatformat:3?>``  ``34.232``
-     * ``34.00000``  ``<?$item->value->floatformat:3?>``  ``34.000``
-     * ``34.26000``  ``<?$item->value->floatformat:3?>``  ``34.260``
+     * ``34.23234``  ``<?=$item->value->floatformat:3?>``  ``34.232``
+     * ``34.00000``  ``<?=$item->value->floatformat:3?>``  ``34.000``
+     * ``34.26000``  ``<?=$item->value->floatformat:3?>``  ``34.260``
      * ============  =============================  ==========
      * 
      * If the argument passed to ``floatformat`` is negative, it will round a number
@@ -1557,9 +1557,9 @@
      * ============  ================================  ==========
      * ``value``     Template                          Output
      * ============  ================================  ==========
-     * ``34.23234``  ``<?$item->value->floatformat:"-3"?>``  ``34.232``
-     * ``34.00000``  ``<?$item->value->floatformat:"-3"?>``  ``34``
-     * ``34.26000``  ``<?$item->value->floatformat:"-3"?>``  ``34.260``
+     * ``34.23234``  ``<?=$item->value->floatformat:"-3"?>``  ``34.232``
+     * ``34.00000``  ``<?=$item->value->floatformat:"-3"?>``  ``34``
+     * ``34.26000``  ``<?=$item->value->floatformat:"-3"?>``  ``34.260``
      * ============  ================================  ==========
      * 
      * Using ``floatformat`` with no argument is equivalent to using ``floatformat``
@@ -1588,7 +1588,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->get_digit:"2"?>
+     *     <?=$item->value->get_digit:"2"?>
      * 
      * If ``value`` is ``123456789``, the output will be ``8``.
      * 
@@ -1606,7 +1606,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->iriencode?>
+     *     <?=$item->value->iriencode?>
      * 
      * If ``value`` is ``"?test=1&me=2"``, the output will be ``"?test=1&amp;me=2"``.
      * 
@@ -1619,7 +1619,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->join:" // "?>
+     *     <?=$item->value->join:" // "?>
      * 
      * If ``value`` is the list ``['a', 'b', 'c']``, the output will be the string
      * ``"a // b // c"``.
@@ -1633,7 +1633,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->last?>
+     *     <?=$item->value->last?>
      * 
      * If ``value`` is the list ``['a', 'b', 'c', 'd']``, the output will be the string
      * ``"d"``.
@@ -1647,7 +1647,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->length?>
+     *     <?=$item->value->length?>
      * 
      * If ``value`` is ``['a', 'b', 'c', 'd']``, the output will be ``4``.
      * 
@@ -1660,7 +1660,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->length_is:"4"?>
+     *     <?=$item->value->length_is:"4"?>
      * 
      * If ``value`` is ``['a', 'b', 'c', 'd']``, the output will be ``True``.
      * 
@@ -1675,7 +1675,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->linebreaks?>
+     *     <?=$item->value->linebreaks?>
      * 
      * If ``value`` is ``Joel\nis a slug``, the output will be ``<p>Joel<br />is a
      * slug</p>``.
@@ -1690,7 +1690,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->linebreaksbr?>
+     *     <?=$item->value->linebreaksbr?>
      * 
      * If ``value`` is ``Joel\nis a slug``, the output will be ``Joel<br />is a
      * slug``.
@@ -1704,7 +1704,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->linenumbers?>
+     *     <?=$item->value->linenumbers?>
      * 
      * If ``value`` is::
      * 
@@ -1729,7 +1729,7 @@
      * 
      * For example::
      * 
-     *     "<?$item->value->ljust:"10"?>"
+     *     "<?=$item->value->ljust:"10"?>"
      * 
      * If ``value`` is ``Django``, the output will be ``"Django    "``.
      * 
@@ -1742,7 +1742,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->lower?>
+     *     <?=$item->value->lower?>
      * 
      * If ``value`` is ``Still MAD At Yoko``, the output will be ``still mad at yoko``.
      * 
@@ -1757,7 +1757,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->make_list?>
+     *     <?=$item->value->make_list?>
      * 
      * If ``value`` is the string ``"Joel"``, the output would be the list
      * ``[u'J', u'o', u'e', u'l']``. If ``value`` is ``123``, the output will be the
@@ -1776,7 +1776,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->phone2numeric?>
+     *     <?=$item->value->phone2numeric?>
      * 
      * If ``value`` is ``800-COLLECT``, the output will be ``800-2655328``.
      * 
@@ -1828,7 +1828,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->random?>
+     *     <?=$item->value->random?>
      * 
      * If ``value`` is the list ``['a', 'b', 'c', 'd']``, the output could be ``"b"``.
      * 
@@ -1841,7 +1841,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->removetags:"b span"|safe?>
+     *     <?=$item->value->removetags:"b span"|safe?>
      * 
      * If ``value`` is ``"<b>Joel</b> <button>is</button> a <span>slug</span>"`` the
      * output will be ``"Joel <button>is</button> a slug"``.
@@ -1862,7 +1862,7 @@
      * 
      * For example::
      * 
-     *     "<?$item->value->rjust:"10"?>"
+     *     "<?=$item->value->rjust:"10"?>"
      * 
      * If ``value`` is ``Django``, the output will be ``"    Django"``.
      * 
@@ -1927,7 +1927,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->slugify?>
+     *     <?=$item->value->slugify?>
      * 
      * If ``value`` is ``"Joel is a slug"``, the output will be ``"joel-is-a-slug"``.
      * 
@@ -1945,7 +1945,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->stringformat:"s"?>
+     *     <?=$item->value->stringformat:"s"?>
      * 
      * If ``value`` is ``"Joel is a slug"``, the output will be ``"Joel is a slug"``.
      * 
@@ -1958,7 +1958,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->striptags?>
+     *     <?=$item->value->striptags?>
      * 
      * If ``value`` is ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the
      * output will be ``"Joel is a slug"``.
@@ -1980,7 +1980,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->time:"H:i"?>
+     *     <?=$item->value->time:"H:i"?>
      * 
      * If ``value`` is equivalent to ``datetime.datetime.now()``, the output will be
      * the string ``"01:23"``.
@@ -1990,14 +1990,14 @@
      * Assuming that :setting:`USE_L10N` is ``True`` and :setting:`LANGUAGE_CODE` is,
      * for example, ``"de"``, then for::
      * 
-     *     <?$item->value->time:"TIME_FORMAT"?>
+     *     <?=$item->value->time:"TIME_FORMAT"?>
      * 
      * the output will be the string ``"01:23:00"`` (The ``"TIME_FORMAT"`` format
      * specifier for the ``de`` locale as shipped with Django is ``"H:i:s"``).
      * 
      * When used without a format string::
      * 
-     *     <?$item->value->time?>
+     *     <?=$item->value->time?>
      * 
      * ...the formatting string defined in the :setting:`TIME_FORMAT` setting will be
      * used, without applying any localization.
@@ -2051,7 +2051,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->title?>
+     *     <?=$item->value->title?>
      * 
      * If ``value`` is ``"my first post"``, the output will be ``"My First Post"``.
      * 
@@ -2069,7 +2069,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->truncatechars:9?>
+     *     <?=$item->value->truncatechars:9?>
      * 
      * If ``value`` is ``"Joel is a slug"``, the output will be ``"Joel i..."``.
      * 
@@ -2084,7 +2084,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->truncatewords:2?>
+     *     <?=$item->value->truncatewords:2?>
      * 
      * If ``value`` is ``"Joel is a slug"``, the output will be ``"Joel is ..."``.
      * 
@@ -2104,7 +2104,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->truncatewords_html:2?>
+     *     <?=$item->value->truncatewords_html:2?>
      * 
      * If ``value`` is ``"<p>Joel is a slug</p>"``, the output will be
      * ``"<p>Joel is ...</p>"``.
@@ -2147,7 +2147,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->upper?>
+     *     <?=$item->value->upper?>
      * 
      * If ``value`` is ``"Joel is a slug"``, the output will be ``"JOEL IS A SLUG"``.
      * 
@@ -2160,7 +2160,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->urlencode?>
+     *     <?=$item->value->urlencode?>
      * 
      * If ``value`` is ``"http://www.example.org/foo?a=b&c=d"``, the output will be
      * ``"http%3A//www.example.org/foo%3Fa%3Db%26c%3Dd"``.
@@ -2173,7 +2173,7 @@
      * If not provided, the '/' character is assumed safe. An empty string can be
      * provided when *all* characters should be escaped. For example::
      * 
-     *     <?$item->value->urlencode:""?>
+     *     <?=$item->value->urlencode:""?>
      * 
      * If ``value`` is ``"http://www.example.org/"``, the output will be
      * ``"http%3A%2F%2Fwww.example.org%2F"``.
@@ -2201,7 +2201,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->urlize?>
+     *     <?=$item->value->urlize?>
      * 
      * If ``value`` is ``"Check out www.djangoproject.com"``, the output will be
      * ``"Check out <a href="http://www.djangoproject.com"
@@ -2230,7 +2230,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->urlizetrunc:15?>
+     *     <?=$item->value->urlizetrunc:15?>
      * 
      * If ``value`` is ``"Check out www.djangoproject.com"``, the output would be
      * ``'Check out <a href="http://www.djangoproject.com"
@@ -2247,7 +2247,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->wordcount?>
+     *     <?=$item->value->wordcount?>
      * 
      * If ``value`` is ``"Joel is a slug"``, the output will be ``4``.
      * 
@@ -2262,7 +2262,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->wordwrap:5?>
+     *     <?=$item->value->wordwrap:5?>
      * 
      * If ``value`` is ``Joel is a slug``, the output would be::
      * 
@@ -2280,7 +2280,7 @@
      * 
      * For example::
      * 
-     *     <?$item->value->yesno:"yeah,no,maybe"?>
+     *     <?=$item->value->yesno:"yeah,no,maybe"?>
      * 
      * ==========  ======================  ==================================
      * Value       Argument                Outputs
