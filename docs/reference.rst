@@ -416,4 +416,21 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _filesizeformat:
+
+filesizeformat()
+++++++++++++++++
+
+Format the value like a 'human-readable' file size (i.e. ``'13 KB'``,
+``'4.1 MB'``, ``'102 bytes'``, etc).
+
+For example::
+
+    <?=$item->value(filesizeformat)?>
+
+If ``value`` is 123456789, the output would be ``117.7 MB``.
+
+*Returns*
+  ``Chano instance``
+
 

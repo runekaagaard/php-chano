@@ -794,13 +794,27 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
 
-    function _filesizeformat($size) {
+    private function _filesizeformat($size) {
         static $prefixes = array('bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
         if (empty($size) || !is_numeric($size)) return "0 $prefixes[0]";
         for ($i=0; round($size, 1) >= 1024 && $i<5; $size /= 1024, ++$i);
         if ($i==0) return "$size $prefixes[0]";
         return sprintf('%01.1f %s', $size, $prefixes[$i]);
     }
+
+    /**
+     * Format the value like a 'human-readable' file size (i.e. ``'13 KB'``,
+     * ``'4.1 MB'``, ``'102 bytes'``, etc).
+     *
+     * For example::
+     *
+     *     <?=$item->value(filesizeformat)?>
+     *
+     * If ``value`` is 123456789, the output would be ``117.7 MB``.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function filesizeformat() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -808,6 +822,14 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_filesizeformat($v);
         return $this;
     }
+
+    /**
+     *
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function yesno($yes=null, $no=null, $maybe=null) {
         $choices = array(
             true => $yes ? $yes : 'yes',
@@ -824,6 +846,13 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function wordwrap($width) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -831,6 +860,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = wordwrap($v, $width, "\n", true);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function wordcount() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -838,6 +874,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = str_word_count($v, 0, '0123456789');
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function len() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -845,6 +888,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = strlen($v);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function stringformat($format) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -852,6 +902,14 @@ class Chano implements Iterator, ArrayAccess {
                 $v = sprintf("%$format", $v);
         return $this;
     }
+
+    /**
+     *
+     * 
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function escapejs() {
         // Thanks Heine!: http://drupal.org/node/479368#pift-results-479368-3198
         // 886-3198886.
@@ -876,6 +934,14 @@ class Chano implements Iterator, ArrayAccess {
                 $v = strtr($v, $replace_pairs);
         return $this;
     }
+
+    /**
+     *
+     * 
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function first() {
         if (is_array($this->v)) {
             if (empty($this->v)) throw new Chano_ValueIsEmptyError;
@@ -896,6 +962,13 @@ class Chano implements Iterator, ArrayAccess {
         
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function fixampersands() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -916,6 +989,13 @@ class Chano implements Iterator, ArrayAccess {
         $ds = $ds ? $ds : 1;
         return sprintf("%.{$ds}f", round($v, $ds));
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function floatformat($ds=null) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -923,12 +1003,21 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_floatformat($v, $ds);
         return $this;
     }
+
     function _getdigit($v, $n) {
-            if (!intval($v) || !intval($n)) return $v;
-            $v_s = (string)$v;
-            if (!isset($v_s[$n-1])) return $v;
-            else return $v_s[$n-1];
-        }
+        if (!intval($v) || !intval($n)) return $v;
+        $v_s = (string)$v;
+        if (!isset($v_s[$n-1])) return $v;
+        else return $v_s[$n-1];
+    }
+
+    /**
+     *
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function getdigit($n) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -936,6 +1025,14 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_getdigit($v, $n);
         return $this;
     }
+
+    /**
+     *
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function lower() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -943,6 +1040,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = mb_strtolower($v, self::$encoding);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function title() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) {
@@ -956,22 +1060,27 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $this;
     }
+
     private function _urlize_cb1($ms) {
         return empty($ms[2]) ? $ms[0]
                : "$ms[1]<a href=\"$ms[2]\" rel=\"nofollow\">$ms[2]</a>";
     }
+
     private function _urlize_cb2($ms) {
         return empty($ms[2])
                ? $ms[0]
                : sprintf('<a href="http://%1$s" rel="nofollow">http://%1$s</a>'
                          , trim($ms[2], '.,;:)'));
     }
+
     private function _urlize_cb3($ms) {
         return "$ms[1]<a href=\"mailto:$ms[2]@$ms[3]\">$ms[2]@$ms[3]</a>";
     }
+
     private function _urlize_cb4($ms) {
         return "<a href=\"http://$ms[0]\" rel=\"nofollow\">$ms[0]</a>";
     }
+
     private function _urlize($v) {
         // Thanks Wordpress (I guess).
         $v = preg_replace_callback('#(?<=[\s>])(\()?([\w]+?://(?:[\w\\x80-\\xff' 
@@ -989,6 +1098,14 @@ class Chano implements Iterator, ArrayAccess {
         return  preg_replace_callback('#(^| )[a-z0-9-_+]+\.(com|org|net)#',
              array($this, '_urlize_cb4'), $v);
     }
+
+    /**
+     *
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function urlize() {
         $this->autoescape_off_until_tostring = true;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -1008,6 +1125,14 @@ class Chano implements Iterator, ArrayAccess {
         return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
                    array($this, '_urlizetrunc_cb'), $v);
     }
+
+    /**
+     *
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function urlizetrunc($len) {
         // TODO: This passes the tests but also truncates existing html
         // addresses which is probably not the desired behavior. Change _urlize
@@ -1020,6 +1145,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_urlizetrunc($v, $len);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function truncatewords($n) {
         // Thanks banderson623: http://snippets.dzone.com/posts/show/412.
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -1052,6 +1184,13 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $v;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function truncatewordshtml($n) {
         $this->autoescape_off_until_tostring = true;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -1060,6 +1199,14 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_truncatewordshtml($v, $n);
         return $this;
     }
+
+    /**
+     *
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function truncatechars($length, $ellipsis='...') {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v)
@@ -1068,6 +1215,14 @@ class Chano implements Iterator, ArrayAccess {
                     $v = substr($v, 0, $length - strlen($ellipsis)) . $ellipsis;
         return $this;
     }
+
+    /**
+     *
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function urlencode() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -1075,6 +1230,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = urlencode($v);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function iriencode() {
         // TODO: Keep this? Suspicious!
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -1105,6 +1267,13 @@ class Chano implements Iterator, ArrayAccess {
         }
         return '';
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function slice($str) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -1112,6 +1281,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_slice($v, $str);
         return $this;
     }
+
     private function _linenumbers($v) {
         $lines = explode("\n", trim($v));
         $strlen = strlen(count($lines));
@@ -1125,6 +1295,13 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $string;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function linenumbers() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -1132,6 +1309,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_linenumbers($v);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function removetags() {
         $this->autoescape_off_until_tostring = true;
         $args = func_get_args();
@@ -1143,6 +1327,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = preg_replace("/<\\/?($tags)(\\s+.*?>|>)/Uis", '', $v);
         return $this;
     }
+    
     function _linebreaks($v) {
         $v = preg_replace('#\r\n|\r|\n#', "\n", $v);
         $paragrahps = preg_split('#\n{2,}#', $v);
@@ -1151,6 +1336,13 @@ class Chano implements Iterator, ArrayAccess {
             $html .= '<p>' . str_replace("\n", '<br />', $p) . '</p>';
         return $html;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function linebreaks() {
         $this->autoescape_off_until_tostring = true;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -1159,6 +1351,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_linebreaks($v);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function linebreaksbr() {
         $this->autoescape_off_until_tostring = true;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -1167,6 +1366,13 @@ class Chano implements Iterator, ArrayAccess {
                 $v = nl2br($v);
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function join($glue=', ') {
         if (is_scalar($this->v)) return $this;
         $this->v = implode($glue, $this->v);
@@ -1183,6 +1389,13 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function slugify() {
         // Thanks Borek! http://drupal.org/node/63924.
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
@@ -1199,6 +1412,13 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $this;
     }
+
+    /**
+     *
+     * @param string $format
+     * @chanotype filter
+     * @return Chano instance
+     */
     function phone2numeric() {
         static $replace_pairs = array('a' => '2', 'b' => '2', 'c' => '2',
             'd' => '3', 'e' => '3', 'f' => '3', 'g' => '4', 'h' => '4',
@@ -1214,4 +1434,5 @@ class Chano implements Iterator, ArrayAccess {
     }
 }
 
+// Register iterators.
 require realpath(dirname(__FILE__) . '/lib/iterators.php');

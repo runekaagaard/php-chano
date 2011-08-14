@@ -44,6 +44,8 @@ $prev_chanotype = false;
 foreach ($methods as $method) {
     $rf_method = new ReflectionMethod('Chano', $method);
     $docblox = new DocBlox_Reflection_DocBlock($rf_method->getDocComment());
+    $short = $docblox->getShortDescription();
+    if (empty($short)) continue;
     $chanotype_tag = $docblox->getTagsByName('chanotype');
     if (empty($chanotype_tag)) continue;
     preg_match("#function ($method\(.*\))#Uis", $chano_src, $ms);
