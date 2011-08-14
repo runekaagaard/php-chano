@@ -941,4 +941,21 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _makelist:
+
+makelist()
+++++++++++
+
+Returns the value turned into an array.
+
+For example::
+
+    <?=$item->value->make_list()?>
+
+If ``value`` is the string ``"Joel"``, the output would be the list
+``array('J', 'o', 'e', 'l')``.
+
+*Returns*
+  ``Chano instance``
+
 

@@ -1629,6 +1629,20 @@ class Chano implements Iterator, ArrayAccess {
         $this->v = implode($glue, $this->v);
         return $this;
     }
+
+    /**
+     * Returns the value turned into an array.
+     *
+     * For example::
+     *
+     *     <?=$item->value->make_list()?>
+     *
+     * If ``value`` is the string ``"Joel"``, the output would be the list
+     * ``array('J', 'o', 'e', 'l')``.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
     function makelist() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) {
