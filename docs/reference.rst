@@ -1219,7 +1219,7 @@ is chainable. Works on the base instance.
 
 For example::
 
-  <?=$items->firstfull(0, null, array(), new stdClass, 42)?>
+  <?=$item->firstfull(0, null, array(), new stdClass, 42)?>
 
 Would output ``42``.
 
