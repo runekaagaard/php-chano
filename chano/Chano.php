@@ -1324,6 +1324,7 @@ class Chano implements Iterator, ArrayAccess {
         }
         return $this;
     }
+
     private function _truncatewordshtml($v, $n) {
         // Strip tags, explode words and count the number of chars of the
         // first n words. Then use cakePHP magic function.
@@ -1346,17 +1347,33 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Similar to `truncatewords`_, except that it is aware of HTML tags. 
+     * Any tags that are opened in the string and not closed before the 
+     * truncation point, are closed immediately after the truncation.
+     * 
+     * This is less efficient than ``truncatewords``, so should only be used
+     * when it is being passed HTML text.
+     * 
+     * For example::
+     * 
+     *     <?=$item->value->truncatewords_html(2)?>
+     * 
+     * If ``value`` is ``"<p>Joel is a slug</p>"``, the output will be
+     * ``"<p>Joel is ...</p>"``.
+     * 
+     * Newlines in the HTML content will be preserved.
      *
-     * @param string $format
+     * @param string $number
+     *   Number of words to truncate after.
      * @chanotype filter
      * @return Chano instance
      */
-    function truncatewordshtml($n) {
+    function truncatewordshtml($number) {
         $this->autoescape_off_until_tostring = true;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = $this->_truncatewordshtml($v, $n);
+                $v = $this->_truncatewordshtml($v, $number);
         return $this;
     }
 
