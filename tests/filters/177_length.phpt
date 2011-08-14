@@ -4,6 +4,6 @@ A generated testfile for the "len" filter.
 <?php
 include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = new Chano(array(array('input' => 'http://31characteruri.com/test/')));
-foreach ($items as $i) echo $i->input->len();
+foreach ($items as $i) echo $i->input->length();
 --EXPECT--
 31

@@ -38,7 +38,7 @@ class myIterator implements Iterator {
 
 foreach (new Chano(new myIterator) as $i) {
     echo $i->title->upper() . "\n";
-    echo $i->title->len() . "\n";
+    echo $i->title->length() . "\n";
 }
 --EXPECT--
 FOO

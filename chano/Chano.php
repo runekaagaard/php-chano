@@ -911,12 +911,19 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Returns the length of the value. This works for both strings and lists.
      *
+     * For example::
+     *
+     *     {{ value|length }}
+     *
+     * If ``value`` is ``['a', 'b', 'c', 'd']``, the output will be ``4``.
+     * 
      * @param string $format
      * @chanotype filter
      * @return Chano instance
      */
-    function len() {
+    function xxxxxxlen() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
