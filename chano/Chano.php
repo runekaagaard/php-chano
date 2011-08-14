@@ -220,8 +220,6 @@ class Chano implements Iterator, ArrayAccess {
      * applied to it before placing the result into the output (but after any
      * filters have been applied).
      *
-     * The only exceptions to this rule is the :ref:`safe` method.
-     *
      * Sample usage::
      *
      *     <?foreach(new Chano($items) as $item)?>
@@ -287,7 +285,8 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?=$item->value->safe()->escape()?>
      *
-     *
+     * @chanotype escaping
+     * @return Chano instance
      */
     function safe() { $this->autoescape_next = false; return $this; }
 

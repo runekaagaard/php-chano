@@ -28,8 +28,6 @@ When auto-escaping is in effect, all variable content has HTML escaping
 applied to it before placing the result into the output (but after any
 filters have been applied).
 
-The only exceptions to this rule is the :ref:`safe` method.
-
 Sample usage::
 
     <?foreach(new Chano($items) as $item)?>
@@ -81,6 +79,26 @@ For example::
         <?=$item->escape()->body?> <!-- body is escaped -->
         <?=$item->comments?> <!-- comments is not escaped -->
     <?endforeach?>
+
+*Returns*
+  ``Chano instance``
+
+.. _safe:
+
+safe()
+++++++
+
+Marks a string as not requiring further HTML escaping prior to output.
+
+When autoescaping is off, this filter has no effect.
+
+The opposite of `escape`_.
+
+If you are chaining filters, a filter applied after ``safe`` can
+make the contents unsafe again. For example, the following code
+prints the variable as is, unescaped::
+
+    <?=$item->value->safe()->escape()?>
 
 *Returns*
   ``Chano instance``
