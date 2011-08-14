@@ -67,7 +67,7 @@ contains::
                   'Lawrence', 'Topeka'
             ), 'Illinois'
         )
-    );
+    )
 
 then ``<?=$item->var->unordered_list()?>`` would render::
 
@@ -100,18 +100,6 @@ For example::
 If ``$value`` is
 ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``, the output
 will be ``"Joel is a slug"``.
-
-*Returns*
-  ``Chano instance``
-
-.. _vd:
-
-vd()
-++++
-
-``var_dumps()`` the content of the current value to screen.
-
-
 
 *Returns*
   ``Chano instance``
@@ -1022,7 +1010,13 @@ isfirst()
 
 True if this is the first time through the loop.
 
+For example::
 
+    <?foreach (new Chano($players) as $player):?>
+        <?if ($player->score->first()):?>
+            First!
+        <?endif?>
+    <?endforeach?
 
 *Returns*
   ``bool``
@@ -1034,7 +1028,11 @@ islast()
 
 True if this is the last time through the loop.
 
-
+<?foreach (new Chano($players) as $player):?>
+        <?if ($player->score->islast()):?>
+            Last!
+        <?endif?>
+    <?endforeach?>
 
 *Returns*
   ``bool``
@@ -1050,7 +1048,7 @@ For example::
 
     <?foreach (new Chano($players) as $player):?>
         <?if ($player->score->changed()):?>
-            NEW!
+            Changed!
         <?endif?>
     <?endforeach?>
 
@@ -1068,7 +1066,7 @@ For example::
 
     <?foreach (new Chano($players) as $player):?>
         <?if ($player->score->same()):?>
-            SAME!
+            Same!
         <?endif?>
     <?endforeach?>
 
@@ -1263,6 +1261,24 @@ count.
 
 *Returns*
   ``int``
+
+
+Filters
+_______
+
+Modifies the value of the current item. All filters are chainable.
+
+.. _vd:
+
+vd()
+++++
+
+``var_dumps()`` the content of the current value to screen.
+
+
+
+*Returns*
+  ``Chano instance``
 
 
 Escaping

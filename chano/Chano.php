@@ -55,9 +55,7 @@ class Chano implements Iterator, ArrayAccess {
 
     // Private values.
     private $_iterator;
-    private $_count = 0;
     private $_i = 0;
-    private $_items;
     private $_current = self::INITIAL;
     private $_lookup_path;
     private $_lookups = array();
@@ -304,7 +302,7 @@ class Chano implements Iterator, ArrayAccess {
      *                   'Lawrence', 'Topeka'
      *             ), 'Illinois'
      *         )
-     *     );
+     *     )
      *
      * then ``<?=$item->var->unordered_list()?>`` would render::
      *
@@ -350,14 +348,6 @@ class Chano implements Iterator, ArrayAccess {
                 $v = strip_tags($v);
         return $this;
     }
-
-    /**
-     * ``var_dumps()`` the content of the current value to screen.
-     *
-     * @chanotype filter
-     * @return Chano instance
-     */
-    function vd() { var_dump($this->v); return $this; }
 
     /**
      * Display the current date and/or time, using a format according to the
@@ -1603,6 +1593,14 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * True if this is the first time through the loop.
      *
+     * For example::
+     *
+     *     <?foreach (new Chano($players) as $player):?>
+     *         <?if ($player->score->first()):?>
+     *             First!
+     *         <?endif?>
+     *     <?endforeach?
+     * 
      * @chanotype question
      * @return bool
      */
@@ -1610,6 +1608,12 @@ class Chano implements Iterator, ArrayAccess {
 
     /**
      * True if this is the last time through the loop.
+     *
+     *    <?foreach (new Chano($players) as $player):?>
+     *         <?if ($player->score->islast()):?>
+     *             Last!
+     *         <?endif?>
+     *     <?endforeach?>
      *
      * @todo Write tests.
      * @chanotype question
@@ -1624,7 +1628,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?foreach (new Chano($players) as $player):?>
      *         <?if ($player->score->changed()):?>
-     *             NEW!
+     *             Changed!
      *         <?endif?>
      *     <?endforeach?>
      *
@@ -1646,7 +1650,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?foreach (new Chano($players) as $player):?>
      *         <?if ($player->score->same()):?>
-     *             SAME!
+     *             Same!
      *         <?endif?>
      *     <?endforeach?>
      *
@@ -1871,6 +1875,15 @@ class Chano implements Iterator, ArrayAccess {
         if (is_scalar($v)) return strlen((string)$v);
         else return count($v);
     }
+
+    /**
+     * ``var_dumps()`` the content of the current value to screen.
+     *
+     * @chanotype filter
+     * @return Chano instance
+     */
+    function vd() { var_dump($this->v); return $this; }
+
 
     /**
      * @section escaping
