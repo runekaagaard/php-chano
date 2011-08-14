@@ -1008,8 +1008,28 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * .. note::
+     * 
+     *     This is rarely useful as ampersands are automatically escaped.
+     *     See :ref:escape for more information.
+     * 
+     * Replaces ampersands with ``&amp;`` entities.
+     * 
+     * For example::
+     * 
+     *     <?$item->value->fixampersands()?>
+     * 
+     * If ``value`` is ``Tom & Jerry``, the output will be ``Tom &amp; Jerry``.
+     * 
+     * However, ampersands used in named entities and numeric character
+     * references will not be replaced. For example, if ``value`` is
+     * ``Caf&eacute;``, the output will *not* be ``Caf&amp;eacute;`` but
+     * remain ``Caf&eacute;``. This means that in some edge cases, such as
+     * acronyms followed by semicolons, this filter will
+     * not replace ampersands that need replacing. For example, if ``value`` is
+     * ``Contact the R&D;``, the output will remain unchanged because ``&D;``
+     * resembles a named entity.
      *
-     * @param string $format
      * @chanotype filter
      * @return Chano instance
      */
