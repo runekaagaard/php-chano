@@ -753,80 +753,18 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * Formats a date according to the given format.
      *
-     * Formats follows the syntax of the ``date()`` function
-     * (http://php.net/date). The used timezone is the one found by the
-     * ``date_default_timezone_get()`` function
-     * (http://www.php.net/manual/en/function.date-default-timezone-get.php).
+     * The format must be in a syntax supported by the
+     * `date()<http://php.net/date>`_ function.
+     *
+     * The used timezone is the one found by the
+     * `date_default_timezone_get()<http://www.php.net/manual/en/function.date-default-timezone-get.php>`_
+     * function.
      *
      * The input value can be a digit, which will be interpreted as a linux
-     * timestamp, a ``DateTime()`` class or a string recognized by the
-     * ``DateTime()`` class
-     * (http://www.php.net/manual/en/datetime.construct.php).
-     *
-     * Available format strings:
-     *
-     *     ================  ========================================  =====================
-     *     Format character  Description                               Example output
-     *     ================  ========================================  =====================
-     *     a                 ``'am'`` or ``'pm'``.                     ``'am'``
-     *     A                 ``'AM'`` or ``'PM'``.                     ``'AM'``
-     *     b                 Month, textual, 3 letters, lowercase.     ``'jan'``
-     *     B                 Not implemented.
-     *     c                 ISO 8601 format. (Note: unlike others     ``2008-01-02T10:30:00.000123+02:00``,
-     *     d                 Day of the month, 2 digits with           ``'01'`` to ``'31'``
-     *                       leading zeros.
-     *     D                 Day of the week, textual, 3 letters.      ``'Fri'``
-     *     E                 Month, locale specific alternative
-     *                       representation usually used for long
-     *                       date representation.                      ``'listopada'`` (for Polish locale, as opposed to ``'Listopad'``)
-     *     f                 Time, in 12-hour hours and minutes,       ``'1'``, ``'1:30'``
-     *                       with minutes left off if they're zero.
-     *                       Proprietary extension.
-     *     F                 Month, textual, long.                     ``'January'``
-     *     g                 Hour, 12-hour format without leading      ``'1'`` to ``'12'``
-     *                       zeros.
-     *     G                 Hour, 24-hour format without leading      ``'0'`` to ``'23'``
-     *                       zeros.
-     *     h                 Hour, 12-hour format.                     ``'01'`` to ``'12'``
-     *     H                 Hour, 24-hour format.                     ``'00'`` to ``'23'``
-     *     i                 Minutes.                                  ``'00'`` to ``'59'``
-     *     I                 Not implemented.
-     *     j                 Day of the month without leading          ``'1'`` to ``'31'``
-     *                       zeros.
-     *     l                 Day of the week, textual, long.           ``'Friday'``
-     *     L                 Boolean for whether it's a leap year.     ``True`` or ``False``
-     *     m                 Month, 2 digits with leading zeros.       ``'01'`` to ``'12'``
-     *     M                 Month, textual, 3 letters.                ``'Jan'``
-     *     n                 Month without leading zeros.              ``'1'`` to ``'12'``
-     *     N                 Month abbreviation in Associated Press    ``'Jan.'``, ``'Feb.'``, ``'March'``, ``'May'``
-     *                       style. Proprietary extension.
-     *     O                 Difference to Greenwich time in hours.    ``'+0200'``
-     *     P                 Time, in 12-hour hours, minutes and       ``'1 am'``, ``'1:30 pm'``, ``'midnight'``, ``'noon'``, ``'12:30 pm'``
-     *                       'am'/'pm', with minutes left off
-     *                       if they're zero and the special-case
-     *                       strings 'midnight' and 'noon' if
-     *                       appropriate. Proprietary extension.
-     *     r                 RFC 2822 formatted date.                  ``'Thu, 21 Dec 2000 16:01:07 +0200'``
-     *     s                 Seconds, 2 digits with leading zeros.     ``'00'`` to ``'59'``
-     *     S                 English ordinal suffix for day of the     ``'st'``, ``'nd'``, ``'rd'`` or ``'th'``
-     *                       month, 2 characters.
-     *     t                 Number of days in the given month.        ``28`` to ``31``
-     *     T                 Time zone of this machine.                ``'EST'``, ``'MDT'``
-     *     u                 Microseconds.                             ``0`` to ``999999``
-     *     U                 Seconds since the Unix Epoch
-     *                       (January 1 1970 00:00:00 UTC).
-     *     w                 Day of the week, digits without           ``'0'`` (Sunday) to ``'6'`` (Saturday)
-     *                       leading zeros.
-     *     W                 ISO-8601 week number of year, with        ``1``, ``53``
-     *                       weeks starting on Monday.
-     *     y                 Year, 2 digits.                           ``'99'``
-     *     Y                 Year, 4 digits.                           ``'1999'``
-     *     z                 Day of the year.                          ``0`` to ``365``
-     *     Z                 Time zone offset in seconds. The          ``-43200`` to ``43200``
-     *                       offset for timezones west of UTC is
-     *                       always negative, and for those east of
-     *                       UTC is always positive.
-     *     ================  ========================================  =====================
+     * timestamp, a ``DateTime()`` class or a string
+     * `recognized by<http://www.php.net/manual/en/datetime.formats.php>`_ the
+     * `DateTime()<http://www.php.net/manual/en/datetime.construct.php>`_
+     * class.
      *
      * For example::
      *
