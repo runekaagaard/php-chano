@@ -919,6 +919,32 @@ the output will be::
 *Returns*
   ``Chano instance``
 
+.. _removetags:
+
+removetags()
+++++++++++++
+
+Removes given arguments of [X]HTML tags from the output.
+
+For example::
+
+    <?=$item->value->removetags("b", "span", "ol")?>
+
+If ``value`` is ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``
+the output will be ``"Joel <button>is</button> a slug"``.
+
+Note that this filter is case-sensitive.
+
+If ``value`` is ``"<B>Joel</B> <button>is</button> a <span>slug</span>"``
+the output will be ``"<B>Joel</B> <button>is</button> a slug"``.
+
+Arguments
+
+- ``string $tag1 ... $tagN - An arbitrary number of tags to be removed.``
+
+*Returns*
+  ``Chano instance``
+
 .. _linebreaks:
 
 linebreaks()

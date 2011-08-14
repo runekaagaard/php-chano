@@ -1554,8 +1554,22 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Removes given arguments of [X]HTML tags from the output.
      *
-     * @param string $format
+     * For example::
+     *
+     *     <?=$item->value->removetags("b", "span", "ol")?>
+     *
+     * If ``value`` is ``"<b>Joel</b> <button>is</button> a <span>slug</span>"``
+     * the output will be ``"Joel <button>is</button> a slug"``.
+     *
+     * Note that this filter is case-sensitive.
+     *
+     * If ``value`` is ``"<B>Joel</B> <button>is</button> a <span>slug</span>"``
+     * the output will be ``"<B>Joel</B> <button>is</button> a slug"``.
+     * 
+     * @param string $tag1 ... $tagN
+     *   An arbitrary number of tags to be removed.
      * @chanotype filter
      * @return Chano instance
      */
