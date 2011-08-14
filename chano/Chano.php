@@ -975,13 +975,14 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * Returns the first item in a list.
+     * Outputs the first item in an array, stdClass or Traversable.
      *
      * For example::
      *
      *     <?$item->value->first()?>
      *
-     * If ``value`` is the list ``['a', 'b', 'c']``, the output will be ``'a'``.
+     * If ``value`` is the array ``array('a', 'b', 'c')``, the output will be
+     * ``'a'``.
      * 
      * @chanotype filter
      * @return Chano instance
@@ -1003,7 +1004,6 @@ class Chano implements Iterator, ArrayAccess {
         } else {
             throw new Chano_TypeNotTraversableError;
         }
-        
         return $this;
     }
 

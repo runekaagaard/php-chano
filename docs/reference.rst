@@ -551,13 +551,14 @@ the output will be
 first()
 +++++++
 
-Returns the first item in a list.
+Outputs the first item in an array, stdClass or Traversable.
 
 For example::
 
     <?$item->value->first()?>
 
-If ``value`` is the list ``['a', 'b', 'c']``, the output will be ``'a'``.
+If ``value`` is the array ``array('a', 'b', 'c')``, the output will be
+``'a'``.
 
 *Returns*
   ``Chano instance``
