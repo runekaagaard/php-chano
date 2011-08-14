@@ -605,7 +605,7 @@ For example:
 If used with a numeric integer argument, ``floatformat`` rounds a number
 to that many decimal places. For example:
 ============  ====================================  ==========
-``value``     Template                                Output
+``value``     Template                              Output
 ============  ====================================  ==========
 ``34.23234``  ``<?$item->value->floatformat(3)?>``  ``34.232``
 ``34.00000``  ``<?$item->value->floatformat(3)?>``  ``34.000``
