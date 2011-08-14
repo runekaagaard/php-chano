@@ -800,6 +800,29 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _truncatechars:
+
+truncatechars($length, $ellipsis='...')
++++++++++++++++++++++++++++++++++++++++
+
+Truncates a string if it is longer than the specified number of
+characters. Truncated strings will end with an ellipsis, which default
+to ("...") but can be set with the second argument.
+
+For example::
+
+    <?=$item->value->truncatechars(9)?>
+
+If ``value`` is ``"Joel is a slug"``, the output will be ``"Joel i..."``.
+
+Arguments
+
+- ``int $length``
+- ``string $ellipsis - Custom ellipsis character(s).``
+
+*Returns*
+  ``Chano instance``
+
 .. _urlencode:
 
 urlencode()

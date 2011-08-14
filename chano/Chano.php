@@ -1378,9 +1378,19 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Truncates a string if it is longer than the specified number of
+     * characters. Truncated strings will end with an ellipsis, which default
+     * to ("...") but can be set with the second argument.
      *
+     * For example::
      *
-     * @param string $format
+     *     <?=$item->value->truncatechars(9)?>
+     *
+     * If ``value`` is ``"Joel is a slug"``, the output will be ``"Joel i..."``.
+     *
+     * @param int $length
+     * @param string $ellipsis
+     *   Custom ellipsis character(s).
      * @chanotype filter
      * @return Chano instance
      */
