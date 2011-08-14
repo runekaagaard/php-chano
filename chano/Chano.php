@@ -314,12 +314,12 @@ class Chano implements Iterator, ArrayAccess {
      * @section question
      *   Questions
      *
-     * Conditionally returns a value based on the value of the current item.
-     * All questions are nonchainable.
+     *   Conditionally returns a value based on the value of the current item or
+     *   other parameters. All questions are nonchainable.
      */
 
     /**
-     * If value evaluates to ``False``, use given default. Otherwise, use the
+     * If value evaluates to ``false``, use given default. Otherwise, use the
      * value.
      *
      * For example::
@@ -336,21 +336,79 @@ class Chano implements Iterator, ArrayAccess {
         $v = $this->reset_filter();
         return empty($v) ? $default : $v;
     }
-    
+
+    /**
+     * True if this is the first time through the loop.
+     *
+     * @chanotype question
+     * @return bool
+     */
     function isfirst() { return $this->i === 0; }
+
+    /**
+     * True if this is the last time through the loop.
+     *
+     * @todo Write tests.
+     * @chanotype question
+     * @return bool
+     */
     function islast() { return $this->i === $this->iterator->count(); }
-    function haschanged() {
+
+    /**
+     * Check if a value has changed from the last iteration of a loop.
+     *
+     * For example::
+     *
+     *     <?foreach (new Chano($players) as $player):?>
+     *         <?if ($player->score->changed()):?>
+     *             NEW!
+     *         <?endif?>
+     *     <?endforeach?>
+     *
+     * @todo Write tests.
+     * @chanotype question
+     * @return bool
+     */
+    function changed() {
         $this->v = self::INITIAL;
         $path = $this->lookup_path_reset();
         return isset($this->previous_lookups[$path]) &&
             $this->previous_lookups[$path] != $this->lookups[$path];
     }
+
+    /**
+     * Check if a value is the same as the last iteration of a loop.
+     *
+     * For example::
+     *
+     *     <?foreach (new Chano($players) as $player):?>
+     *         <?if ($player->score->same()):?>
+     *             SAME!
+     *         <?endif?>
+     *     <?endforeach?>
+     *
+     * @chanotype question
+     * @return bool
+     */
     function same() {
         $this->v = self::INITIAL;
         $path = $this->lookup_path_reset();
         return isset($this->previous_lookups[$path]) &&
             $this->previous_lookups[$path] == $this->lookups[$path];
     }
+
+    /**
+     * Returns ``true`` if the value is divisible by the argument.
+     *
+     * For example::
+     *
+     *     <?=$item->value->divisibleby(3)?>
+     *
+     * If ``value`` is ``21``, the output would be ``true``.
+     *
+     * @chanotype question
+     * @return bool
+     */
     function divisibleby($divisor) {
         return ($this->reset_filter() % $divisor) === 0;
     }

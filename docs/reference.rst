@@ -123,15 +123,15 @@ to use the ``escape`` filter.
 Questions
 _________
 
-Conditionally returns a value based on the value of the current item.
-All questions are nonchainable.
+Conditionally returns a value based on the value of the current item or
+other parameters. All questions are nonchainable.
 
 .. _emptyor:
 
 emptyor($default)
 +++++++++++++++++
 
-If value evaluates to ``False``, use given default. Otherwise, use the
+If value evaluates to ``false``, use given default. Otherwise, use the
 value.
 
 For example::
@@ -143,6 +143,82 @@ If ``value`` is ``""`` (the empty string), the output will be
 
 *Returns*
   ``mixed``
+
+.. _isfirst:
+
+isfirst()
++++++++++
+
+True if this is the first time through the loop.
+
+
+
+*Returns*
+  ``bool``
+
+.. _islast:
+
+islast()
+++++++++
+
+True if this is the last time through the loop.
+
+
+
+*Returns*
+  ``bool``
+
+.. _changed:
+
+changed()
++++++++++
+
+Check if a value has changed from the last iteration of a loop.
+
+For example::
+
+    <?foreach (new Chano($players) as $player):?>
+        <?if ($player->score->changed()):?>
+            NEW!
+        <?endif?>
+    <?endforeach?>
+
+*Returns*
+  ``bool``
+
+.. _same:
+
+same()
+++++++
+
+Check if a value is the same as the last iteration of a loop.
+
+For example::
+
+    <?foreach (new Chano($players) as $player):?>
+        <?if ($player->score->same()):?>
+            SAME!
+        <?endif?>
+    <?endforeach?>
+
+*Returns*
+  ``bool``
+
+.. _divisibleby:
+
+divisibleby($divisor)
++++++++++++++++++++++
+
+Returns ``true`` if the value is divisible by the argument.
+
+For example::
+
+    <?=$item->value->divisibleby(3)?>
+
+If ``value`` is ``21``, the output would be ``true``.
+
+*Returns*
+  ``bool``
 
 
 Counters
