@@ -604,6 +604,7 @@ For example:
 
 If used with a numeric integer argument, ``floatformat`` rounds a number
 to that many decimal places. For example:
+
 ============  ====================================  ==========
 ``value``     Template                              Output
 ============  ====================================  ==========
