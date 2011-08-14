@@ -451,7 +451,7 @@ Value       Arguments                    Outputs
 ``true``    ``("yeah", "no", "maybe")``  ``yeah``
 ``false``   ``("yeah", "no", "maybe")``  ``no``
 ``null``    ``("yeah", "no", "maybe")``  ``maybe``
-``nule``    ``("yeah", "no",)``          ``"no"`` (converts null to false
+``null``    ``("yeah", "no")``           ``"no"`` (converts null to false
                                          if no mapping for null is given)
 ==========  ===========================  ==================================
 
@@ -460,6 +460,30 @@ Arguments
 - ``string $yes``
 - ``string $no``
 - ``string $maybe``
+
+*Returns*
+  ``Chano instance``
+
+.. _wordwrap:
+
+wordwrap($width)
+++++++++++++++++
+
+Wraps words at specified line length.
+
+For example::
+
+    <?=$item->value->wordwrap(5)?>
+
+If ``value`` is ``Joel is a slug``, the output would be::
+
+    Joel
+    is a
+    slug
+
+Arguments
+
+- ``int $width - Number of characters at which to wrap the text.``
 
 *Returns*
   ``Chano instance``

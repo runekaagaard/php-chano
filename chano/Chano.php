@@ -837,7 +837,7 @@ class Chano implements Iterator, ArrayAccess {
      * ``true``    ``("yeah", "no", "maybe")``  ``yeah``
      * ``false``   ``("yeah", "no", "maybe")``  ``no``
      * ``null``    ``("yeah", "no", "maybe")``  ``maybe``
-     * ``nule``    ``("yeah", "no",)``          ``"no"`` (converts null to false
+     * ``null``    ``("yeah", "no")``           ``"no"`` (converts null to false
      *                                          if no mapping for null is given)
      * ==========  ===========================  ==================================
      *
@@ -865,8 +865,20 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Wraps words at specified line length.
+     * 
+     * For example::
+     * 
+     *     <?=$item->value->wordwrap(5)?>
+     * 
+     * If ``value`` is ``Joel is a slug``, the output would be::
+     * 
+     *     Joel
+     *     is a
+     *     slug
      *
-     * @param string $format
+     * @param int $width
+     *   Number of characters at which to wrap the text.
      * @chanotype filter
      * @return Chano instance
      */
