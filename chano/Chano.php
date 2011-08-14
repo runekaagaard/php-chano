@@ -1105,17 +1105,26 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Given a whole number, returns the requested digit, where 1 is the
+     * right-most digit, 2 is the second-right-most digit, etc. Returns the
+     * original value for invalid input (if input or argument is not an integer,
+     * or if argument is less than 1). Otherwise, output is always an integer.
      *
+     * For example::
      *
-     * @param string $format
+     *     <?$item->value->get_digit(2)?>
+     *
+     * If ``value`` is ``123456789``, the output will be ``8``.
+     *
+     * @param int $number
      * @chanotype filter
      * @return Chano instance
      */
-    function getdigit($n) {
+    function getdigit($number) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = $this->_getdigit($v, $n);
+                $v = $this->_getdigit($v, $number);
         return $this;
     }
 
