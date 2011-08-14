@@ -329,7 +329,7 @@ class Chano implements Iterator, ArrayAccess {
      * If ``value`` is ``""`` (the empty string), the output will be
      * ``nothing``.
      *
-     * @chanotype @question
+     * @chanotype question
      * @return mixed
      */
     function emptyor($default) {

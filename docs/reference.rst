@@ -119,6 +119,13 @@ to use the ``escape`` filter.
 *Returns*
   ``Chano instance``
 
+
+Questions
+_________
+
+Conditionally returns a value based on the value of the current item.
+All questions are nonchainable.
+
 .. _emptyor:
 
 emptyor($default)
