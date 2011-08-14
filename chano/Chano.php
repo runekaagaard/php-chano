@@ -61,8 +61,7 @@ class Chano implements Iterator, ArrayAccess {
     private $lookups = array();
     private $previous_lookups = array();
     private $autoescape = true;
-    private $autoescape_off_until_tostring = false;
-    private $autoescapeoff_overridden = false;
+    private $autoescape_next = null;
 
     /**
      * Takes an array of arrays as first parameter and an optional array of
@@ -84,12 +83,9 @@ class Chano implements Iterator, ArrayAccess {
     }
     private function out($v, $escape=null) {
         if ($escape === null) $escape = $this->autoescape;
-        $s = (!$this->autoescape_off_until_tostring && $escape) ||
-        $this->autoescapeoff_overridden
-            ? $this->_escape($v)
-            : (string)$v;
-        $this->autoescape_off_until_tostring = false;
-        $this->autoescapeoff_overridden = false;
+        if ($this->autoescape_next !== null)
+            $escape = $this->autoescape_next;
+        $s = $escape ? $this->_escape($v) : (string)$v;
         return (string)$s;
     }
 
@@ -112,7 +108,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return mixed
      */
     private function reset_filter() {
-        $this->autoescape_off_until_tostring = FALSE;
+        $this->autoescape_next = null;
         return $this->reset_v();
     }
     
@@ -207,10 +203,12 @@ class Chano implements Iterator, ArrayAccess {
     ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * @section flag
-     *   Flags
+     * @section escaping
+     *   Escaping
      *   
-     *   Sets a boolean option on the Chano instance. All flags are chainable.
+     *   By default all output from Chano is escaped but this behavior can be
+     *   modified by the functions in this section. All escaping functions are
+     *   chainable.
      */
 
     /**
@@ -233,7 +231,7 @@ class Chano implements Iterator, ArrayAccess {
      *         <?=$item->title?>
      *     <?endforeach?>
      *
-     * @chanotype flag
+     * @chanotype escaping
      * @return Chano instance
      */
     function autoescapeon() { $this->autoescape = true; return $this; }
@@ -252,28 +250,64 @@ class Chano implements Iterator, ArrayAccess {
      *         <?=$item->title?> <!-- title is escaped -->
      *     <?endforeach?>
      *
-     * @chanotype flag
+     * @chanotype escaping
      * @return Chano instance
      */
     function autoescapeoff() { $this->autoescape = false; return $this; }
 
     /**
-     * Forces escaping on the next output, i.e. when __toString() is called,
-     * overruling the :ref:`autoescapeoff` flag a single time.
+     * Forces escaping on the next output, e.g. when __toString() is called,
+     * overruling the :ref:`autoescapeoff` flag a single time. When
+     * autoescaping is on this flag has no effect.
      *
-     * * Sample usage::
+     * The opposite of `safe`_.
+     *
+     * For example::
      *
      *     <?foreach(new Chano($items) as $item)?>
      *         <?=$item->autoescapeoff()?>
      *         <?=$item->escape()->body?> <!-- body is escaped -->
-     *         <?=$item->comments?> <!-- comments is not -->
+     *         <?=$item->comments?> <!-- comments is not escaped -->
      *     <?endforeach?>
      * 
-     * @chanotype flag
+     * @chanotype escaping
      * @return Chano instance
      */
-    function escape() {
-        $this->autoescapeoff_overridden = true;
+    function escape() { $this->autoescape_next = true; return $this; }
+
+    /**
+     * Marks a string as not requiring further HTML escaping prior to output.
+     * When autoescaping is off, this filter has no effect.
+     *
+     * The opposite of `escape`_.
+     *
+     * If you are chaining filters, a filter applied after ``safe`` can
+     * make the contents unsafe again. For example, the following code
+     * prints the variable as is, unescaped::
+     *
+     *     <?=$item->value->safe()->escape()?>
+     *
+     *
+     */
+    function safe() { $this->autoescape_next = false; return $this; }
+
+    /**
+     * Applies HTML escaping to a string (see the ``escape`` filter for
+     * details). This filter is applied *immediately* and returns a new, escaped
+     * string. This is useful in the rare cases where you need multiple escaping
+     * or want to apply other filters to the escaped results. Normally, you want
+     * to use the ``escape`` filter.
+     *
+     * @chanotype return
+     * @return Chano instance
+     */
+    function forceescape() {
+        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        $autoescape_next = $this->autoescape_next;
+        foreach($vs as &$v)
+            if (!is_array($v) || $this->v === null)
+                $v = $this->_escape($this->reset_filter());
+        $this->autoescape_next = $autoescape_next;
         return $this;
     }
 
@@ -305,23 +339,6 @@ class Chano implements Iterator, ArrayAccess {
     }
     function divisibleby($divisor) {
         return ($this->reset_filter() % $divisor) === 0;
-    }
-
-    /**
-     * @section return
-     *   Returns
-     *
-     *   Returns the value of the current item in various ways. All returns are
-     *   nonchainable.
-     */
-    function safe() { return $this->out($this->v, false); }
-    function forceescape() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
-        foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
-                $v = $this->_escape($this->reset_filter());
-        $this->autoescape_off_until_tostring = true;
-        return $this;
     }
 
     /**
@@ -597,7 +614,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function unorderedlist() {
-        $this->autoescape_off_until_tostring = true;
+        $this->autoescape_next = false;
         $this->v = $this->_unorderedlist($this->_clean_list($this->v));
         return $this;
     }
@@ -1342,7 +1359,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function urlize() {
-        $this->autoescape_off_until_tostring = true;
+        $this->autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
@@ -1386,7 +1403,7 @@ class Chano implements Iterator, ArrayAccess {
         // TODO: This passes the tests but also truncates existing html
         // addresses which is probably not the desired behavior. Change _urlize
         // to support truncate.
-        $this->autoescape_off_until_tostring = true;
+        $this->autoescape_next = false;
         $this->_urlizetrunc_len = $len;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -1467,7 +1484,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function truncatewordshtml($number) {
-        $this->autoescape_off_until_tostring = true;
+        $this->autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
@@ -1671,7 +1688,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function removetags() {
-        $this->autoescape_off_until_tostring = true;
+        $this->autoescape_next = false;
         $args = func_get_args();
         if (empty($args)) return $this;
         $tags = implode('|', $args);
@@ -1707,7 +1724,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function linebreaks() {
-        $this->autoescape_off_until_tostring = true;
+        $this->autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
@@ -1730,7 +1747,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function linebreaksbr() {
-        $this->autoescape_off_until_tostring = true;
+        $this->autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
