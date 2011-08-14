@@ -488,4 +488,20 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _wordcount:
+
+wordcount()
++++++++++++
+
+Returns the number of words.
+
+For example::
+
+    <?=$item->value->wordcount()?>
+
+If ``value`` is ``"Joel is a slug"``, the output will be ``4``.
+
+*Returns*
+  ``Chano instance``
+
 

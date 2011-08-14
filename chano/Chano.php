@@ -891,8 +891,14 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     *
-     * @param string $format
+     * Returns the number of words.
+     * 
+     * For example::
+     * 
+     *     <?=$item->value->wordcount()?>
+     * 
+     * If ``value`` is ``"Joel is a slug"``, the output will be ``4``.
+     * 
      * @chanotype filter
      * @return Chano instance
      */
