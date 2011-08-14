@@ -958,4 +958,23 @@ If ``value`` is the string ``"Joel"``, the output would be the list
 *Returns*
   ``Chano instance``
 
+.. _slugify:
+
+slugify()
++++++++++
+
+Converts to lowercase, removes non-word characters (alphanumerics and
+underscores) and converts spaces to hyphens. Also strips leading and
+trailing whitespace.
+
+For example::
+
+    <?=$item->value->slugify()?>
+
+If ``value`` is ``"Joel is a slug"``, the output will be
+``"joel-is-a-slug"``.
+
+*Returns*
+  ``Chano instance``
+
 

@@ -1656,8 +1656,17 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Converts to lowercase, removes non-word characters (alphanumerics and
+     * underscores) and converts spaces to hyphens. Also strips leading and
+     * trailing whitespace.
      *
-     * @param string $format
+     * For example::
+     *
+     *     <?=$item->value->slugify()?>
+     *
+     * If ``value`` is ``"Joel is a slug"``, the output will be
+     * ``"joel-is-a-slug"``.
+     * 
      * @chanotype filter
      * @return Chano instance
      */
