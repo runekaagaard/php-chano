@@ -800,4 +800,21 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _urlencode:
+
+urlencode()
++++++++++++
+
+Escapes a value for use in a URL.
+
+For example::
+
+    <?=$item->value->urlencode()?>
+
+If ``value`` is ``"http://www.example.org/foo?a=b&c=d"``, the output will
+be ``"http%3A//www.example.org/foo%3Fa%3Db%26c%3Dd"``.
+
+*Returns*
+  ``Chano instance``
+
 
