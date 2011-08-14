@@ -96,7 +96,7 @@ The opposite of `escape`_.
 
 If you are chaining filters, a filter applied after ``safe`` can
 make the contents unsafe again. For example, the following code
-prints the variable as is, unescaped::
+prints as escaped::
 
     <?=$item->value->safe()->escape()?>
 
