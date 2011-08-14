@@ -3,8 +3,8 @@
 Chano functions
 ===============
 
-This document describes all the filters, flags, questions and other functions
-that Chano supports. Most of this documentation is adapated from
+This document describes all the filters, flags, questions, counts and other
+functions that Chano supports. Most of this documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 
 
@@ -79,6 +79,62 @@ overruling the :ref:`autoescapeoff` flag a single time.
 
 *Returns*
   ``Chano instance``
+
+
+Counters
+________
+
+Different methods of counting to/from the current item. Works on the
+base instance, e.g. you don't have to ask for a key first. All counters
+are chainable.
+
+.. _counter:
+
+counter()
++++++++++
+
+The current iteration of the loop (1-indexed).
+
+
+
+*Returns*
+  ``Chano Instance``
+
+.. _counter0:
+
+counter0()
+++++++++++
+
+The current iteration of the loop (0-indexed).
+
+
+
+*Returns*
+  ``Chano Instance``
+
+.. _revcounter:
+
+revcounter()
+++++++++++++
+
+The number of iterations from the end of the loop (1-indexed)
+
+
+
+*Returns*
+  ``Chano Instance``
+
+.. _revcounter0:
+
+revcounter0()
++++++++++++++
+
+The number of iterations from the end of the loop (0-indexed)
+
+
+
+*Returns*
+  ``Chano Instance``
 
 
 Filters

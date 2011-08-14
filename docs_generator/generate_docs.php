@@ -20,8 +20,8 @@ $rst =
 Chano functions
 ===============
 
-This document describes all the filters, flags, questions and other functions
-that Chano supports. Most of this documentation is adapated from
+This document describes all the filters, flags, questions, counts and other
+functions that Chano supports. Most of this documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 
 ";

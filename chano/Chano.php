@@ -332,19 +332,46 @@ class Chano implements Iterator, ArrayAccess {
      *   base instance, e.g. you don't have to ask for a key first. All counters
      *   are chainable.
      */
-    
+
+    /**
+     * The current iteration of the loop (1-indexed).
+     *
+     * @chanotype counter
+     * @return Chano Instance
+     */
     function counter() {
         $this->v = $this->i + 1;
         return $this;
     }
+    
+    /**
+     * The current iteration of the loop (0-indexed).
+     *
+     * @chanotype counter
+     * @return Chano Instance
+     */
     function counter0() {
         $this->v = $this->i;
         return $this;
     }
+
+    /**
+     * The number of iterations from the end of the loop (1-indexed)
+     *
+     * @chanotype counter
+     * @return Chano Instance
+     */
     function revcounter() {
         $this->v = $this->iterator->count() - $this->i;
         return $this;
     }
+
+    /**
+     * The number of iterations from the end of the loop (0-indexed)
+     *
+     * @chanotype counter
+     * @return Chano Instance
+     */
     function revcounter0() {
         $this->v = $this->iterator->count() - $this->i - 1;
         return $this;
