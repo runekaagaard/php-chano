@@ -1476,7 +1476,7 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * Returns a slice of the list.
+     * Returns a slice of a string.
      *
      * Uses the same syntax as Python's list slicing. See
      * http://diveintopython.org/native_data_types/lists.html#odbchelper.list.slice
@@ -1484,21 +1484,27 @@ class Chano implements Iterator, ArrayAccess {
      *
      * Example::
      *
-     *     <?=$item->value->slice(2)?>
+     *     <?=$item->value->slice("0")?>
+     *     <?=$item->value->slice("1")?>
+     *     <?=$item->value->slice("-1")?>
+     *     <?=$item->value->slice("1:2")?>
+     *     <?=$item->value->slice("1:3")?>
+     *     <?=$item->value->slice("0::2")?>
      *
-     * If ``value`` is ``array('a', 'b', 'c')``, the output will be
-     * ``array('a', 'b')``.
-     * 
-     * @param string $number
-     *   Number of slices.
+     * If ``value`` is ``"abcdefg"``, the outputs will be
+     * ``""``, ``"a"``, ``"abcdef"``, ``"b"``, ``"bc"`` and ``"aceg"``
+     * respectively.
+     *
+     * @todo Make it work on traversables too.
+     * @param string $slice_string
      * @chanotype filter
      * @return Chano instance
      */
-    function slice($number) {
+    function slice($slice_string) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = $this->_slice($v, $number);
+                $v = $this->_slice($v, $slice_string);
         return $this;
     }
 

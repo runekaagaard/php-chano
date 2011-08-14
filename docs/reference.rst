@@ -864,10 +864,10 @@ If ``value`` is ``"?test=1&me=2"``, the output will be
 
 .. _slice:
 
-slice($number)
-++++++++++++++
+slice($slice_string)
+++++++++++++++++++++
 
-Returns a slice of the list.
+Returns a slice of a string.
 
 Uses the same syntax as Python's list slicing. See
 http://diveintopython.org/native_data_types/lists.html#odbchelper.list.slice
@@ -875,14 +875,20 @@ for an introduction.
 
 Example::
 
-    <?=$item->value->slice(2)?>
+    <?=$item->value->slice("0")?>
+    <?=$item->value->slice("1")?>
+    <?=$item->value->slice("-1")?>
+    <?=$item->value->slice("1:2")?>
+    <?=$item->value->slice("1:3")?>
+    <?=$item->value->slice("0::2")?>
 
-If ``value`` is ``array('a', 'b', 'c')``, the output will be
-``array('a', 'b')``.
+If ``value`` is ``"abcdefg"``, the outputs will be
+``""``, ``"a"``, ``"abcdef"``, ``"b"``, ``"bc"`` and ``"aceg"``
+respectively.
 
 Arguments
 
-- ``string $number - Number of slices.``
+- ``string $slice_string``
 
 *Returns*
   ``Chano instance``
