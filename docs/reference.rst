@@ -924,14 +924,15 @@ the output will be::
 join($glue=', ')
 ++++++++++++++++
 
-Joins a list with a string, like Python's ``str.join(list)``
+Joins a list with a string, like the
+`implode() <http://php.net/manual/en/function.implode.php>`_ function.
 
 For example::
 
-    <?=$item->value->join:" // "?>
+    <?=$item->value->join(" // ")?>
 
-If ``value`` is the list ``['a', 'b', 'c']``, the output will be the string
-``"a // b // c"``.
+If ``value`` is the array ``array('a', 'b', 'c')``, the output will be
+the string ``"a // b // c"``.
 
 Arguments
 
