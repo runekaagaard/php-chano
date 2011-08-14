@@ -542,7 +542,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * Example::
      *
-     *     Current time is: <?=$item->now("F j, Y, g:i a")?>
+     *     Current time is: <?=$item->now("%B %e, %Y, %R %P")?>
      *
      * This would display as ``"Current time is: March 10, 2001, 5:16 pm"``.
      *
@@ -550,10 +550,11 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function now($format) {
+        $now = defined('CHANO_TESTS_NOWTIME') ? CHANO_TESTS_NOWTIME : time();
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = date($format);
+                $v = strftime($format, $now);
         return $this;
     }
     /**
@@ -1604,8 +1605,16 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Converts all newlines in a piece of plain text to HTML line breaks
+     * (``<br />``).
      *
-     * @param string $format
+     * For example::
+     *
+     *     <?=$item->value->linebreaksbr()?>
+     *
+     * If ``value`` is ``"Joel\nis a slug"``, the output will be
+     * ``Joel<br />is a slug``.
+     *
      * @chanotype filter
      * @return Chano instance
      */
