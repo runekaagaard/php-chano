@@ -750,4 +750,25 @@ Arguments
 *Returns*
   ``Chano instance``
 
+.. _truncatewords:
+
+truncatewords($number)
+++++++++++++++++++++++
+
+Truncates a string after a certain number of words.
+
+For example::
+
+    <?=$item->value->truncatewords(2)?>
+
+If ``value`` is ``"Joel is a slug"``, the output will be
+``"Joel is ..."``.
+
+Arguments
+
+- ``string $number - Number of words to truncate after.``
+
+*Returns*
+  ``Chano instance``
+
 

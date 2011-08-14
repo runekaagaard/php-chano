@@ -1298,19 +1298,28 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Truncates a string after a certain number of words.
      *
-     * @param string $format
+     * For example::
+     *
+     *     <?=$item->value->truncatewords(2)?>
+     *
+     * If ``value`` is ``"Joel is a slug"``, the output will be
+     * ``"Joel is ..."``.
+     * 
+     * @param string $number
+     *   Number of words to truncate after.
      * @chanotype filter
      * @return Chano instance
      */
-    function truncatewords($n) {
+    function truncatewords($number) {
         // Thanks banderson623: http://snippets.dzone.com/posts/show/412.
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) {
             if (!is_array($v) || $this->v === null) {
                 $parts = explode(' ', $v);
-                if(count($parts) > $n && $n>0)
-                    $v = implode(' ', array_slice($parts, 0, $n)) . ' ...';
+                if(count($parts) > $number && $number>0)
+                    $v = implode(' ', array_slice($parts, 0, $number)) . ' ...';
             }
         }
         return $this;
