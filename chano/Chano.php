@@ -1451,6 +1451,7 @@ class Chano implements Iterator, ArrayAccess {
                 $v = str_replace('+', '%20', urlencode(urldecode($v)));
         return $this;
     }
+    
     private function _slice($v, $str) {
         $ps = explode(':', $str);
         $count = count($ps);
@@ -1475,16 +1476,29 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Returns a slice of the list.
      *
-     * @param string $format
+     * Uses the same syntax as Python's list slicing. See
+     * http://diveintopython.org/native_data_types/lists.html#odbchelper.list.slice
+     * for an introduction.
+     *
+     * Example::
+     *
+     *     <?=$item->value->slice(2)?>
+     *
+     * If ``value`` is ``array('a', 'b', 'c')``, the output will be
+     * ``array('a', 'b')``.
+     * 
+     * @param string $number
+     *   Number of slices.
      * @chanotype filter
      * @return Chano instance
      */
-    function slice($str) {
+    function slice($number) {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = $this->_slice($v, $str);
+                $v = $this->_slice($v, $number);
         return $this;
     }
 

@@ -862,4 +862,29 @@ If ``value`` is ``"?test=1&me=2"``, the output will be
 *Returns*
   ``Chano instance``
 
+.. _slice:
+
+slice($number)
+++++++++++++++
+
+Returns a slice of the list.
+
+Uses the same syntax as Python's list slicing. See
+http://diveintopython.org/native_data_types/lists.html#odbchelper.list.slice
+for an introduction.
+
+Example::
+
+    <?=$item->value->slice(2)?>
+
+If ``value`` is ``array('a', 'b', 'c')``, the output will be
+``array('a', 'b')``.
+
+Arguments
+
+- ``string $number - Number of slices.``
+
+*Returns*
+  ``Chano instance``
+
 
