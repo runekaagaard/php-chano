@@ -50,18 +50,20 @@ class Chano implements Iterator, ArrayAccess {
      */
     public $v = self::INITIAL;
 
-    // Private values.
+    // Constants.
     const INITIAL = '__CHANO_INITIAL__';
-    private $iterator;
-    private $count = 0;
-    private $i = 0;
-    private $items;
-    private $current = self::INITIAL;
-    private $lookup_path;
-    private $lookups = array();
-    private $previous_lookups = array();
-    private $autoescape = true;
-    private $autoescape_next = null;
+
+    // Private values.
+    private $_iterator;
+    private $_count = 0;
+    private $_i = 0;
+    private $_items;
+    private $_current = self::INITIAL;
+    private $_lookup_path;
+    private $_lookups = array();
+    private $_previous_lookups = array();
+    private $_autoescape = true;
+    private $_autoescape_next = null;
 
     /**
      * Takes an array of arrays as first parameter and an optional array of
@@ -73,18 +75,18 @@ class Chano implements Iterator, ArrayAccess {
      *   using that feature to be used.
      */
     function __construct($items) {
-        $this->set_iterator($items);
+        $this->_set_iterator($items);
     }
     function __toString() {
-        return $this->out($this->reset_v());
+        return $this->_out($this->_reset_v());
     }
     private function _escape($s) {
         return htmlspecialchars((string)$s, ENT_NOQUOTES, self::$encoding);
     }
-    private function out($v, $escape=null) {
-        if ($escape === null) $escape = $this->autoescape;
-        if ($this->autoescape_next !== null)
-            $escape = $this->autoescape_next;
+    private function _out($v, $escape=null) {
+        if ($escape === null) $escape = $this->_autoescape;
+        if ($this->_autoescape_next !== null)
+            $escape = $this->_autoescape_next;
         $s = $escape ? $this->_escape($v) : (string)$v;
         return (string)$s;
     }
@@ -94,10 +96,10 @@ class Chano implements Iterator, ArrayAccess {
      *
      * @return mixed
      */
-    private function reset_v() {
+    private function _reset_v() {
         $value = $this->v;
         $this->v = self::INITIAL;
-        $this->lookup_path_reset();
+        $this->_lookup_path_reset();
         return $value;
     }
 
@@ -107,9 +109,9 @@ class Chano implements Iterator, ArrayAccess {
      *
      * @return mixed
      */
-    private function reset_filter() {
-        $this->autoescape_next = null;
-        return $this->reset_v();
+    private function _reset_filter() {
+        $this->_autoescape_next = null;
+        return $this->_reset_v();
     }
     
     /*
@@ -120,28 +122,28 @@ class Chano implements Iterator, ArrayAccess {
         self::$iterators[] = $class;
     }
 
-    private function set_iterator($items) {
+    private function _set_iterator($items) {
         foreach (self::$iterators as $iterator) {
             if ($iterator::is_match($items)) {
-                $this->iterator = $iterator::get_instance($items);
+                $this->_iterator = $iterator::get_instance($items);
                 return true;
             }
         }
         throw new Chano_NoMatchingIteratorFoundError;
     }
-    function rewind() { $this->iterator->rewind(); }
+    function rewind() { $this->_iterator->rewind(); }
     function current() {
-        $this->current = $this->iterator->current();
+        $this->_current = $this->_iterator->current();
         return $this;
     }
-    function key() { return $this->iterator->key(); }
+    function key() { return $this->_iterator->key(); }
     function next() {
-        $this->lookup_next();
-        $this->current = $this->iterator->next();
-        ++$this->i;
+        $this->_lookup_next();
+        $this->_current = $this->_iterator->next();
+        ++$this->_i;
     }
     function valid() {
-        return $this->iterator->valid();
+        return $this->_iterator->valid();
     }
 
     /*
@@ -149,19 +151,19 @@ class Chano implements Iterator, ArrayAccess {
      * for previous item.
      */
     
-    private function lookup_add($o) {
-        $this->lookup_path .= $o;
-        $this->lookups[$this->lookup_path] = $this->v;
+    private function _lookup_add($o) {
+        $this->_lookup_path .= $o;
+        $this->_lookups[$this->_lookup_path] = $this->v;
     }
-    private function lookup_path_reset() {
-        $path = $this->lookup_path;
-        $this->lookup_path = '';
+    private function _lookup_path_reset() {
+        $path = $this->_lookup_path;
+        $this->_lookup_path = '';
         return $path;
     }
-    private function lookup_next() {
-        $this->previous_lookups = $this->lookups;
-        $this->lookups = array();
-        $this->lookup_path_reset();
+    private function _lookup_next() {
+        $this->_previous_lookups = $this->_lookups;
+        $this->_lookups = array();
+        $this->_lookup_path_reset();
     }
 
     /*
@@ -171,14 +173,14 @@ class Chano implements Iterator, ArrayAccess {
     function offsetGet($o) {
         if ($o == '_') return $this->__toString();
 
-        if ($this->v == self::INITIAL) $v = $this->current;
+        if ($this->v == self::INITIAL) $v = $this->_current;
         else $v = $this->v;
 
         if (is_object($v)) $this->v = $v->$o;
         elseif (is_array($v)) $this->v = $v[$o];
         else throw new Chano_TypeNotComplexError;
 
-        $this->lookup_add($o);
+        $this->_lookup_add($o);
         return $this;
     }
     function offsetExists($offset) { throw new Chano_NotImplementedError; }
@@ -194,7 +196,7 @@ class Chano implements Iterator, ArrayAccess {
     function  __get($name) { return $this->offsetGet($name); }
     
     function __call($name, $args) {
-        $this->v = call_user_func_array(array($this->current, $name), $args);
+        $this->v = call_user_func_array(array($this->_current, $name), $args);
         return $this;
     }
     
@@ -232,7 +234,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype escaping
      * @return Chano instance
      */
-    function autoescapeon() { $this->autoescape = true; return $this; }
+    function autoescapeon() { $this->_autoescape = true; return $this; }
 
     /**
      * Switches off the default auto-escaping behavior. This means that all
@@ -251,7 +253,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype escaping
      * @return Chano instance
      */
-    function autoescapeoff() { $this->autoescape = false; return $this; }
+    function autoescapeoff() { $this->_autoescape = false; return $this; }
 
     /**
      * Forces escaping on the next output, e.g. when __toString() is called,
@@ -271,7 +273,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype escaping
      * @return Chano instance
      */
-    function escape() { $this->autoescape_next = true; return $this; }
+    function escape() { $this->_autoescape_next = true; return $this; }
 
     /**
      * Marks a string as not requiring further HTML escaping prior to output.
@@ -288,7 +290,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype escaping
      * @return Chano instance
      */
-    function safe() { $this->autoescape_next = false; return $this; }
+    function safe() { $this->_autoescape_next = false; return $this; }
 
     /**
      * Applies HTML escaping to a string (see the ``escape`` filter for
@@ -302,11 +304,11 @@ class Chano implements Iterator, ArrayAccess {
      */
     function forceescape() {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
-        $autoescape_next = $this->autoescape_next;
+        $autoescape_next = $this->_autoescape_next;
         foreach($vs as &$v)
             if (!is_array($v) || $this->v === null)
-                $v = $this->_escape($this->reset_filter());
-        $this->autoescape_next = $autoescape_next;
+                $v = $this->_escape($this->_reset_filter());
+        $this->_autoescape_next = $autoescape_next;
         return $this;
     }
 
@@ -333,7 +335,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return mixed
      */
     function emptyor($default) {
-        $v = $this->reset_filter();
+        $v = $this->_reset_filter();
         return empty($v) ? $default : $v;
     }
 
@@ -343,7 +345,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype question
      * @return bool
      */
-    function isfirst() { return $this->i === 0; }
+    function isfirst() { return $this->_i === 0; }
 
     /**
      * True if this is the last time through the loop.
@@ -352,7 +354,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype question
      * @return bool
      */
-    function islast() { return $this->i === $this->iterator->count(); }
+    function islast() { return $this->_i === $this->_iterator->count(); }
 
     /**
      * Check if a value has changed from the last iteration of a loop.
@@ -371,9 +373,9 @@ class Chano implements Iterator, ArrayAccess {
      */
     function changed() {
         $this->v = self::INITIAL;
-        $path = $this->lookup_path_reset();
-        return isset($this->previous_lookups[$path]) &&
-            $this->previous_lookups[$path] != $this->lookups[$path];
+        $path = $this->_lookup_path_reset();
+        return isset($this->_previous_lookups[$path]) &&
+            $this->_previous_lookups[$path] != $this->_lookups[$path];
     }
 
     /**
@@ -392,9 +394,9 @@ class Chano implements Iterator, ArrayAccess {
      */
     function same() {
         $this->v = self::INITIAL;
-        $path = $this->lookup_path_reset();
-        return isset($this->previous_lookups[$path]) &&
-            $this->previous_lookups[$path] == $this->lookups[$path];
+        $path = $this->_lookup_path_reset();
+        return isset($this->_previous_lookups[$path]) &&
+            $this->_previous_lookups[$path] == $this->_lookups[$path];
     }
 
     /**
@@ -410,7 +412,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return bool
      */
     function divisibleby($divisor) {
-        return ($this->reset_filter() % $divisor) === 0;
+        return ($this->_reset_filter() % $divisor) === 0;
     }
 
     /**
@@ -445,7 +447,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano Instance
      */
     function counter() {
-        $this->v = $this->i + 1;
+        $this->v = $this->_i + 1;
         return $this;
     }
     
@@ -472,7 +474,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano Instance
      */
     function counter0() {
-        $this->v = $this->i;
+        $this->v = $this->_i;
         return $this;
     }
 
@@ -499,7 +501,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano Instance
      */
     function revcounter() {
-        $this->v = $this->iterator->count() - $this->i;
+        $this->v = $this->_iterator->count() - $this->_i;
         return $this;
     }
 
@@ -526,7 +528,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano Instance
      */
     function revcounter0() {
-        $this->v = $this->iterator->count() - $this->i - 1;
+        $this->v = $this->_iterator->count() - $this->_i - 1;
         return $this;
     }
     
@@ -568,7 +570,7 @@ class Chano implements Iterator, ArrayAccess {
      * Other nonchainable commands.
      */
     function length() {
-        $v = $this->reset_filter();
+        $v = $this->_reset_filter();
         if (is_scalar($v)) return strlen((string)$v);
         else return count($v);
     }
@@ -686,7 +688,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function unorderedlist() {
-        $this->autoescape_next = false;
+        $this->_autoescape_next = false;
         $this->v = $this->_unorderedlist($this->_clean_list($this->v));
         return $this;
     }
@@ -1431,7 +1433,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function urlize() {
-        $this->autoescape_next = false;
+        $this->_autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
@@ -1475,7 +1477,7 @@ class Chano implements Iterator, ArrayAccess {
         // TODO: This passes the tests but also truncates existing html
         // addresses which is probably not the desired behavior. Change _urlize
         // to support truncate.
-        $this->autoescape_next = false;
+        $this->_autoescape_next = false;
         $this->_urlizetrunc_len = $len;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
@@ -1556,7 +1558,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function truncatewordshtml($number) {
-        $this->autoescape_next = false;
+        $this->_autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
@@ -1760,7 +1762,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function removetags() {
-        $this->autoescape_next = false;
+        $this->_autoescape_next = false;
         $args = func_get_args();
         if (empty($args)) return $this;
         $tags = implode('|', $args);
@@ -1796,7 +1798,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function linebreaks() {
-        $this->autoescape_next = false;
+        $this->_autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
@@ -1819,7 +1821,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function linebreaksbr() {
-        $this->autoescape_next = false;
+        $this->_autoescape_next = false;
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
