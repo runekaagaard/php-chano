@@ -911,27 +911,15 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * Returns the length of the value. This works for both strings and lists.
-     *
-     * For example::
-     *
-     *     {{ value|length }}
-     *
-     * If ``value`` is ``['a', 'b', 'c', 'd']``, the output will be ``4``.
+     * Formats the variable according to the argument, a string formatting
+     * specifier. This specifier uses the syntax of the
+     * `sprintf <http://php.net/manual/en/function.sprintf.php>`_ function.
      * 
-     * @param string $format
-     * @chanotype filter
-     * @return Chano instance
-     */
-    function xxxxxxlen() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
-        foreach($vs as &$v) 
-            if (!is_array($v) || $this->v === null)
-                $v = strlen($v);
-        return $this;
-    }
-
-    /**
+     * For example::
+     * 
+     *     <?$item->value->stringformat:("%03d")?>
+     * 
+     * If ``value`` is ``1``, the output will be ``"001"``.
      *
      * @param string $format
      * @chanotype filter
@@ -941,7 +929,7 @@ class Chano implements Iterator, ArrayAccess {
         if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
         foreach($vs as &$v) 
             if (!is_array($v) || $this->v === null)
-                $v = sprintf("%$format", $v);
+                $v = sprintf("$format", $v);
         return $this;
     }
 

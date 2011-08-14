@@ -504,4 +504,26 @@ If ``value`` is ``"Joel is a slug"``, the output will be ``4``.
 *Returns*
   ``Chano instance``
 
+.. _stringformat:
+
+stringformat($format)
++++++++++++++++++++++
+
+Formats the variable according to the argument, a string formatting
+specifier. This specifier uses the syntax of the
+`sprintf <http://php.net/manual/en/function.sprintf.php>`_ function.
+
+For example::
+
+    <?$item->value->stringformat:("%03d")?>
+
+If ``value`` is ``1``, the output will be ``"001"``.
+
+Arguments
+
+- ``string $format``
+
+*Returns*
+  ``Chano instance``
+
 
