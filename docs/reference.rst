@@ -546,4 +546,20 @@ the output will be
 *Returns*
   ``Chano instance``
 
+.. _first:
+
+first()
++++++++
+
+Returns the first item in a list.
+
+For example::
+
+    <?$item->value->first()?>
+
+If ``value`` is the list ``['a', 'b', 'c']``, the output will be ``'a'``.
+
+*Returns*
+  ``Chano instance``
+
 

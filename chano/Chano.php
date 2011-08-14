@@ -975,9 +975,14 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Returns the first item in a list.
      *
+     * For example::
+     *
+     *     <?$item->value->first()?>
+     *
+     * If ``value`` is the list ``['a', 'b', 'c']``, the output will be ``'a'``.
      * 
-     * @param string $format
      * @chanotype filter
      * @return Chano instance
      */
