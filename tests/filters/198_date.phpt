@@ -1,7 +1,9 @@
 --TEST--
-Testing chaining capabilities.
+Testing date locale
 --FILE--
 <?php
+// Needs on ubuntu to pass: sudo locale-gen da_DK.utf8.
+setlocale(LC_ALL, 'da_DK.utf8');
 date_default_timezone_set('UTC');
 include dirname(__FILE__) . '/../../chano/Chano.php';
 $items = array(
@@ -11,6 +13,6 @@ $items = array(
 );
 foreach (new Chano($items) as $i) echo $i->d->date('%a %d %b %Y') . "\n";
 --EXPECT--
-Sat 01 Jan 2000
-Sat 01 Jan 2000
-Sat 01 Jan 2000
+lør 01 jan 2000
+lør 01 jan 2000
+lør 01 jan 2000
