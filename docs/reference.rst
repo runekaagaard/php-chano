@@ -1,3 +1,5 @@
+string(13) "@section flag"
+string(15) "@section filter"
 .. highlight:: php
 
 Chano functions
@@ -76,12 +78,6 @@ overruling the :ref:`autoescapeoff` flag a single time.
 
 *Returns*
   ``Chano instance``
-
-
-Filters
-_____
-
-Modifies the value of the current item. Chainable.
 
 .. _pluralize:
 

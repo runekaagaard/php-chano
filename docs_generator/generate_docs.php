@@ -52,7 +52,20 @@ foreach ($methods as $method) {
     $method_sig = $ms[1];
     $chanotype = $chanotype_tag[0]->getContent();
     if (empty($prev_chanotype) || $prev_chanotype != $chanotype) {
-        $rst .= $$chanotype;
+        var_dump("@section $chanotype");
+        preg_match("#/\*\*\n     \* @section $chanotype.*\*/#Uis", $chano_src, $ms);
+        if (!empty($ms)) {
+            $db = new DocBlox_Reflection_DocBlock($ms[0]);
+            $_tags = $db->getTagsByName('section');
+            $lines = explode("\n", $_tags[0]->getDescription());
+            array_shift($lines);
+            $headline = array_shift($lines);
+            array_unshift($lines, "");
+            array_unshift($lines, str_repeat('_', strlen($headline)));
+            array_unshift($lines, $headline);
+            $rst .= "\n" . implode("\n", $lines) . "\n\n";
+        }
+        
     }
 
 

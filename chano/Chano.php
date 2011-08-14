@@ -206,11 +206,11 @@ class Chano implements Iterator, ArrayAccess {
     // Below this line are the methods that are part of the template api.     //
     ////////////////////////////////////////////////////////////////////////////
 
-    /*
-     * Flags.
-     *
-     * Sets one or more boolean values on the Chano class. Chainable.
-     *
+    /**
+     * @section flag
+     *   Flags
+     *   
+     *   Sets one or more boolean values on the Chano class. Chainable.
      */
 
     /**
