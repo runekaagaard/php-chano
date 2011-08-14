@@ -95,7 +95,21 @@ counter()
 
 The current iteration of the loop (1-indexed).
 
+For example::
 
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->counter()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``123``.
 
 *Returns*
   ``Chano Instance``
@@ -107,7 +121,21 @@ counter0()
 
 The current iteration of the loop (0-indexed).
 
+For example::
 
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->counter0()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``012``.
 
 *Returns*
   ``Chano Instance``
@@ -117,9 +145,23 @@ The current iteration of the loop (0-indexed).
 revcounter()
 ++++++++++++
 
-The number of iterations from the end of the loop (1-indexed)
+The number of iterations from the end of the loop (1-indexed).
 
+For example::
 
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->revcounter()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``321``.
 
 *Returns*
   ``Chano Instance``
@@ -129,9 +171,23 @@ The number of iterations from the end of the loop (1-indexed)
 revcounter0()
 +++++++++++++
 
-The number of iterations from the end of the loop (0-indexed)
+The number of iterations from the end of the loop (0-indexed).
 
+For example::
 
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->revcounter0()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``210``.
 
 *Returns*
   ``Chano Instance``
