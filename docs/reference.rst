@@ -725,4 +725,29 @@ rel="nofollow">chano.readthedocs.org</a>"``.
 *Returns*
   ``Chano instance``
 
+.. _urlizetrunc:
+
+urlizetrunc($len)
++++++++++++++++++
+
+Converts URLs into clickable links just like urlize_, but truncates URLs
+longer than the given character limit.
+
+For example::
+
+    <?=$item->value->urlizetrunc(15)?>
+
+If ``value`` is ``"Check out chano.readthedocs.org"``, the output would
+be ``'Check out <a href="http://chano.readthedocs.org"
+rel="nofollow">chano.readth...</a>'``.
+
+As with urlize_, this filter should only be applied to plain text.
+
+Arguments
+
+- ``int $length - Number of characters that link text should be truncated to, including the ellipsis that's added if truncation is necessary.``
+
+*Returns*
+  ``Chano instance``
+
 

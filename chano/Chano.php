@@ -1251,12 +1251,14 @@ class Chano implements Iterator, ArrayAccess {
                 $v = $this->_urlize($v);
         return $this;
     }
+
     private function _urlizetrunc_cb($ms) {
         $len = $this->_urlizetrunc_len;
         if ($len <= 3) return $ms[1] . '...' . $ms[3];
         if (strlen($ms[2]) <= $len) return $ms[0];
         return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
     }
+    
     function _urlizetrunc($v) {
         $v = self::_urlize($v);
         return preg_replace_callback('#(<a href=.*">)([^<]*)(</a>)#Uis', 
@@ -1264,9 +1266,21 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Converts URLs into clickable links just like urlize_, but truncates URLs
+     * longer than the given character limit.
      *
+     * For example::
      *
-     * @param string $format
+     *     <?=$item->value->urlizetrunc(15)?>
+     *
+     * If ``value`` is ``"Check out chano.readthedocs.org"``, the output would
+     * be ``'Check out <a href="http://chano.readthedocs.org"
+     * rel="nofollow">chano.readth...</a>'``.
+     *
+     * As with urlize_, this filter should only be applied to plain text.
+     *
+     * @param int $length
+     *   Number of characters that link text should be truncated to, including the ellipsis that's added if truncation is necessary.
      * @chanotype filter
      * @return Chano instance
      */
