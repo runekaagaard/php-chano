@@ -8,331 +8,6 @@ Most of this documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 
 
-Escaping
-________
-
-By default all output from Chano is escaped but this behavior can be
-modified by the functions in this section. All escaping functions are
-chainable.
-
-.. _autoescapeon:
-
-autoescapeon()
-++++++++++++++
-
-Switches on auto-escaping behavior. This only has any effect after the
-:ref:`autoescapeoff` method has been called as the default behavior of
-Chano is to escape all output.
-
-When auto-escaping is in effect, all variable content has HTML escaping
-applied to it before placing the result into the output (but after any
-filters have been applied).
-
-Sample usage::
-
-    <?foreach(new Chano($items) as $item)?>
-        <?=$item->autoescapeoff()->body?>
-        <?=$item->comments?>
-        <?=$item->autoescapeon()?>
-        <?=$item->title?>
-    <?endforeach?>
-
-*Returns*
-  ``Chano instance``
-
-.. _autoescapeoff:
-
-autoescapeoff()
-+++++++++++++++
-
-Switches off the default auto-escaping behavior. This means that all
-output until the end or until :ref:`autoescapeon` is called will not be
-escaped unless :ref:`escape` is specifically called.
-
-Sample usage::
-
-    <?foreach(new Chano($items) as $item)?>
-        <?=$item->autoescapeoff()->body?>
-        <?=$item->comments?> <!-- body and comments are not escaped -->
-        <?=$item->autoescapeon()?>
-        <?=$item->title?> <!-- title is escaped -->
-    <?endforeach?>
-
-*Returns*
-  ``Chano instance``
-
-.. _escape:
-
-escape()
-++++++++
-
-Forces escaping on the next output, e.g. when __toString() is called,
-overruling the :ref:`autoescapeoff` flag a single time. When
-autoescaping is on this flag has no effect.
-
-The opposite of `safe`_.
-
-For example::
-
-    <?foreach(new Chano($items) as $item)?>
-        <?=$item->autoescapeoff()?>
-        <?=$item->escape()->body?> <!-- body is escaped -->
-        <?=$item->comments?> <!-- comments is not escaped -->
-    <?endforeach?>
-
-*Returns*
-  ``Chano instance``
-
-.. _safe:
-
-safe()
-++++++
-
-Marks a string as not requiring further HTML escaping prior to output.
-
-When autoescaping is off, this filter has no effect.
-
-The opposite of `escape`_.
-
-If you are chaining filters, a filter applied after ``safe`` can
-make the contents unsafe again. For example, the following code
-prints as escaped::
-
-    <?=$item->value->safe()->escape()?>
-
-*Returns*
-  ``Chano instance``
-
-.. _forceescape:
-
-forceescape()
-+++++++++++++
-
-Applies HTML escaping to a string (see the ``escape`` filter for
-details). This filter is applied *immediately* and returns a new, escaped
-string. This is useful in the rare cases where you need multiple escaping
-or want to apply other filters to the escaped results. Normally, you want
-to use the ``escape`` filter.
-
-
-
-*Returns*
-  ``Chano instance``
-
-
-Questions
-_________
-
-Conditionally returns a value based on the value of the current item or
-other parameters. All questions are nonchainable.
-
-.. _emptyor:
-
-emptyor($default)
-+++++++++++++++++
-
-If value evaluates to ``false``, use given default. Otherwise, use the
-value.
-
-For example::
-
-    <?=$item->value->default("nothing")?>
-
-If ``value`` is ``""`` (the empty string), the output will be
-``nothing``.
-
-*Returns*
-  ``mixed``
-
-.. _isfirst:
-
-isfirst()
-+++++++++
-
-True if this is the first time through the loop.
-
-
-
-*Returns*
-  ``bool``
-
-.. _islast:
-
-islast()
-++++++++
-
-True if this is the last time through the loop.
-
-
-
-*Returns*
-  ``bool``
-
-.. _changed:
-
-changed()
-+++++++++
-
-Check if a value has changed from the last iteration of a loop.
-
-For example::
-
-    <?foreach (new Chano($players) as $player):?>
-        <?if ($player->score->changed()):?>
-            NEW!
-        <?endif?>
-    <?endforeach?>
-
-*Returns*
-  ``bool``
-
-.. _same:
-
-same()
-++++++
-
-Check if a value is the same as the last iteration of a loop.
-
-For example::
-
-    <?foreach (new Chano($players) as $player):?>
-        <?if ($player->score->same()):?>
-            SAME!
-        <?endif?>
-    <?endforeach?>
-
-*Returns*
-  ``bool``
-
-.. _divisibleby:
-
-divisibleby($divisor)
-+++++++++++++++++++++
-
-Returns ``true`` if the value is divisible by the argument.
-
-For example::
-
-    <?=$item->value->divisibleby(3)?>
-
-If ``value`` is ``21``, the output would be ``true``.
-
-*Returns*
-  ``bool``
-
-
-Counters
-________
-
-Different methods of counting to/from the current item. Works on the
-base instance, e.g. you don't have to ask for a key first. All counters
-are chainable.
-
-.. _counter:
-
-counter()
-+++++++++
-
-The current iteration of the loop (1-indexed).
-
-For example::
-
-    <?foreach(new Chano($items) as $item):?>
-         <?=$item->counter()?>
-    <?èndforeach?>
-
-If ``$items`` is::
-
-    array(
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-    )
-
-The output would be ``123``.
-
-*Returns*
-  ``Chano Instance``
-
-.. _counter0:
-
-counter0()
-++++++++++
-
-The current iteration of the loop (0-indexed).
-
-For example::
-
-    <?foreach(new Chano($items) as $item):?>
-         <?=$item->counter0()?>
-    <?èndforeach?>
-
-If ``$items`` is::
-
-    array(
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-    )
-
-The output would be ``012``.
-
-*Returns*
-  ``Chano Instance``
-
-.. _revcounter:
-
-revcounter()
-++++++++++++
-
-The number of iterations from the end of the loop (1-indexed).
-
-For example::
-
-    <?foreach(new Chano($items) as $item):?>
-         <?=$item->revcounter()?>
-    <?èndforeach?>
-
-If ``$items`` is::
-
-    array(
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-    )
-
-The output would be ``321``.
-
-*Returns*
-  ``Chano Instance``
-
-.. _revcounter0:
-
-revcounter0()
-+++++++++++++
-
-The number of iterations from the end of the loop (0-indexed).
-
-For example::
-
-    <?foreach(new Chano($items) as $item):?>
-         <?=$item->revcounter0()?>
-    <?èndforeach?>
-
-If ``$items`` is::
-
-    array(
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-        array('value' => 'foo'),
-    )
-
-The output would be ``210``.
-
-*Returns*
-  ``Chano Instance``
-
-
 Filters
 _______
 
@@ -567,7 +242,7 @@ If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
 
 Arguments
 
-- ``int $width``
+- ``int $widthF``
 
 *Returns*
   ``Chano instance``
@@ -1311,6 +986,331 @@ For example::
     <?=$item->value->phone2numeric()?>
 
 If ``value`` is ``800-COLLECT``, the output will be ``800-2655328``.
+
+*Returns*
+  ``Chano instance``
+
+
+Questions
+_________
+
+Conditionally returns a value based on the value of the current item or
+other parameters. All questions are nonchainable.
+
+.. _emptyor:
+
+emptyor($default)
++++++++++++++++++
+
+If value evaluates to ``false``, use given default. Otherwise, use the
+value.
+
+For example::
+
+    <?=$item->value->default("nothing")?>
+
+If ``value`` is ``""`` (the empty string), the output will be
+``nothing``.
+
+*Returns*
+  ``mixed``
+
+.. _isfirst:
+
+isfirst()
++++++++++
+
+True if this is the first time through the loop.
+
+
+
+*Returns*
+  ``bool``
+
+.. _islast:
+
+islast()
+++++++++
+
+True if this is the last time through the loop.
+
+
+
+*Returns*
+  ``bool``
+
+.. _changed:
+
+changed()
++++++++++
+
+Check if a value has changed from the last iteration of a loop.
+
+For example::
+
+    <?foreach (new Chano($players) as $player):?>
+        <?if ($player->score->changed()):?>
+            NEW!
+        <?endif?>
+    <?endforeach?>
+
+*Returns*
+  ``bool``
+
+.. _same:
+
+same()
+++++++
+
+Check if a value is the same as the last iteration of a loop.
+
+For example::
+
+    <?foreach (new Chano($players) as $player):?>
+        <?if ($player->score->same()):?>
+            SAME!
+        <?endif?>
+    <?endforeach?>
+
+*Returns*
+  ``bool``
+
+.. _divisibleby:
+
+divisibleby($divisor)
++++++++++++++++++++++
+
+Returns ``true`` if the value is divisible by the argument.
+
+For example::
+
+    <?=$item->value->divisibleby(3)?>
+
+If ``value`` is ``21``, the output would be ``true``.
+
+*Returns*
+  ``bool``
+
+
+Counters
+________
+
+Different methods of counting to/from the current item. Works on the
+base instance, e.g. you don't have to ask for a key first. All counters
+are chainable.
+
+.. _counter:
+
+counter()
++++++++++
+
+The current iteration of the loop (1-indexed).
+
+For example::
+
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->counter()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``123``.
+
+*Returns*
+  ``Chano Instance``
+
+.. _counter0:
+
+counter0()
+++++++++++
+
+The current iteration of the loop (0-indexed).
+
+For example::
+
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->counter0()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``012``.
+
+*Returns*
+  ``Chano Instance``
+
+.. _revcounter:
+
+revcounter()
+++++++++++++
+
+The number of iterations from the end of the loop (1-indexed).
+
+For example::
+
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->revcounter()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``321``.
+
+*Returns*
+  ``Chano Instance``
+
+.. _revcounter0:
+
+revcounter0()
++++++++++++++
+
+The number of iterations from the end of the loop (0-indexed).
+
+For example::
+
+    <?foreach(new Chano($items) as $item):?>
+         <?=$item->revcounter0()?>
+    <?èndforeach?>
+
+If ``$items`` is::
+
+    array(
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+        array('value' => 'foo'),
+    )
+
+The output would be ``210``.
+
+*Returns*
+  ``Chano Instance``
+
+
+Escaping
+________
+
+By default all output from Chano is escaped but this behavior can be
+modified by the functions in this section. All escaping functions are
+chainable.
+
+.. _autoescapeon:
+
+autoescapeon()
+++++++++++++++
+
+Switches on auto-escaping behavior. This only has any effect after the
+:ref:`autoescapeoff` method has been called as the default behavior of
+Chano is to escape all output.
+
+When auto-escaping is in effect, all variable content has HTML escaping
+applied to it before placing the result into the output (but after any
+filters have been applied).
+
+Sample usage::
+
+    <?foreach(new Chano($items) as $item)?>
+        <?=$item->autoescapeoff()->body?>
+        <?=$item->comments?>
+        <?=$item->autoescapeon()?>
+        <?=$item->title?>
+    <?endforeach?>
+
+*Returns*
+  ``Chano instance``
+
+.. _autoescapeoff:
+
+autoescapeoff()
++++++++++++++++
+
+Switches off the default auto-escaping behavior. This means that all
+output until the end or until :ref:`autoescapeon` is called will not be
+escaped unless :ref:`escape` is specifically called.
+
+Sample usage::
+
+    <?foreach(new Chano($items) as $item)?>
+        <?=$item->autoescapeoff()->body?>
+        <?=$item->comments?> <!-- body and comments are not escaped -->
+        <?=$item->autoescapeon()?>
+        <?=$item->title?> <!-- title is escaped -->
+    <?endforeach?>
+
+*Returns*
+  ``Chano instance``
+
+.. _escape:
+
+escape()
+++++++++
+
+Forces escaping on the next output, e.g. when __toString() is called,
+overruling the :ref:`autoescapeoff` flag a single time. When
+autoescaping is on this flag has no effect.
+
+The opposite of `safe`_.
+
+For example::
+
+    <?foreach(new Chano($items) as $item)?>
+        <?=$item->autoescapeoff()?>
+        <?=$item->escape()->body?> <!-- body is escaped -->
+        <?=$item->comments?> <!-- comments is not escaped -->
+    <?endforeach?>
+
+*Returns*
+  ``Chano instance``
+
+.. _safe:
+
+safe()
+++++++
+
+Marks a string as not requiring further HTML escaping prior to output.
+
+When autoescaping is off, this filter has no effect.
+
+The opposite of `escape`_.
+
+If you are chaining filters, a filter applied after ``safe`` can
+make the contents unsafe again. For example, the following code
+prints as escaped::
+
+    <?=$item->value->safe()->escape()?>
+
+*Returns*
+  ``Chano instance``
+
+.. _forceescape:
+
+forceescape()
++++++++++++++
+
+Applies HTML escaping to a string (see the ``escape`` filter for
+details). This filter is applied *immediately* and returns a new, escaped
+string. This is useful in the rare cases where you need multiple escaping
+or want to apply other filters to the escaped results. Normally, you want
+to use the ``escape`` filter.
+
+
 
 *Returns*
   ``Chano instance``
