@@ -197,7 +197,7 @@ described in the :ref:`date` filter section.
 
 Example::
 
-    Current time is: <?=$item->now("F j, Y, g:i a")?>
+    Current time is: <?=$item->now("%B %e, %Y, %R %P")?>
 
 This would display as ``"Current time is: March 10, 2001, 5:16 pm"``.
 
@@ -934,6 +934,24 @@ For example::
 
 If ``value`` is ``Joel\nis a slug``, the output will be ``<p>Joel<br />is
 a slug</p>``.
+
+*Returns*
+  ``Chano instance``
+
+.. _linebreaksbr:
+
+linebreaksbr()
+++++++++++++++
+
+Converts all newlines in a piece of plain text to HTML line breaks
+(``<br />``).
+
+For example::
+
+    <?=$item->value->linebreaksbr()?>
+
+If ``value`` is ``"Joel\nis a slug"``, the output will be
+``Joel<br />is a slug``.
 
 *Returns*
   ``Chano instance``
