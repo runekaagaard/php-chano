@@ -1204,6 +1204,50 @@ The output would be ``210``.
   ``Chano Instance``
 
 
+Other
+_____
+
+Other functions.
+
+.. _cycle:
+
+cycle()
++++++++
+
+Cycle among the given arguments, each time this function is called. Works
+multiple times with different arguments inside the same loop. This
+function is chainable.
+
+For example::
+
+    <?foreach (new Chano($items) as $item):?>
+        <tr class="<?=$item->cycle('row1', 'row2')?>">
+            ...
+        </tr>
+    <?endforeach?>
+
+Arguments
+
+- ``mixed $arg1 ... $argN``
+
+*Returns*
+  ``Chano Instance``
+
+.. _length:
+
+length()
+++++++++
+
+Returns the length of the current value. If the current value is a scalar
+(string, int, etc.) the string length will be returned, otherwise the
+count.
+
+
+
+*Returns*
+  ``int``
+
+
 Escaping
 ________
 

@@ -1794,26 +1794,55 @@ class Chano implements Iterator, ArrayAccess {
     }
     
     /**
-     * @section selector
-     *   Selectors
+     * @section other
+     *   Other
      *
-     *   One of given arguments are conditionally returned. Works on the base
-     *   instance too. All selectors are chainable.
+     *   Other functions.
      */
 
-    function firstof() {
+    /**
+     * Returns the first not empty value of the given arguments. This function
+     * is chainable. Works on the base instance.
+     *
+     * For example::
+     *
+     *   <?=$items->firstfull(0, null, array(), new stdClass, 42)?>
+     *
+     * Would output ``42``.
+     *
+     * @chanogroup other
+     * @param mixed $arg1 ... $argN
+     * $return Chano instance
+     */
+    function firstfull() {
         $args = func_get_args();
         $this->v = '';
         foreach ($args as $arg) {
             if (!empty($arg)) {
                 $this->v = $arg;
                 break;
-            }
+             }
         }
         return $this;
     }
 
-    
+    /**
+     * Cycle among the given arguments, each time this function is called. Works
+     * multiple times with different arguments inside the same loop. This
+     * function is chainable.
+     *
+     * For example::
+     *
+     *     <?foreach (new Chano($items) as $item):?>
+     *         <tr class="<?=$item->cycle('row1', 'row2')?>">
+     *             ...
+     *         </tr>
+     *     <?endforeach?>
+     *
+     * @param mixed $arg1 ... $argN
+     * @chanotype other
+     * @return Chano Instance
+     */
     function cycle() {
         static $cycles = array();
         $args = func_get_args();
@@ -1829,8 +1858,13 @@ class Chano implements Iterator, ArrayAccess {
         return $this;
     }
 
-    /*
-     * Other nonchainable commands.
+    /**
+     * Returns the length of the current value. If the current value is a scalar
+     * (string, int, etc.) the string length will be returned, otherwise the
+     * count.
+     *
+     * @chanotype other
+     * @return int
      */
     function length() {
         $v = $this->_reset_filter();

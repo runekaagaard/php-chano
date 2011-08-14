@@ -68,10 +68,9 @@
      * cycle
      * ^^^^^
      * 
-     * Cycle among the given strings or variables each time this tag is encountered.
+     * Cycle among the given arguments. each time this tag is encountered.
      * 
-     * Within a loop, cycles among the given strings each time through the
-     * loop::
+     * For example::
      * 
      *     {% for o in some_list %}
      *         <tr class="{% cycle 'row1' 'row2' %}">
