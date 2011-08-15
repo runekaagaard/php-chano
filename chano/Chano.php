@@ -12,12 +12,15 @@ class Chano_ValueIsEmptyError extends Exception {}
 class Chano_NoMatchingIteratorFoundError extends Exception {}
 
 /**
- * An iterator that takes an array of arrays as an input and supplies
- * capabilities matching the Django Template Language. Implements the full
- * featureset (almost) found here:
- *     http://docs.djangoproject.com/en/dev/ref/templates/builtins/.
+ * An iterator that supplies capabilities matching the Django Template Language. 
+ * Implements the full featureset (almost) found here:
+ *   - http://docs.djangoproject.com/en/dev/ref/templates/builtins/.
  *
- * @author Rune Kaagaard
+ * Is has github and readthedocs pages at:
+ *   - https://github.com/runekaagaard/php-chano and
+ *   - http://chano.readthedocs.org/
+ * 
+ * @author Rune Kaagaard <rumi.kg@gmail.com>
  * @todo
  *   - Create more iterators, i.e. for mysql and mysqli ressources.
  *   - Think about how to use all the functionality in a procedural way.
@@ -27,9 +30,10 @@ class Chano_NoMatchingIteratorFoundError extends Exception {}
  *   those experiments entails:
  *     - One line functions.
  *     - Skipping brackets.
- *     - Having both a if/foreach and a statement on a single line.
+ *     - Having both an if/foreach and a statement on a single line.
  *     - Not adding docblocks to (for me) obvious internal stuff.
  *     - Skipping default "public" keywords.
+ *     - Using only "public" and "private", nothing inbetween.
  */
 class Chano implements Iterator, ArrayAccess {
     /**
@@ -37,6 +41,12 @@ class Chano implements Iterator, ArrayAccess {
      * @var string
      */
     static $encoding = 'utf-8';
+    /**
+     * An array of iterators for supported datatypes. See the 
+     * register_iterator() method.
+     * 
+     * @var type array
+     */
     static $iterators;
 
     /**
@@ -59,8 +69,8 @@ class Chano implements Iterator, ArrayAccess {
     private $_autoescape_next = null;
 
     /**
-     * Takes an array of arrays as first parameter and an optional array of
-     * options as second.
+     * Takes an array, iterator or stdClass of arrays or stdClasses as the only 
+     * argument.
      * 
      * @param array $items
      *   Accepts an array, object, iterator, etc. giving arrays or objects. The
@@ -189,11 +199,9 @@ class Chano implements Iterator, ArrayAccess {
     function offsetUnset($offset) { throw new Chano_ReadOnlyError; }
 
     /**
-     * Implementation of __get magic method.
-     *
-     * @param string $name
-     * @return mixed
+     * Implementation of magic methods.
      */
+    
     function  __get($name) { return $this->offsetGet($name); }
     
     function __call($name, $args) {
@@ -640,7 +648,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?=$item->value(filesizeformat("yeah", "no", "maybe"))?>
+     *     <?=$item->value->yesno("yeah", "no", "maybe")?>
      *
      * ==========  ===========================  ==================================
      * Value       Arguments                    Outputs

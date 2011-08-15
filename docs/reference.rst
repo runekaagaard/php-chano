@@ -361,7 +361,7 @@ returns one of those strings according to the value:
 
 For example::
 
-    <?=$item->value(filesizeformat("yeah", "no", "maybe"))?>
+    <?=$item->value->yesno("yeah", "no", "maybe")?>
 
 ==========  ===========================  ==================================
 Value       Arguments                    Outputs
