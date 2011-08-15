@@ -1,6 +1,22 @@
 <?php
 
-class Chano_Iterators_Array {
+interface Chano_Iterators_Interface {
+    /**
+     * Is the $items passed to Chano a match for this iterator.
+     *
+     * @param mixed $items
+     */
+    static function is_match($items);
+
+    /**
+     * Returns an instance of an Iterator with the passed $items.
+     *
+     * @param Iterator $items
+     */
+    static function get_instance($items);
+}
+
+class Chano_Iterators_Array implements Chano_Iterators_Interface {
     static function is_match($items) {
         return is_array($items);
     }
@@ -9,9 +25,10 @@ class Chano_Iterators_Array {
         return new ArrayIterator($items);
     }
 }
+// Register this iterator with Chano.
 Chano::register_iterator('Chano_Iterators_Array');
 
-class Chano_Iterators_Iterator {
+class Chano_Iterators_Iterator implements Chano_Iterators_Interface {
     static function is_match($items) {
         return $items instanceof Traversable;
     }
@@ -20,9 +37,10 @@ class Chano_Iterators_Iterator {
         return $items;
     }
 }
+// Register this iterator with Chano.
 Chano::register_iterator('Chano_Iterators_Iterator');
 
-class Chano_Iterators_Object {
+class Chano_Iterators_Object implements Chano_Iterators_Interface {
     static function is_match($items) {
         return $items instanceof stdClass;
     }
@@ -31,4 +49,5 @@ class Chano_Iterators_Object {
         return new ArrayIterator($items);
     }
 }
+// Register this iterator with Chano.
 Chano::register_iterator('Chano_Iterators_Object');

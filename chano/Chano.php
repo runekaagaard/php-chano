@@ -219,13 +219,14 @@ class Chano implements Iterator, ArrayAccess {
     function _setCurrent($current) { $this->_current = $current; }
     
     /**
-     * Makes Chano work on single values too, not just i.e. an array of arrays.
+     * Makes Chano work with single values too, not just i.e. an array of
+     * arrays.
      * 
      * @staticvar boolean $chano
      * @param mixed $value
      * @return Chano 
      */
-    static function set($value=null) {
+    static function with($value=null) {
         static $chano = false;
         if (!$chano) $chano = new Chano(self::NON_ITERABLE_VALUE);
         $chano->_setCurrent(array('value' => $value));

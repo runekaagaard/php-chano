@@ -23,3 +23,26 @@ Table of contents
 
    usage
    functions
+
+Example
+=======
+
+Below follows an example of what a template using Chano could look like::
+
+    <?foreach(new Chano($items) as $i):?>
+        <div class="movies <?=$i->cycle('odd', 'even')?>">
+            <h1><?=$i->title->capfirst()->ljust(20)?></h1>
+            <p>Number <?=$i->counter()?>.</p>
+            <p>
+                <strong>Rating<?=$i->ratings->pluralize()?>:</strong>
+                <?=$i->ratings->join()?>
+            </p>
+            <ul>
+                <?if($i->links->length() < 3):?>
+                    <?=$i->links->unorderedlist()->urlize()?>
+                <?else:?>
+                    <?=$i->links->unorderedlist()->urlizetrunc(12)?>
+                <?endif?>
+            </ul>
+        </div>
+    <?endforeach?>

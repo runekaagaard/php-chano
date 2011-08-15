@@ -24,28 +24,6 @@ This document describes all the functions that Chano supports. Most of this
 documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 
-Should you wish to use a Chano function on a single value (string, int, array,
- etc.) this is possible by using the ``Chano::set()`` shortcut.
- 
-For example::
-
-   <?=\$item->value->center(14)?>
-        
-Used inside a ``foreach`` loop is identical to::
-        
-   <?=Chano::set(\$value)->center(14))?>
-
-This works for functions that works on the base Chano instance too. Simply
-don't pass any arguments to the ``set()`` function.
-
-For example::
-
-   <?=\$item->now()?>
-        
-Used inside a ``foreach`` loop is identical to::
-        
-   <?=Chano::set()->now())?>
-
 ";
 $prev_chanotype = false;
 foreach ($methods as $method) {
