@@ -119,7 +119,7 @@ Used inside a ``foreach`` loop is identical to::
 Calling methods on values
 -------------------------
 
-Stub.
+This section is a stub.
 
 Encoding
 --------
