@@ -57,6 +57,7 @@ class Chano implements Iterator, ArrayAccess {
 
     // Constants.
     const INITIAL = '__CHANO_INITIAL__';
+    const NON_ITERABLE_VALUE = -8296;
 
     // Private values.
     private $_iterator;
@@ -78,7 +79,8 @@ class Chano implements Iterator, ArrayAccess {
      *   using that feature to be used.
      */
     function __construct($items) {
-        $this->_set_iterator($items);
+        if ($items !== self::NON_ITERABLE_VALUE)
+            $this->_set_iterator($items);
     }
     function __toString() {
         return $this->_out($this->_reset_v());
@@ -186,10 +188,10 @@ class Chano implements Iterator, ArrayAccess {
 
         if ($this->v == self::INITIAL) $v = $this->_current;
         else $v = $this->v;
-
+        
         if (is_object($v)) $this->v = $v->$o;
         elseif (is_array($v)) $this->v = $v[$o];
-        else throw new Chano_TypeNotComplexError;
+        elseif (is_scalar($v)) $this->v = $v;
 
         $this->_lookup_add($o);
         return $this;
@@ -207,6 +209,28 @@ class Chano implements Iterator, ArrayAccess {
     function __call($name, $args) {
         $this->v = call_user_func_array(array($this->_current, $name), $args);
         return $this;
+    }
+    
+    /**
+     * Not part of the public API, even though it is public.
+     * 
+     * @param mixed $current 
+     */
+    function _setCurrent($current) { $this->_current = $current; }
+    
+    /**
+     * Makes Chano work on single values too, not just i.e. an array of arrays.
+     * 
+     * @staticvar boolean $chano
+     * @param mixed $value
+     * @return Chano 
+     */
+    static function set($value=null) {
+        static $chano = false;
+        if (!$chano) $chano = new Chano(self::NON_ITERABLE_VALUE);
+        $chano->_setCurrent(array('value' => $value));
+        $chano->__get('value');
+        return $chano;
     }
     
     ////////////////////////////////////////////////////////////////////////////

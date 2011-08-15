@@ -1,6 +1,6 @@
 .. highlight:: php
 
-Basic usage
+Chano usage
 ===========
 
 Instantiation is as simple as::
