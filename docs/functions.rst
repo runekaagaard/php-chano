@@ -3,9 +3,31 @@
 Chano functions
 ===============
 
-This document describes all the functions that Chano supports.
-Most of this documentation is adapated from
+This document describes all the functions that Chano supports. Most of this 
+documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
+
+Should you wish to use a Chano function on a single value (string, int, array,
+ etc.) this is possible by using the ``Chano::set()`` shortcut.
+ 
+For example::
+
+   <?=$item->value->center(14)?>
+        
+Used inside a ``foreach`` loop is identical to::
+        
+   <?=Chano::set($value)->center(14))?>
+
+This works for functions that works on the base Chano instance too. Simply
+don't pass any arguments to the ``set()`` function.
+
+For example::
+
+   <?=$item->now()?>
+        
+Used inside a ``foreach`` loop is identical to::
+        
+   <?=Chano::set()->now())?>
 
 
 Filters
@@ -246,7 +268,7 @@ For example::
 
     "<?=$item->value->ljust(10)?>"
 
-If value is Chano!, the output will be "Chano!    ".
+If value is ``Chano!``, the output will be ``"Chano!    "``.
 
 Arguments
 
@@ -266,7 +288,7 @@ For example::
 
     "<?=$item->value->rjust(10)?>"
 
-If value is Chano!, the output will be "    Chano!".
+If value is ``Chano!``, the output will be ``"    Chano!"``.
 
 Arguments
 
@@ -310,7 +332,7 @@ The used timezone is the one found by the
 `date_default_timezone_get() <http://www.php.net/manual/en/function.date-default-timezone-get.php>`_
 function.
 
-Uses the current locale as set by the `setlocale <http://php.net/manual/en/function.setlocale.php>`_
+Uses the current locale as set by the `setlocale() <http://php.net/manual/en/function.setlocale.php>`_
 function.
 
 The input value can be a digit, which will be interpreted as a linux
@@ -361,7 +383,7 @@ returns one of those strings according to the value:
 
 For example::
 
-    <?=$item->value(filesizeformat("yeah", "no", "maybe"))?>
+    <?=$item->value->yesno("yeah", "no", "maybe")?>
 
 ==========  ===========================  ==================================
 Value       Arguments                    Outputs
@@ -486,12 +508,10 @@ If ``value`` is the array ``array('a', 'b', 'c')``, the output will be
 fixampersands()
 +++++++++++++++
 
-.. note::
-
-This is rarely useful as ampersands are automatically escaped.
-    See :ref:`escape` for more information.
-
 Replaces ampersands with ``&amp;`` entities.
+
+This is rarely useful as ampersands are automatically escaped. See
+:ref:`escape` for more information.
 
 For example::
 
@@ -512,36 +532,36 @@ decimal place -- but only if there's a decimal part to be displayed.
 
 For example:
 
-============  ===================================  ========
-``value``     Template                             Output
-============  ===================================  ========
+============  ====================================  ========
+``value``     Template                              Output
+============  ====================================  ========
 ``34.23234``  ``<?=$item->value->floatformat()?>``  ``34.2``
 ``34.00000``  ``<?=$item->value->floatformat()?>``  ``34``
 ``34.26000``  ``<?=$item->value->floatformat()?>``  ``34.3``
-============  ===================================  ========
+============  ====================================  ========
 
 If used with a numeric integer argument, ``floatformat`` rounds a number
 to that many decimal places. For example:
 
-============  ====================================  ==========
-``value``     Template                              Output
-============  ====================================  ==========
+============  =====================================  ==========
+``value``     Template                               Output
+============  =====================================  ==========
 ``34.23234``  ``<?=$item->value->floatformat(3)?>``  ``34.232``
 ``34.00000``  ``<?=$item->value->floatformat(3)?>``  ``34.000``
 ``34.26000``  ``<?=$item->value->floatformat(3)?>``  ``34.260``
-============  ====================================  ==========
+============  =====================================  ==========
 
 If the argument passed to ``floatformat`` is negative, it will round a
 number to that many decimal places -- but only if there's a decimal part
 to be displayed. For example:
 
-============  =====================================  ==========
-``value``     Template                               Output
-============  =====================================  ==========
+============  ======================================  ==========
+``value``     Template                                Output
+============  ======================================  ==========
 ``34.23234``  ``<?=$item->value->floatformat(-3)?>``  ``34.232``
 ``34.00000``  ``<?=$item->value->floatformat(-3)?>``  ``34``
 ``34.26000``  ``<?=$item->value->floatformat(-3)?>``  ``34.260``
-============  =====================================  ==========
+============  ======================================  ==========
 
 Using ``floatformat`` with no argument is equivalent to using
 ``floatformat`` with an argument of ``-1``.
@@ -874,7 +894,7 @@ followed by a blank line becomes a paragraph break (``</p>``).
 
 For example::
 
-    <?=$item->value->linebreaks?>
+    <?=$item->value->linebreaks()?>
 
 If ``value`` is ``Joel\nis a slug``, the output will be ``<p>Joel<br />is
 a slug</p>``.
@@ -1028,7 +1048,9 @@ islast()
 
 True if this is the last time through the loop.
 
-<?foreach (new Chano($players) as $player):?>
+For example::
+
+   <?foreach (new Chano($players) as $player):?>
         <?if ($player->score->islast()):?>
             Last!
         <?endif?>
@@ -1108,7 +1130,7 @@ For example::
 
     <?foreach(new Chano($items) as $item):?>
          <?=$item->counter()?>
-    <?èndforeach?>
+    <?endforeach?>
 
 If ``$items`` is::
 
@@ -1134,7 +1156,7 @@ For example::
 
     <?foreach(new Chano($items) as $item):?>
          <?=$item->counter0()?>
-    <?èndforeach?>
+    <?endforeach?>
 
 If ``$items`` is::
 
@@ -1160,7 +1182,7 @@ For example::
 
     <?foreach(new Chano($items) as $item):?>
          <?=$item->revcounter()?>
-    <?èndforeach?>
+    <?endforeach?>
 
 If ``$items`` is::
 
@@ -1186,7 +1208,7 @@ For example::
 
     <?foreach(new Chano($items) as $item):?>
          <?=$item->revcounter0()?>
-    <?èndforeach?>
+    <?endforeach?>
 
 If ``$items`` is::
 
@@ -1257,7 +1279,12 @@ Returns the length of the current value. If the current value is a scalar
 (string, int, etc.) the string length will be returned, otherwise the
 count.
 
+For example::
 
+    <?=$item->value->length()?>
+
+If ``value`` is ``"joel"`` or ``array("j", "o", "e", "l")`` the output
+will be ``4``.
 
 *Returns*
   ``int``
@@ -1381,7 +1408,7 @@ prints as escaped::
 forceescape()
 +++++++++++++
 
-Applies HTML escaping to a string (see the ``escape`` filter for
+Applies HTML escaping to a string (see the `escape`_ filter for
 details). This filter is applied *immediately* and returns a new, escaped
 string. This is useful in the rare cases where you need multiple escaping
 or want to apply other filters to the escaped results. Normally, you want

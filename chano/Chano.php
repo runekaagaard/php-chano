@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL|E_STRICT);
-ini_set('display_errors', 1);
 
 // Includes.
 require realpath(dirname(__FILE__) . '/lib/text.php');
@@ -14,27 +12,28 @@ class Chano_ValueIsEmptyError extends Exception {}
 class Chano_NoMatchingIteratorFoundError extends Exception {}
 
 /**
- * An iterator that takes an array of arrays as an input and supplies
- * capabilities matching the Django Template Language. Implements the full
- * featureset (almost) found here:
- *     http://docs.djangoproject.com/en/dev/ref/templates/builtins/.
+ * An iterator that supplies capabilities matching the Django Template Language. 
+ * Implements the full featureset (almost) found here:
+ *   - http://docs.djangoproject.com/en/dev/ref/templates/builtins/.
  *
- * @author Rune Kaagaard
+ * Is has github and readthedocs pages at:
+ *   - https://github.com/runekaagaard/php-chano and
+ *   - http://chano.readthedocs.org/
+ * 
+ * @author Rune Kaagaard <rumi.kg@gmail.com>
  * @todo
- *
- * 1) While the filter tests are pretty good, more tests of more general nature
- * are needed.
- * 2) Create proper documentation in restructured text.
+ *   - Create more iterators, i.e. for mysql and mysqli ressources.
+ *   - Think about how to use all the functionality in a procedural way.
  *
  * @codestyle
- *
- * In this project i've been experimenting with a non-pear code style. Some of
- * those experiments entails:
- *   * One line functions.
- *   * Skipping brackets.
- *   * Having both a if/foreach and a statement on a single line.
- *   * Not adding docblocks to (for me) obvious stuff.
- *   * Skipping default "public" keywords.
+ *   In this project i've been experimenting with a non-pear code style. Some of
+ *   those experiments entails:
+ *     - One line functions.
+ *     - Skipping brackets.
+ *     - Having both an if/foreach and a statement on a single line.
+ *     - Not adding docblocks to (for me) obvious internal stuff.
+ *     - Skipping default "public" keywords.
+ *     - Using only "public" and "private", nothing inbetween.
  */
 class Chano implements Iterator, ArrayAccess {
     /**
@@ -42,6 +41,12 @@ class Chano implements Iterator, ArrayAccess {
      * @var string
      */
     static $encoding = 'utf-8';
+    /**
+     * An array of iterators for supported datatypes. See the 
+     * register_iterator() method.
+     * 
+     * @var type array
+     */
     static $iterators;
 
     /**
@@ -52,6 +57,7 @@ class Chano implements Iterator, ArrayAccess {
 
     // Constants.
     const INITIAL = '__CHANO_INITIAL__';
+    const NON_ITERABLE_VALUE = -8296;
 
     // Private values.
     private $_iterator;
@@ -64,8 +70,8 @@ class Chano implements Iterator, ArrayAccess {
     private $_autoescape_next = null;
 
     /**
-     * Takes an array of arrays as first parameter and an optional array of
-     * options as second.
+     * Takes an array, iterator or stdClass of arrays or stdClasses as the only 
+     * argument.
      * 
      * @param array $items
      *   Accepts an array, object, iterator, etc. giving arrays or objects. The
@@ -73,7 +79,8 @@ class Chano implements Iterator, ArrayAccess {
      *   using that feature to be used.
      */
     function __construct($items) {
-        $this->_set_iterator($items);
+        if ($items !== self::NON_ITERABLE_VALUE)
+            $this->_set_iterator($items);
     }
     function __toString() {
         return $this->_out($this->_reset_v());
@@ -125,8 +132,9 @@ class Chano implements Iterator, ArrayAccess {
 
     private function _set_iterator($items) {
         foreach (self::$iterators as $iterator) {
-            if ($iterator::is_match($items)) {
-                $this->_iterator = $iterator::get_instance($items);
+            if (call_user_func(array($iterator, 'is_match'), $items)) {
+                $this->_iterator = call_user_func(
+                    array($iterator, 'get_instance'), $items);
                 return true;
             }
         }
@@ -180,10 +188,10 @@ class Chano implements Iterator, ArrayAccess {
 
         if ($this->v == self::INITIAL) $v = $this->_current;
         else $v = $this->v;
-
+        
         if (is_object($v)) $this->v = $v->$o;
         elseif (is_array($v)) $this->v = $v[$o];
-        else throw new Chano_TypeNotComplexError;
+        elseif (is_scalar($v)) $this->v = $v;
 
         $this->_lookup_add($o);
         return $this;
@@ -193,16 +201,36 @@ class Chano implements Iterator, ArrayAccess {
     function offsetUnset($offset) { throw new Chano_ReadOnlyError; }
 
     /**
-     * Implementation of __get magic method.
-     *
-     * @param string $name
-     * @return mixed
+     * Implementation of magic methods.
      */
+    
     function  __get($name) { return $this->offsetGet($name); }
     
     function __call($name, $args) {
         $this->v = call_user_func_array(array($this->_current, $name), $args);
         return $this;
+    }
+    
+    /**
+     * Not part of the public API, even though it is public.
+     * 
+     * @param mixed $current 
+     */
+    function _setCurrent($current) { $this->_current = $current; }
+    
+    /**
+     * Makes Chano work on single values too, not just i.e. an array of arrays.
+     * 
+     * @staticvar boolean $chano
+     * @param mixed $value
+     * @return Chano 
+     */
+    static function set($value=null) {
+        static $chano = false;
+        if (!$chano) $chano = new Chano(self::NON_ITERABLE_VALUE);
+        $chano->_setCurrent(array('value' => $value));
+        $chano->__get('value');
+        return $chano;
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -507,7 +535,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     "<?=$item->value->ljust(10)?>"
      *
-     * If value is Chano!, the output will be "Chano!    ".
+     * If value is ``Chano!``, the output will be ``"Chano!    "``.
      *
      * @param int $width
      * @chanotype filter
@@ -528,7 +556,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     "<?=$item->value->rjust(10)?>"
      *
-     * If value is Chano!, the output will be "    Chano!".
+     * If value is ``Chano!``, the output will be ``"    Chano!"``.
      *
      * @param int $width
      * @chanotype filter
@@ -575,7 +603,7 @@ class Chano implements Iterator, ArrayAccess {
      * `date_default_timezone_get() <http://www.php.net/manual/en/function.date-default-timezone-get.php>`_
      * function.
      *
-     * Uses the current locale as set by the `setlocale <http://php.net/manual/en/function.setlocale.php>`_
+     * Uses the current locale as set by the `setlocale() <http://php.net/manual/en/function.setlocale.php>`_
      * function.
      *
      * The input value can be a digit, which will be interpreted as a linux
@@ -644,7 +672,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?=$item->value(filesizeformat("yeah", "no", "maybe"))?>
+     *     <?=$item->value->yesno("yeah", "no", "maybe")?>
      *
      * ==========  ===========================  ==================================
      * Value       Arguments                    Outputs
@@ -823,12 +851,10 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * .. note::
-     *
-     *     This is rarely useful as ampersands are automatically escaped.
-     *     See :ref:`escape` for more information.
-     *
      * Replaces ampersands with ``&amp;`` entities.
+     * 
+     * This is rarely useful as ampersands are automatically escaped. See 
+     * :ref:`escape` for more information.
      *
      * For example::
      *
@@ -866,36 +892,36 @@ class Chano implements Iterator, ArrayAccess {
      * decimal place -- but only if there's a decimal part to be displayed.
      * For example:
      *
-     * ============  ===================================  ========
-     * ``value``     Template                             Output
-     * ============  ===================================  ========
+     * ============  ====================================  ========
+     * ``value``     Template                              Output
+     * ============  ====================================  ========
      * ``34.23234``  ``<?=$item->value->floatformat()?>``  ``34.2``
      * ``34.00000``  ``<?=$item->value->floatformat()?>``  ``34``
      * ``34.26000``  ``<?=$item->value->floatformat()?>``  ``34.3``
-     * ============  ===================================  ========
+     * ============  ====================================  ========
      *
      * If used with a numeric integer argument, ``floatformat`` rounds a number
      * to that many decimal places. For example:
      *
-     * ============  ====================================  ==========
-     * ``value``     Template                              Output
-     * ============  ====================================  ==========
+     * ============  =====================================  ==========
+     * ``value``     Template                               Output
+     * ============  =====================================  ==========
      * ``34.23234``  ``<?=$item->value->floatformat(3)?>``  ``34.232``
      * ``34.00000``  ``<?=$item->value->floatformat(3)?>``  ``34.000``
      * ``34.26000``  ``<?=$item->value->floatformat(3)?>``  ``34.260``
-     * ============  ====================================  ==========
+     * ============  =====================================  ==========
      *
      * If the argument passed to ``floatformat`` is negative, it will round a
      * number to that many decimal places -- but only if there's a decimal part
      * to be displayed. For example:
      *
-     * ============  =====================================  ==========
-     * ``value``     Template                               Output
-     * ============  =====================================  ==========
+     * ============  ======================================  ==========
+     * ``value``     Template                                Output
+     * ============  ======================================  ==========
      * ``34.23234``  ``<?=$item->value->floatformat(-3)?>``  ``34.232``
      * ``34.00000``  ``<?=$item->value->floatformat(-3)?>``  ``34``
      * ``34.26000``  ``<?=$item->value->floatformat(-3)?>``  ``34.260``
-     * ============  =====================================  ==========
+     * ============  ======================================  ==========
      *
      * Using ``floatformat`` with no argument is equivalent to using
      * ``floatformat`` with an argument of ``-1``.
@@ -1415,7 +1441,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?=$item->value->linebreaks?>
+     *     <?=$item->value->linebreaks()?>
      *
      * If ``value`` is ``Joel\nis a slug``, the output will be ``<p>Joel<br />is
      * a slug</p>``.
@@ -1609,6 +1635,8 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * True if this is the last time through the loop.
      *
+     * For example::
+     * 
      *    <?foreach (new Chano($players) as $player):?>
      *         <?if ($player->score->islast()):?>
      *             Last!
@@ -1623,7 +1651,7 @@ class Chano implements Iterator, ArrayAccess {
 
     /**
      * Check if a value has changed from the last iteration of a loop.
-     *
+     * 
      * For example::
      *
      *     <?foreach (new Chano($players) as $player):?>
@@ -1696,7 +1724,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?foreach(new Chano($items) as $item):?>
      *          <?=$item->counter()?>
-     *     <?èndforeach?>
+     *     <?endforeach?>
      *
      * If ``$items`` is::
      *
@@ -1723,7 +1751,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?foreach(new Chano($items) as $item):?>
      *          <?=$item->counter0()?>
-     *     <?èndforeach?>
+     *     <?endforeach?>
      *
      * If ``$items`` is::
      *
@@ -1750,7 +1778,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?foreach(new Chano($items) as $item):?>
      *          <?=$item->revcounter()?>
-     *     <?èndforeach?>
+     *     <?endforeach?>
      *
      * If ``$items`` is::
      *
@@ -1777,7 +1805,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?foreach(new Chano($items) as $item):?>
      *          <?=$item->revcounter0()?>
-     *     <?èndforeach?>
+     *     <?endforeach?>
      *
      * If ``$items`` is::
      *
@@ -1867,6 +1895,13 @@ class Chano implements Iterator, ArrayAccess {
      * (string, int, etc.) the string length will be returned, otherwise the
      * count.
      *
+     * For example::
+     * 
+     *     <?=$item->value->length()?>
+     * 
+     * If ``value`` is ``"joel"`` or ``array("j", "o", "e", "l")`` the output
+     * will be ``4``.
+     * 
      * @chanotype other
      * @return int
      */
@@ -1974,7 +2009,7 @@ class Chano implements Iterator, ArrayAccess {
     function safe() { $this->_autoescape_next = false; return $this; }
 
     /**
-     * Applies HTML escaping to a string (see the ``escape`` filter for
+     * Applies HTML escaping to a string (see the `escape`_ filter for
      * details). This filter is applied *immediately* and returns a new, escaped
      * string. This is useful in the rare cases where you need multiple escaping
      * or want to apply other filters to the escaped results. Normally, you want
