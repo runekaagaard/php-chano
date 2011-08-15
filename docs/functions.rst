@@ -7,6 +7,18 @@ This document describes all the functions that Chano supports.
 Most of this documentation is adapated from
 https://docs.djangoproject.com/en/dev/ref/templates/builtins/.
 
+All the functions below are also available as PHP functions that can be called
+directly on non iterable values. One must merely add the value as the first
+argument.
+
+For example::
+
+   <?=$item->value->center(14)?>
+        
+could be called in a procedural style as::
+        
+   chano_center($value, 14);
+
 
 Filters
 _______
