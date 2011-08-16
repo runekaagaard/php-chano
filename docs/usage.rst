@@ -56,8 +56,8 @@ doing::
 Modifying values
 ----------------
 
-You can modify the current by calling any of the functions described on the
-`functions`_ page of the documentation.
+You can modify the current value by calling any of the functions described on
+the `functions <http://chano.readthedocs.org/en/latest/functions.html>`_ page.
 
 Most of the Chano functions can be chained, so the following is perfectly
 legal::
