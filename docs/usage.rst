@@ -76,7 +76,7 @@ method or its shortcut, the ``Chano::_`` magic property.
 For example if ``number_of_monkeys`` is an integer::
 
     <?php
-    <?=getclass($item->number_of_monkeys)?>
+    <?=get_class($item->number_of_monkeys)?>
     <?=gettype($item->number_of_monkeys->v)?>
     <?=gettype($item->number_of_monkeys->__toString())?>
     <?=gettype($item->number_of_monkeys->_)?>
