@@ -144,7 +144,7 @@ current item which is updated with return of said function.
 For example if ``$items`` is a collection of Propel Orm Model instances, which 
 each has getter functions::
 
-    <?foreach(new $chano($items) as $item):?>
+    <?foreach(new Chano($items) as $item):?>
         <?=$item->getTitle->title()?>
         <?=$item->getBody->safe()?>
     <?endforeach?>
