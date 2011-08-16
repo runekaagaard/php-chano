@@ -107,8 +107,8 @@ The output would be::
     String
     String
 
-This also means that you can't access keys named "_" and "v" in your items as
-the magic values will take precedence.
+This also means that you can't access keys named ``"_"`` and ``"v"`` in your 
+items as the magic values will take precedence.
 
 Standalone values
 -----------------
