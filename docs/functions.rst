@@ -1267,12 +1267,6 @@ will be ``4``.
 *Returns*
   ``int``
 
-
-Filters
-_______
-
-Modifies the value of the current item. All filters are chainable.
-
 .. _vd:
 
 vd()

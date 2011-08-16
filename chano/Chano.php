@@ -1915,7 +1915,7 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * ``var_dumps()`` the content of the current value to screen.
      *
-     * @chanotype filter
+     * @chanotype other
      * @return Chano instance
      */
     function vd() { var_dump($this->v); return $this; }
