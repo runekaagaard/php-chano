@@ -57,7 +57,7 @@ Modifying values
 ----------------
 
 You can modify the current by calling any of the functions described on the
-``functions``_ page of the documentation.
+`functions`_ page of the documentation.
 
 Most of the Chano functions can be chained, so the following is perfectly
 legal::
