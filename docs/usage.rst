@@ -139,8 +139,8 @@ Calling methods on values
 Function calls for functions not found on the Chano class is passed on to the
 current item which is updated with return of said function.
 
-For example if $items is a collection of Propel Orm Model instances, which each
-has getter functions::
+For example if ``$items`` is a collection of Propel Orm Model instances, which 
+each has getter functions::
 
     <?foreach(new $chano($items) as $item):?>
         <?=$item->getTitle->title()?>
