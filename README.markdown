@@ -1,53 +1,36 @@
 ## Chano ##
 
-An iterator class that takes an array of things as an input and supplies
-capabilities resembling the Django Template Language.
+Chano is an almost direct port of Djangos Template Language to PHP. But where
+Django uses its own template language, Chano is implemented as a PHP iterator
+that lets you iterate over an array, stdClass or Iterator and manipulate its
+content in a variety of ways, matching the capabilities of the Django Template
+Language.
 
-Filters are chainable where it makes sense.
+Besides from being able to iterate over data, all the Chano functions can also
+be called on non iterable values.
 
-Still in beta.
+Read the docs at http://chano.readthedocs.org/.
 
 ## Example ##
-Also check out the the tests. The following is a example of usage::
+
+Below follows an example of what a template using Chano could look like:
 
 ```php
-<?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
-$items = new Chano(array(
-    array(
-        'title' => 'I am legend',
-        'ratings' => array(45,56,23,89,12),
-        'links' => array(
-            'http://www.imdb.com/title/tt0480249/',
-            'imdb.com/name/nm1349376/',
-        ),
-    ),
-    array(
-        'title' => 'zorro',
-        'ratings' => array(80),
-        'links' => array(
-            'http://www.imdb.com/title/tt0120746/',
-            'zorro@example.com',
-            'ftp://trailerdownload.org',
-        ),
-    ),
-));
-?>
-<?foreach ($items as $i):?>
+<?foreach(new Chano($items) as $i):?>
     <div class="movies <?=$i->cycle('odd', 'even')?>">
         <h1><?=$i->title->capfirst()->ljust(20)?></h1>
+        <p>Number <?=$i->counter()?>.</p>
         <p>
-            <strong>Rating<?=$i->ratings->pluralize()?>:</strong><?=$i->ratings->join()?>    
+            <strong>Rating<?=$i->ratings->pluralize()?>:</strong>
+            <?=$i->ratings->join()?>
         </p>
-        <p>
-            <ul>
-                <?if($i->links->length() < 3):?>
-                    <?=$i->links->unorderedlist()->urlize()?>
-                <?else:?>
-                    <?=$i->links->unorderedlist()->urlizetrunc(12)?>
-                <?endif?>
-            </ul>
-        </p>
+        <ul>
+            <?if($i->links->length() < 3):?>
+                <?=$i->links->unorderedlist()->urlize()?>
+            <?else:?>
+                <?=$i->links->unorderedlist()->urlizetrunc(12)?>
+            <?endif?>
+        </ul>
     </div>
 <?endforeach?>
 ```
