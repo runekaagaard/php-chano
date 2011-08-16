@@ -72,6 +72,8 @@ For example if ``value`` is ``"joel"``::
     $item->upper(); // Current value is "JOEL".
     $item->lower(); // Current value is "joel" again.
     echo $item; // "joel" is rendered and the current value is reset.
+    echo $item->other_value; // Meaning that you can start over with another
+                             // value from the current array or object.
 
 Most of the Chano functions can be chained, so the following is perfectly
 legal::
