@@ -6,7 +6,7 @@ Chano usage
 Iteration
 ---------
 
-The Chano class can be looped over by instantiating it with either a array,
+The Chano class can be looped over by instantiating it with either an array,
 stdClass or Traversable of arrays or objects.
 
 For example if ``$items`` is::
@@ -16,14 +16,14 @@ For example if ``$items`` is::
         array('title' => 'second title'),
     )
 
-Or::
+or::
 
     (object)array(
         (object)array('title' => 'first title'),
         (object)array('title' => 'second title'),
     )
 
-Or::
+or::
 
     new ArrayObject(
         array(
@@ -47,8 +47,8 @@ identical::
     <?=$item->title?>
     <?=$item['title']?>
 
-If you are working with deeper datasets you can access the more inner parts
-simply by doing::
+If you are working on nested datasets you can access its inner parts simply by 
+doing::
 
     <?=$item->key1->key2->key3?>
     <?=$item['key1']['key2']['key3']?>
@@ -71,22 +71,22 @@ instance is being cast to a string - by doing ``<?=$item->title?>`` or
 
 If you want to access the actual value you can use the ``Chano::v`` property,
 and if you want the stringified value you can use the ``Chano::__toString()``
-method or it shortcut the ``Chano::_`` magic property.
+method or its shortcut, the ``Chano::_`` magic property.
 
 For example if ``number_of_monkeys`` is an integer::
 
     <?php
-    <?=type($item->number_of_monkeys)?>
-    <?=type($item->number_of_monkeys->_)?>
-    <?=type($item->number_of_monkeys->__toString())?>
-    <?=type($item->number_of_monkeys->v)?>
-
+    <?=getclass($item->number_of_monkeys)?>
+    <?=gettype($item->number_of_monkeys->v)?>
+    <?=gettype($item->number_of_monkeys->__toString())?>
+    <?=gettype($item->number_of_monkeys->_)?>
+    
 The output would be::
 
     Chano
-    String
-    String
     Integer
+    String
+    String
 
 This also means that you can't access keys named "_" and "v" in your items as
 the magic values will take precedence.
@@ -94,8 +94,8 @@ the magic values will take precedence.
 Standalone values
 -----------------
 
-Should you wish to use a Chano function on a single value (string, int, array,
- etc.) this is possible by using the ``Chano::with()`` shortcut.
+Should you wish to use a Chano function on a single value (string, int, array, 
+etc.) this is possible by using the ``Chano::with()`` shortcut.
 
 For example::
 
@@ -105,7 +105,7 @@ Used inside a ``foreach`` loop is identical to::
 
    <?=Chano::with($value)->center(14))?>
 
-This works for functions that works on the base Chano instance too. Simply
+This works on functions that works on the base Chano instance too. Simply
 don't pass any arguments to the ``set()`` function.
 
 For example::
@@ -119,7 +119,16 @@ Used inside a ``foreach`` loop is identical to::
 Calling methods on values
 -------------------------
 
-This section is a stub.
+Function calls for functions not found on the Chano class is passed on to the
+current item which is updated with return of said function.
+
+For example if $items is a collection of Propel Orm Model instances, which each
+has getter functions::
+
+    <?foreach(new $chano($items) as $item):?>
+        <?=$item->getTitle->title()?>
+        <?=$item->getBody->safe()?>
+    <?endforeach?>
 
 Encoding
 --------
