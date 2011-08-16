@@ -52,12 +52,26 @@ doing::
 
     <?=$item->key1->key2->key3?>
     <?=$item['key1']['key2']['key3']?>
+    
+It works this way due to the fact that Chano updates its current value,
+everytime a key is accessed on it. This goes on until its ``__toString()`` 
+method is called.
 
 Modifying values
 ----------------
 
 You can modify the current value by calling any of the functions described on
 the `functions <http://chano.readthedocs.org/en/latest/functions.html>`_ page.
+
+For example if ``value`` is ``"joel"``::
+
+    <?php
+    // Note this is not a typical Chano usecase, but merely an illustrative
+    // example. Normally, chaining is the way to go!
+    $item->value; // Current value is "joel".
+    $item->upper(); // Current value is "JOEL".
+    $item->lower(); // Current value is "joel" again.
+    echo $item; // "joel" is rendered and the current value is reset.
 
 Most of the Chano functions can be chained, so the following is perfectly
 legal::
@@ -113,11 +127,11 @@ don't pass any arguments to the ``set()`` function.
 
 For example::
 
-   <?=$item->now()?>
+   <?=$item->now("%B %e, %Y, %R %P")?>
 
 Used inside a ``foreach`` loop is identical to::
 
-   <?=Chano::with()->now())?>
+   <?=Chano::with()->now("%B %e, %Y, %R %P"))?>
 
 Calling methods on values
 -------------------------

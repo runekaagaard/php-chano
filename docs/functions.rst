@@ -344,7 +344,7 @@ Format the value like a 'human-readable' file size (i.e. ``'13 KB'``,
 
 For example::
 
-    <?=$item->value(filesizeformat)?>
+    <?=$item->value->filesizeformat()?>
 
 If ``value`` is 123456789, the output would be ``117.7 MB``.
 

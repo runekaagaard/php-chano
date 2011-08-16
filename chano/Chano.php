@@ -652,7 +652,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?=$item->value(filesizeformat)?>
+     *     <?=$item->value->filesizeformat()?>
      *
      * If ``value`` is 123456789, the output would be ``117.7 MB``.
      *
