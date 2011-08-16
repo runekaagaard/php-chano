@@ -53,8 +53,11 @@ doing::
     <?=$item->key1->key2->key3?>
     <?=$item['key1']['key2']['key3']?>
 
-Chaining
---------
+Modifying values
+----------------
+
+You can modify the current by calling any of the functions described on the
+``functions``_ page of the documentation.
 
 Most of the Chano functions can be chained, so the following is perfectly
 legal::

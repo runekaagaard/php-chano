@@ -34,3 +34,10 @@ Below follows an example of what a template using Chano could look like:
     </div>
 <?endforeach?>
 ```
+
+## Tests ##
+Chano is pretty well tested with PHPT. I was able to port most of the tests for
+the functions directly from Django and then add integration tests to those.
+
+See: https://github.com/runekaagaard/php-chano/tree/master/tests.
+
