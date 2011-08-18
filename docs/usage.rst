@@ -80,6 +80,13 @@ legal::
 
     <?=$item->monkeys->bosses->join(" -- ")->title()->ljust(20)?>
 
+An important thing to note is that if a function is being called when the 
+current value is an array or an stdClass, Chano will iterate over said array or 
+stdClass and non-recursively modify all scalar values in it. So the following 
+would be identical to the example above::
+
+    <?=$item->monkeys->bosses->title()->ljust(20)->join(" -- ")?>
+
 Datatypes
 ---------
 

@@ -342,9 +342,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function striptags() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = strip_tags($v);
         return $this;
     }
@@ -365,9 +366,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function now($format) {
         $now = defined('CHANO_TESTS_NOWTIME') ? CHANO_TESTS_NOWTIME : time();
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = strftime($format, $now);
         return $this;
     }
@@ -392,9 +394,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function widthratio($max_in, $max_out) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = round($v / $max_in * $max_out);
         return $this;
     }
@@ -409,9 +412,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function add($amount) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v += $amount;
         return $this;
     }
@@ -431,9 +435,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function addslashes() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = addslashes($v);
         return $this;
     }
@@ -451,9 +456,11 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function capfirst() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
+        
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = ucfirst($v);
         return $this;
     }
@@ -472,9 +479,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function upper() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = mb_strtoupper($v, self::$encoding);
         return $this;
     }
@@ -493,9 +501,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function center($width) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = str_pad($v, $width, " ", STR_PAD_BOTH);
         return $this;
     }
@@ -514,9 +523,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function ljust($width) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = str_pad($v, $width, " ", STR_PAD_LEFT);
         return $this;
     }
@@ -535,9 +545,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function rjust($width) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = str_pad($v, $width, " ", STR_PAD_RIGHT);
         return $this;
     }
@@ -558,9 +569,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function cut($string) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = str_replace($string, '', $v);
         return $this;
     }
@@ -597,9 +609,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function date($format) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 if ($v instanceof DateTime)
                     $v = strftime($format, $v->getTimestamp());
                 elseif (ctype_digit((string)$v))
@@ -631,9 +644,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function filesizeformat() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_filesizeformat($v);
         return $this;
     }
@@ -668,9 +682,10 @@ class Chano implements Iterator, ArrayAccess {
             false => $no ? $no : 'no',
             null => $maybe ? $maybe : 'maybe',
         );
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v) {
-            if (!is_array($v) || $this->v === null) {
+            if (!is_array($v)) {
                 if ($v === null && $no && !$maybe) $v = False;
                 if ($v !== null) $v = (bool)$v;
                 $v = $choices[$v];
@@ -698,9 +713,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function wordwrap($width) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = wordwrap($v, $width, "\n", true);
         return $this;
     }
@@ -718,9 +734,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function wordcount() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = str_word_count($v, 0, '0123456789');
         return $this;
     }
@@ -741,9 +758,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function stringformat($format) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = sprintf("$format", $v);
         return $this;
     }
@@ -782,9 +800,10 @@ class Chano implements Iterator, ArrayAccess {
             '<' => '\u003C', '>' => '\u003E', '&' => '\u0026',
             '/' => '\u002F', "\xe2\x80\xa8" => '\u2028',
             "\xe2\x80\xa9" => '\u2029',);
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = strtr($v, $replace_pairs);
         return $this;
     }
@@ -838,9 +857,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function fixampersands() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = strtr($v, '&', '&amp;');
         return $this;
     }
@@ -903,9 +923,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function floatformat($decimal_places=null) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_floatformat($v, $decimal_places);
         return $this;
     }
@@ -934,9 +955,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function getdigit($number) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_getdigit($v, $number);
         return $this;
     }
@@ -955,9 +977,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function lower() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = mb_strtolower($v, self::$encoding);
         return $this;
     }
@@ -976,9 +999,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function title() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v) {
-            if (!is_array($v) || $this->v === null) {
+            if (!is_array($v)) {
                 // Some PHP 5.2.x versions have problems with single quotes,
                 // interpreting them as spaces. Fix.
                 $v = str_replace("'", '__SINGLEQUOTE', $v);
@@ -1058,9 +1082,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function urlize() {
         $this->_autoescape_next = false;
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_urlize($v);
         return $this;
     }
@@ -1103,9 +1128,10 @@ class Chano implements Iterator, ArrayAccess {
         // to support truncate.
         $this->_autoescape_next = false;
         $this->_urlizetrunc_len = $len;
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_urlizetrunc($v, $len);
         return $this;
     }
@@ -1127,9 +1153,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function truncatewords($number) {
         // Thanks banderson623: http://snippets.dzone.com/posts/show/412.
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v) {
-            if (!is_array($v) || $this->v === null) {
+            if (!is_array($v)) {
                 $parts = explode(' ', $v);
                 if(count($parts) > $number && $number>0)
                     $v = implode(' ', array_slice($parts, 0, $number)) . ' ...';
@@ -1183,9 +1210,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function truncatewordshtml($number) {
         $this->_autoescape_next = false;
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_truncatewordshtml($v, $number);
         return $this;
     }
@@ -1209,9 +1237,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function truncatechars($length, $ellipsis='...') {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 if (strlen($v) > $length)
                     $v = substr($v, 0, $length - strlen($ellipsis)) . $ellipsis;
         return $this;
@@ -1231,9 +1260,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function urlencode() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = urlencode($v);
         return $this;
     }
@@ -1258,9 +1288,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function iriencode() {
         // TODO: Keep this? Suspicious!
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = str_replace('+', '%20', urlencode(urldecode($v)));
         return $this;
     }
@@ -1314,9 +1345,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function slice($slice_string) {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_slice($v, $slice_string);
         return $this;
     }
@@ -1358,9 +1390,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function linenumbers() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_linenumbers($v);
         return $this;
     }
@@ -1390,9 +1423,10 @@ class Chano implements Iterator, ArrayAccess {
         $args = func_get_args();
         if (empty($args)) return $this;
         $tags = implode('|', $args);
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = preg_replace("/<\\/?($tags)(\\s+.*?>|>)/Uis", '', $v);
         return $this;
     }
@@ -1423,9 +1457,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function linebreaks() {
         $this->_autoescape_next = false;
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_linebreaks($v);
         return $this;
     }
@@ -1446,9 +1481,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function linebreaksbr() {
         $this->_autoescape_next = false;
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = nl2br($v);
         return $this;
     }
@@ -1488,9 +1524,10 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function makelist() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v) {
-            if (!is_array($v) || $this->v === null) {
+            if (!is_array($v)) {
                 $_vs = str_split((string)$v);
                 if (is_int($v)) foreach ($_vs as &$_v) $_v = (int)$_v;
                 $v = $_vs;
@@ -1516,9 +1553,10 @@ class Chano implements Iterator, ArrayAccess {
      */
     function slugify() {
         // Thanks Borek! http://drupal.org/node/63924.
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v) {
-            if (!is_array($v) || $this->v === null) {
+            if (!is_array($v)) {
                 $v = str_replace(array(',', '\''), '', $v);
                 $v = preg_replace('#[^\\pL0-9_]+#u', '-', $v);
                 $v = preg_replace('#[-]{2,}#', '-', $v);
@@ -1554,9 +1592,10 @@ class Chano implements Iterator, ArrayAccess {
             'n' => '6', 'o' => '6', 'p' => '7', 'q' => '7', 'r' => '7',
             's' => '7', 't' => '8', 'u' => '8', 'v' => '8', 'w' => '9',
             'x' => '9', 'y' => '9', 'z' => '9');
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = strtr(strtolower($v), $replace_pairs);
         return $this;
     }
@@ -2053,10 +2092,11 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function forceescape() {
-        if (!is_array($this->v)) $vs = array(&$this->v); else $vs = &$this->v;
+        if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
+        else $vs = array(&$this->v);
         $autoescape_next = $this->_autoescape_next;
         foreach($vs as &$v)
-            if (!is_array($v) || $this->v === null)
+            if (!is_array($v))
                 $v = $this->_escape($this->_reset_filter());
         $this->_autoescape_next = $autoescape_next;
         return $this;
