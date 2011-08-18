@@ -21,7 +21,7 @@ Below follows an example of what a template using Chano could look like:
 $movies = new Chano(get_movies());
 ?>
 
-<!-- Template-->
+<!-- Template -->
 <div class="movies">
 	<p>
 		Showing <?=$movies->length()?> movie<?=$movies->pluralize()?>
