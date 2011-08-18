@@ -16,23 +16,41 @@ Read the docs at http://chano.readthedocs.org/.
 Below follows an example of what a template using Chano could look like:
 
 ```php
-<?foreach(new Chano($items) as $i):?>
-    <div class="movies <?=$i->cycle('odd', 'even')?>">
-        <h1><?=$i->title->capfirst()->ljust(20)?></h1>
-        <p>Number <?=$i->counter()?>.</p>
-        <p>
-            <strong>Rating<?=$i->ratings->pluralize()?>:</strong>
-            <?=$i->ratings->join()?>
-        </p>
-        <ul>
-            <?if($i->links->length() < 3):?>
-                <?=$i->links->unorderedlist()->urlize()?>
-            <?else:?>
-                <?=$i->links->unorderedlist()->urlizetrunc(12)?>
-            <?endif?>
-        </ul>
-    </div>
-<?endforeach?>
+<?php
+// This would probably be done in the controller.
+$movies = new Chano(get_movies());
+?>
+
+<!-- Template-->
+<div class="movies">
+	<p>
+		Showing <?=$movies->length()?> movie<?=$movies->pluralize()?>
+	</p>
+    
+	<?foreach($movies as $m):?>
+		<div class="movie <?=$m->cycle('odd', 'even')?>"/>
+			<h1>
+				<?=$m->counter()?>) 
+				<?=$m->title->upper()?>
+			</h1>
+
+			<h2>Rating<?=$m->ratings->pluralize()?></h2>
+			<p>
+				<?=$m->ratings->join()?>
+			</p>
+			
+			<h2>Link<?=$m->links->pluralize()?></h2>
+			<ul>
+				<?if($m->links->length() < 3):?>
+					<?=$m->links->unorderedlist()->urlize()?>
+				<?else:?>
+					<?=$m->links->unorderedlist()->urlizetrunc(12)?>
+				<?endif?>
+			</ul>
+		</div>
+	<?endforeach?>
+    
+</div>
 ```
 
 ## Tests ##

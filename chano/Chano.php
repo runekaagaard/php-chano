@@ -107,6 +107,18 @@ class Chano implements Iterator, ArrayAccess {
         $this->_lookup_path_reset();
         return $value;
     }
+    
+    /**
+     * Some functions, like length() and pluralize() should work directly on the
+     * base instance too. Returns the main iterator if the v property has not
+     * been set, else the v property.
+     * 
+     * @return mixed
+     */
+    private function _get_v_or_iterator() {
+        if ($this->v === self::INITIAL) return $this->_iterator;
+        else return $this->v;
+    }
 
     /**
      * Resets settings for filters that does not wait for the __toString()
@@ -244,47 +256,6 @@ class Chano implements Iterator, ArrayAccess {
      *
      *   Modifies the value of the current item. All filters are chainable.
      */
-
-    /**
-     * Returns a plural suffix if the value is not 1. By default,
-     * this suffix is ``'s'``.
-     *
-     * Example::
-     *
-     *     You have <?$item->num_messages?> message<?$item->num_messages->pluralize()?>.
-     *
-     * If ``num_messages`` is ``1``, the output will be ``You have 1 message.``
-     * If ``num_messages`` is ``2``  the output will be ``You have 2 messages.``
-     *
-     * For words that require a suffix other than ``'s'``, you can provide an
-     * alternate suffix as the first argument to the filter.
-     *
-     * Example::
-     *
-     *     You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
-     *
-     * For words that don't pluralize by simple suffix, you can specify both a
-     * plural and singular suffix as arguments.
-     *
-     * Example::
-     *
-     *     You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
-     *
-     * @chanotype filter
-     * @param string $plural
-     * @param string $singular
-     * @return Chano instance
-     */
-    function pluralize($plural='s', $singular=null) {
-        if (empty($singular)) list($plural, $singular) = array('', $plural);
-        else list($plural, $singular) = array($plural, $singular);
-        if (is_scalar($this->v)) {
-            if ((int)$this->v == 0) $this->v = $singular;
-            else $this->v = (int)$this->v > 1 ? $singular : $plural;
-        }
-        else $this->v = count($this->v) > 1 ? $singular : $plural;
-        return $this;
-    }
 
     private function _clean_list($list) {
         $new_list = array();
@@ -1894,7 +1865,7 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * Returns the length of the current value. If the current value is a scalar
      * (string, int, etc.) the string length will be returned, otherwise the
-     * count.
+     * count. This function is non chainable.
      *
      * For example::
      * 
@@ -1903,15 +1874,77 @@ class Chano implements Iterator, ArrayAccess {
      * If ``value`` is ``"joel"`` or ``array("j", "o", "e", "l")`` the output
      * will be ``4``.
      * 
+     * If length is called on the base instance, the count of the main dataset 
+     * is given.
+     * 
+     * For example if ``$items`` is::
+     * 
+     *     new Chano(array(
+     *         array('title' => 'foo'),
+     *         array('title' => 'bar'),
+     *     ))
+     * 
+     * then::
+     * 
+     *     <?$items->length()?>
+     * 
+     * would output ``2``.
+     * 
      * @chanotype other
      * @return int
      */
     function length() {
-        $v = $this->_reset_filter();
+        $v = $this->_get_v_or_iterator();
+        $this->_reset_filter();
         if (is_scalar($v)) return strlen((string)$v);
         else return count($v);
     }
-
+    
+    /**
+     * Returns a plural suffix if the value is not 1. By default,
+     * this suffix is ``'s'``.
+     *
+     * Example::
+     *
+     *     You have <?$item->num_messages?> message<?$item->num_messages->pluralize()?>.
+     *
+     * If ``num_messages`` is ``1``, the output will be ``You have 1 message.``
+     * If ``num_messages`` is ``2``  the output will be ``You have 2 messages.``
+     *
+     * For words that require a suffix other than ``'s'``, you can provide an
+     * alternate suffix as the first argument to the filter.
+     *
+     * Example::
+     *
+     *     You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
+     *
+     * For words that don't pluralize by simple suffix, you can specify both a
+     * plural and singular suffix as arguments.
+     *
+     * Example::
+     *
+     *     You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
+     * 
+     * If pluralize is called on the base instance, what is being pluralized
+     * is the main dataset. See `length`_.
+     *
+     * @chanotype other
+     * @param string $plural
+     * @param string $singular
+     * @return string
+     */
+    function pluralize($plural='s', $singular=null) {
+        if (empty($singular)) list($plural, $singular) = array('', $plural);
+        else list($plural, $singular) = array($plural, $singular);
+        $v = $this->_get_v_or_iterator();
+        $this->_reset_filter();
+        if (is_scalar($v)) {
+            if ((int)$v == 0) return $singular;
+            else return (int)$v > 1 ? $singular : $plural;
+        }
+        else return count($v) > 1 ? $singular : $plural;
+    }
+    
     /**
      * ``var_dumps()`` the content of the current value to screen.
      *
