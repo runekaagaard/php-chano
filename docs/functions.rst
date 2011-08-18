@@ -13,43 +13,6 @@ _______
 
 Modifies the value of the current item. All filters are chainable.
 
-.. _pluralize:
-
-pluralize($plural='s', $singular=null)
-++++++++++++++++++++++++++++++++++++++
-
-Returns a plural suffix if the value is not 1. By default,
-this suffix is ``'s'``.
-
-Example::
-
-    You have <?$item->num_messages?> message<?$item->num_messages->pluralize()?>.
-
-If ``num_messages`` is ``1``, the output will be ``You have 1 message.``
-If ``num_messages`` is ``2``  the output will be ``You have 2 messages.``
-
-For words that require a suffix other than ``'s'``, you can provide an
-alternate suffix as the first argument to the filter.
-
-Example::
-
-    You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
-
-For words that don't pluralize by simple suffix, you can specify both a
-plural and singular suffix as arguments.
-
-Example::
-
-    You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
-
-Arguments
-
-- ``string $plural``
-- ``string $singular``
-
-*Returns*
-  ``Chano instance``
-
 .. _unorderedlist:
 
 unorderedlist()
@@ -1255,7 +1218,7 @@ length()
 
 Returns the length of the current value. If the current value is a scalar
 (string, int, etc.) the string length will be returned, otherwise the
-count.
+count. This function is non chainable.
 
 For example::
 
@@ -1264,8 +1227,64 @@ For example::
 If ``value`` is ``"joel"`` or ``array("j", "o", "e", "l")`` the output
 will be ``4``.
 
+If length is called on the base instance, the count of the main dataset
+is given.
+
+For example if ``$items`` is::
+
+    new Chano(array(
+        array('title' => 'foo'),
+        array('title' => 'bar'),
+    ))
+
+then::
+
+    <?$items->length()?>
+
+would output ``2``.
+
 *Returns*
   ``int``
+
+.. _pluralize:
+
+pluralize($plural='s', $singular=null)
+++++++++++++++++++++++++++++++++++++++
+
+Returns a plural suffix if the value is not 1. By default,
+this suffix is ``'s'``.
+
+Example::
+
+    You have <?$item->num_messages?> message<?$item->num_messages->pluralize()?>.
+
+If ``num_messages`` is ``1``, the output will be ``You have 1 message.``
+If ``num_messages`` is ``2``  the output will be ``You have 2 messages.``
+
+For words that require a suffix other than ``'s'``, you can provide an
+alternate suffix as the first argument to the filter.
+
+Example::
+
+    You have <?$item->num_walruses?> walrus<?$item->num_messages->pluralize("es")?>.
+
+For words that don't pluralize by simple suffix, you can specify both a
+plural and singular suffix as arguments.
+
+Example::
+
+    You have <?$item->num_cherries?> cherr<?$item->num_cherries->pluralize("y", "ies")?>.
+
+If pluralize is called on the base instance, what is being pluralized
+is the main dataset. See `length`_.
+
+Arguments
+
+- ``string $plural``
+- ``string $singular``
+
+*Returns*
+  ``string``
 
 .. _vd:
 
