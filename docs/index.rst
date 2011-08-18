@@ -32,6 +32,7 @@ Below follows an example of what a template using Chano could look like::
     <?php
     // This would probably be done in the controller.
     $movies = new Chano(get_movies());
+    $title = "My page title";
     ?>
 
     <!-- Template -->
