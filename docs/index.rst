@@ -35,6 +35,11 @@ Below follows an example of what a template using Chano could look like::
     ?>
 
     <!-- Template -->
+
+    <h1>
+        <?=Chano::with($title)->upper()?>
+    </h1>
+
     <div class="movies">
         <p>
             Showing <?=$movies->length()?> movie<?=$movies->pluralize()?>
@@ -42,17 +47,17 @@ Below follows an example of what a template using Chano could look like::
 
         <?foreach($movies as $m):?>
             <div class="movie <?=$m->cycle('odd', 'even')?>"/>
-                <h1>
+                <h2>
                     <?=$m->counter()?>) 
                     <?=$m->title->upper()?>
-                </h1>
+                </h2>
 
-                <h2>Rating<?=$m->ratings->pluralize()?></h2>
+                <h3>Rating<?=$m->ratings->pluralize()?></h3>
                 <p>
                     <?=$m->ratings->join()?>
                 </p>
 
-                <h2>Link<?=$m->links->pluralize()?></h2>
+                <h3>Link<?=$m->links->pluralize()?></h3>
                 <ul>
                     <?if($m->links->length() < 3):?>
                         <?=$m->links->unorderedlist()->urlize()?>

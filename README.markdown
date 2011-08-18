@@ -22,6 +22,11 @@ $movies = new Chano(get_movies());
 ?>
 
 <!-- Template -->
+
+<h1>
+    <?=Chano::with($title)->upper()?>
+</h1>
+
 <div class="movies">
 	<p>
 		Showing <?=$movies->length()?> movie<?=$movies->pluralize()?>
