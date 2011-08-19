@@ -1245,7 +1245,7 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * Truncates a string if it is longer than the specified number of
      * characters. Truncated strings will end with an ellipsis, which defaults
-     * to ("...") but can be set with the second argument.
+     * to ("...") but can be set by the second argument.
      *
      * For example::
      *
@@ -1271,7 +1271,7 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * Escapes a value for use in a URL.
+     * Escapes a value for use in an URL.
      *
      * For example::
      *
@@ -1294,8 +1294,8 @@ class Chano implements Iterator, ArrayAccess {
 
     /**
      * Converts an IRI (Internationalized Resource Identifier) to a string that
-     * is suitable for including in a URL. This is necessary if you're trying
-     * to use strings containing non-ASCII characters in a URL.
+     * is suitable for including in an URL. This is necessary if you're trying
+     * to use strings containing non-ASCII characters in an URL.
      *
      * It's safe to use this filter on a string that has already gone through
      * the ``urlencode`` filter.
@@ -1539,9 +1539,9 @@ class Chano implements Iterator, ArrayAccess {
      *
      * For example::
      *
-     *     <?=$item->value->make_list()?>
+     *     <?=$item->value->makelist()?>
      *
-     * If ``value`` is the string ``"Joel"``, the output will be the list
+     * If ``value`` is the string ``"Joel"``, the output will be the array
      * ``array('J', 'o', 'e', 'l')``.
      *
      * @chanotype filter
@@ -1734,7 +1734,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?=$item->value->divisibleby(3)?>
      *
-     * If ``value`` is ``21``, the output wwill be ``true``.
+     * If ``value`` is ``21``, the output will be ``true``.
      *
      * @chanotype question
      * @return bool
@@ -2010,7 +2010,7 @@ class Chano implements Iterator, ArrayAccess {
 
     /**
      * For performance reasons, Chano changes the values of the current item by
-     * reference. So if you apply a function to a value, and accesses the same
+     * reference. So if you apply a function to a value, and accesses that same
      * value again, the value is still changed. `deepcopy`_ clones the values
      * in the current item, and rebuilds it after every ``__toString()`` call.
      *
@@ -2147,7 +2147,7 @@ class Chano implements Iterator, ArrayAccess {
      * details). This filter is applied *immediately* and returns a new, escaped
      * string. This is useful in the rare cases where you need multiple escaping
      * or want to apply other filters to the escaped results. Normally, you want
-     * to use the ``escape`` filter.
+     * to use the `escape`_ filter.
      *
      * @chanotype return
      * @return Chano instance
