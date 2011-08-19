@@ -33,7 +33,7 @@ class Chano_NoMatchingIteratorFoundError extends Exception {}
  *     - One line functions.
  *     - Skipping brackets.
  *     - Having both an if/foreach and a statement on a single line.
- *     - Not adding docblocks to (for me) obvious internal stuff.
+ *     - Not adding docblocks to (for me:) obvious internal stuff.
  *     - Skipping default "public" keywords.
  *     - Using only "public" and "private", nothing inbetween.
  */

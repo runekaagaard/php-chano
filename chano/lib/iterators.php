@@ -5,6 +5,7 @@ interface Chano_Iterators_Interface {
      * Is the $items passed to Chano a match for this iterator.
      *
      * @param mixed $items
+     * @return bool
      */
     static function is_match($items);
 
@@ -12,6 +13,7 @@ interface Chano_Iterators_Interface {
      * Returns an instance of an Iterator with the passed $items.
      *
      * @param Iterator $items
+     * @return Traversable
      */
     static function get_instance($items);
 }
