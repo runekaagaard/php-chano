@@ -1256,7 +1256,6 @@ class Chano implements Iterator, ArrayAccess {
      * @param int $length
      * @param string $ellipsis
      *   Custom ellipsis character(s).
-     * @todo write tests.
      * @chanotype filter
      * @return Chano instance
      */
@@ -1266,7 +1265,9 @@ class Chano implements Iterator, ArrayAccess {
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
                 if (strlen($v) > $length)
-                    $v = substr($v, 0, $length - strlen($ellipsis)) . $ellipsis;
+                    $v = mb_substr($v, 0, $length - strlen($ellipsis),
+                                self::$encoding)
+                         . $ellipsis;
         return $this;
     }
 

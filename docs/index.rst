@@ -23,6 +23,7 @@ Table of contents
 
    usage
    functions
+   installation
 
 Example
 =======

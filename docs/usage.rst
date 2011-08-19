@@ -53,9 +53,8 @@ doing::
     <?=$item->key1->key2->key3?>
     <?=$item['key1']['key2']['key3']?>
     
-It works this way due to the fact that Chano updates its current value,
-everytime a key is accessed on it. This goes on until its ``__toString()`` 
-method is called.
+It works this way because Chano updates its current value, everytime a key is
+accessed on it. This goes on until its ``__toString()`` method is called.
 
 Modifying values
 ----------------
@@ -146,7 +145,8 @@ Calling methods on values
 -------------------------
 
 Function calls for functions not found on the Chano class is passed on to the
-current item which is updated with return of said function.
+current item and the current value is updated with the return from that
+function call.
 
 For example if ``$items`` is a collection of Propel Orm Model instances, which 
 each has getter functions::
