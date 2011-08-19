@@ -18,10 +18,10 @@ Modifies the value of the current item. All filters are chainable.
 unorderedlist()
 +++++++++++++++
 
-Recursively takes a self-nested list and returns an HTML unordered list -
-WITHOUT opening and closing <ul> tags.
+Recursively takes an array and returns an HTML unordered list - without
+opening and closing <ul> tags.
 
-The list is assumed to be in the proper format. For example, if ``var``
+The array is assumed to be in the proper format. For example, if ``var``
 contains::
 
     array(
@@ -32,7 +32,7 @@ contains::
         )
     )
 
-then ``<?=$item->var->unordered_list()?>`` would render::
+then ``<?=$item->var->unordered_list()?>`` will render::
 
     <li>States
     <ul>
@@ -72,15 +72,15 @@ will be ``"Joel is a slug"``.
 now($format)
 ++++++++++++
 
-Display the current date and/or time, using a format according to the
-given string. Such string can contain format specifiers characters as
-described in the :ref:`date` filter section.
+Displays the current date and/or time, using a format according to the
+given string which can contain format specifiers characters as described
+in the :ref:`date` filter section.
 
 Example::
 
     Current time is: <?=$item->now("%B %e, %Y, %R %P")?>
 
-This would display as ``"Current time is: March 10, 2001, 5:16 pm"``.
+This will display as ``"Current time is: March 10, 2001, 5:16 pm"``.
 
 *Returns*
   ``Chano instance``
@@ -193,7 +193,7 @@ If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
 
 Arguments
 
-- ``int $widthF``
+- ``int $width``
 
 *Returns*
   ``Chano instance``
@@ -309,7 +309,7 @@ For example::
 
     <?=$item->value->filesizeformat()?>
 
-If ``value`` is 123456789, the output would be ``117.7 MB``.
+If ``value`` is 123456789, the output will be ``117.7 MB``.
 
 *Returns*
   ``Chano instance``
@@ -356,7 +356,7 @@ For example::
 
     <?=$item->value->wordwrap(5)?>
 
-If ``value`` is ``Joel is a slug``, the output would be::
+If ``value`` is ``Joel is a slug``, the output will be::
 
     Joel
     is a
@@ -616,7 +616,7 @@ For example::
 
     <?=$item->value->urlizetrunc(15)?>
 
-If ``value`` is ``"Check out chano.readthedocs.org"``, the output would
+If ``value`` is ``"Check out chano.readthedocs.org"``, the output will
 be ``'Check out <a href="http://chano.readthedocs.org"
 rel="nofollow">chano.readth...</a>'``.
 
@@ -894,7 +894,7 @@ For example::
 
     <?=$item->value->make_list()?>
 
-If ``value`` is the string ``"Joel"``, the output would be the list
+If ``value`` is the string ``"Joel"``, the output will be the list
 ``array('J', 'o', 'e', 'l')``.
 
 *Returns*
@@ -1047,7 +1047,7 @@ For example::
 
     <?=$item->value->divisibleby(3)?>
 
-If ``value`` is ``21``, the output would be ``true``.
+If ``value`` is ``21``, the output wwill be ``true``.
 
 *Returns*
   ``bool``
@@ -1081,7 +1081,7 @@ If ``$items`` is::
         array('value' => 'foo'),
     )
 
-The output would be ``123``.
+The output will be ``123``.
 
 *Returns*
   ``Chano Instance``
@@ -1107,7 +1107,7 @@ If ``$items`` is::
         array('value' => 'foo'),
     )
 
-The output would be ``012``.
+The output will be ``012``.
 
 *Returns*
   ``Chano Instance``
@@ -1133,7 +1133,7 @@ If ``$items`` is::
         array('value' => 'foo'),
     )
 
-The output would be ``321``.
+The output will be ``321``.
 
 *Returns*
   ``Chano Instance``
@@ -1159,7 +1159,7 @@ If ``$items`` is::
         array('value' => 'foo'),
     )
 
-The output would be ``210``.
+The output will be ``210``.
 
 *Returns*
   ``Chano Instance``
@@ -1182,7 +1182,7 @@ For example::
 
   <?=$item->firstfull(0, null, array(), new stdClass, 42)?>
 
-Would output ``42``.
+Will output ``42``.
 
 Arguments
 
@@ -1241,7 +1241,7 @@ then::
 
     <?$items->length()?>
 
-would output ``2``.
+will output ``2``.
 
 *Returns*
   ``int``
@@ -1309,14 +1309,14 @@ The following::
         - <?=$item->title?>
     <?endforeach?>
 
-Would output ``FOO - FOO``. But using deepcopy like::
+Will output ``FOO - FOO``. But using deepcopy like::
 
     <?foreach(new Chano($items) as $item)?>
         <?=$item->deepcopy()->title->upper()?>
         - <?=$item->title?>
     <?endforeach?>
 
-Would output ``FOO - foo``.
+Will output ``FOO - foo``.
 
 *Returns*
   ``Chano instance``

@@ -315,10 +315,10 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * Recursively takes a self-nested list and returns an HTML unordered list -
-     * WITHOUT opening and closing <ul> tags.
+     * Recursively takes an array and returns an HTML unordered list - without
+     * opening and closing <ul> tags.
      *
-     * The list is assumed to be in the proper format. For example, if ``var``
+     * The array is assumed to be in the proper format. For example, if ``var``
      * contains::
      *
      *     array(
@@ -329,7 +329,7 @@ class Chano implements Iterator, ArrayAccess {
      *         )
      *     )
      *
-     * then ``<?=$item->var->unordered_list()?>`` would render::
+     * then ``<?=$item->var->unordered_list()?>`` will render::
      *
      *     <li>States
      *     <ul>
@@ -376,15 +376,15 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * Display the current date and/or time, using a format according to the
-     * given string. Such string can contain format specifiers characters as
-     * described in the :ref:`date` filter section.
+     * Displays the current date and/or time, using a format according to the
+     * given string which can contain format specifiers characters as described
+     * in the :ref:`date` filter section.
      *
      * Example::
      *
      *     Current time is: <?=$item->now("%B %e, %Y, %R %P")?>
      *
-     * This would display as ``"Current time is: March 10, 2001, 5:16 pm"``.
+     * This will display as ``"Current time is: March 10, 2001, 5:16 pm"``.
      *
      * @chanotype filter
      * @return Chano instance
@@ -520,7 +520,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      * If ``value`` is ``"Chano!"``, the output will be ``"     Chano!    "``.
      *
-     * @param int $widthF
+     * @param int $width
      * @chanotype filter
      * @return Chano instance
      */
@@ -662,7 +662,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?=$item->value->filesizeformat()?>
      *
-     * If ``value`` is 123456789, the output would be ``117.7 MB``.
+     * If ``value`` is 123456789, the output will be ``117.7 MB``.
      *
      * @chanotype filter
      * @return Chano instance
@@ -725,7 +725,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?=$item->value->wordwrap(5)?>
      *
-     * If ``value`` is ``Joel is a slug``, the output would be::
+     * If ``value`` is ``Joel is a slug``, the output will be::
      *
      *     Joel
      *     is a
@@ -1135,7 +1135,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?=$item->value->urlizetrunc(15)?>
      *
-     * If ``value`` is ``"Check out chano.readthedocs.org"``, the output would
+     * If ``value`` is ``"Check out chano.readthedocs.org"``, the output will
      * be ``'Check out <a href="http://chano.readthedocs.org"
      * rel="nofollow">chano.readth...</a>'``.
      *
@@ -1541,7 +1541,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?=$item->value->make_list()?>
      *
-     * If ``value`` is the string ``"Joel"``, the output would be the list
+     * If ``value`` is the string ``"Joel"``, the output will be the list
      * ``array('J', 'o', 'e', 'l')``.
      *
      * @chanotype filter
@@ -1734,7 +1734,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *     <?=$item->value->divisibleby(3)?>
      *
-     * If ``value`` is ``21``, the output would be ``true``.
+     * If ``value`` is ``21``, the output wwill be ``true``.
      *
      * @chanotype question
      * @return bool
@@ -1769,7 +1769,7 @@ class Chano implements Iterator, ArrayAccess {
      *         array('value' => 'foo'),
      *     )
      *
-     * The output would be ``123``.
+     * The output will be ``123``.
      * 
      * @chanotype counter
      * @return Chano Instance
@@ -1796,7 +1796,7 @@ class Chano implements Iterator, ArrayAccess {
      *         array('value' => 'foo'),
      *     )
      *
-     * The output would be ``012``.
+     * The output will be ``012``.
      * 
      * @chanotype counter
      * @return Chano Instance
@@ -1823,7 +1823,7 @@ class Chano implements Iterator, ArrayAccess {
      *         array('value' => 'foo'),
      *     )
      *
-     * The output would be ``321``.
+     * The output will be ``321``.
      * 
      * @chanotype counter
      * @return Chano Instance
@@ -1850,7 +1850,7 @@ class Chano implements Iterator, ArrayAccess {
      *         array('value' => 'foo'),
      *     )
      *
-     * The output would be ``210``.
+     * The output will be ``210``.
      *
      * @chanotype counter
      * @return Chano Instance
@@ -1875,7 +1875,7 @@ class Chano implements Iterator, ArrayAccess {
      *
      *   <?=$item->firstfull(0, null, array(), new stdClass, 42)?>
      *
-     * Would output ``42``.
+     * Will output ``42``.
      *
      * @chanotype other
      * @param mixed $arg1 ... $argN
@@ -1951,7 +1951,7 @@ class Chano implements Iterator, ArrayAccess {
      * 
      *     <?$items->length()?>
      * 
-     * would output ``2``.
+     * will output ``2``.
      * 
      * @chanotype other
      * @return int
@@ -2027,14 +2027,14 @@ class Chano implements Iterator, ArrayAccess {
      *         - <?=$item->title?>
      *     <?endforeach?>
      *
-     * Would output ``FOO - FOO``. But using deepcopy like::
+     * Will output ``FOO - FOO``. But using deepcopy like::
      * 
      *     <?foreach(new Chano($items) as $item)?>
      *         <?=$item->deepcopy()->title->upper()?>
      *         - <?=$item->title?>
      *     <?endforeach?>
      *
-     * Would output ``FOO - foo``.
+     * Will output ``FOO - foo``.
      * 
      * @chanotype other
      * @return Chano instance
