@@ -98,17 +98,18 @@ class Chano implements Iterator, ArrayAccess {
         $s = $escape ? $this->_escape($v) : (string)$v;
         return (string)$s;
     }
-    
+
+    /**
+     * Yes, this actually seems to be the fastest way to make a deep copy of an
+     * object or an array in PHP. Scary!
+     * 
+     * @param array/object $var
+     * @return array/object
+     */
     private function _clone($var) {
         return unserialize(serialize($var));
     }
     
-    function deepcopy() {
-        unset($this->_current_clone);
-        $this->_current_clone = $this->_clone($this->_current);
-        return $this;
-    }
-
     /**
      * Resets and returns current value.
      *
@@ -2005,6 +2006,43 @@ class Chano implements Iterator, ArrayAccess {
             else return (int)$v > 1 ? $singular : $plural;
         }
         else return count($v) > 1 ? $singular : $plural;
+    }
+
+    /**
+     * For performance reasons, Chano changes the values of the current item by
+     * reference. So if you apply a function to a value, and accesses the same
+     * value again, the value is still changed. `deepcopy`_ clones the values
+     * in the current item, and rebuilds it after every ``__toString()`` call.
+     *
+     * For example if ``$items`` is::
+     *
+     *     array(
+     *         array('title' => 'foo')
+     *     )
+     *
+     * The following::
+     *
+     *     <?foreach(new Chano($items) as $item)?>
+     *         <?=$item->title->upper()?>
+     *         - <?=$item->title?>
+     *     <?endforeach?>
+     *
+     * Would output ``FOO - FOO``. But using deepcopy like::
+     * 
+     *     <?foreach(new Chano($items) as $item)?>
+     *         <?=$item->deepcopy()->title->upper()?>
+     *         - <?=$item->title?>
+     *     <?endforeach?>
+     *
+     * Would output ``FOO - foo``.
+     * 
+     * @chanotype other
+     * @return Chano instance
+     */
+    function deepcopy() {
+        unset($this->_current_clone);
+        $this->_current_clone = $this->_clone($this->_current);
+        return $this;
     }
     
     /**

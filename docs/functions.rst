@@ -1286,6 +1286,41 @@ Arguments
 *Returns*
   ``string``
 
+.. _deepcopy:
+
+deepcopy()
+++++++++++
+
+For performance reasons, Chano changes the values of the current item by
+reference. So if you apply a function to a value, and accesses the same
+value again, the value is still changed. `deepcopy`_ clones the values
+in the current item, and rebuilds it after every ``__toString()`` call.
+
+For example if ``$items`` is::
+
+    array(
+        array('title' => 'foo')
+    )
+
+The following::
+
+    <?foreach(new Chano($items) as $item)?>
+        <?=$item->title->upper()?>
+        - <?=$item->title?>
+    <?endforeach?>
+
+Would output ``FOO - FOO``. But using deepcopy like::
+
+    <?foreach(new Chano($items) as $item)?>
+        <?=$item->deepcopy()->title->upper()?>
+        - <?=$item->title?>
+    <?endforeach?>
+
+Would output ``FOO - foo``.
+
+*Returns*
+  ``Chano instance``
+
 .. _vd:
 
 vd()
