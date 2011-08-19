@@ -22,7 +22,7 @@ With git
     git clone git://github.com/runekaagaard/php-chano.git
 
 Including Chano
-===============
+---------------
 
 Simply go::
 
