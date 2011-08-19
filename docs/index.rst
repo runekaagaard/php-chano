@@ -12,8 +12,9 @@ loop over an array, stdClass or Iterator and output its content in a variety of
 ways. Chano can of course be applied to a single value, e.g. a string, as well.
 
 Chano is - thanks to the great Django documentation - pretty well documented.
-Learn all about Chano by following the links below or get the code from the
-github project at https://github.com/runekaagaard/php-chano and start hacking.
+Learn all about Chano by following the links below.
+
+Chano has a github page at https://github.com/runekaagaard/php-chano.
 
 Table of contents
 =================
