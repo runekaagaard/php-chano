@@ -23,7 +23,6 @@ class Chano_NoMatchingIteratorFoundError extends Exception {}
  * @author Rune Kaagaard <rumi.kg@gmail.com>
  * @todo
  *   - Create more iterators, i.e. for mysql and mysqli ressources.
- *   - Think about how to use all the functionality in a procedural way.
  *
  * @codestyle
  *   In this project i've been experimenting with a non-pear code style. Some of
@@ -31,16 +30,17 @@ class Chano_NoMatchingIteratorFoundError extends Exception {}
  *     - One line functions.
  *     - Skipping brackets.
  *     - Having both an if/foreach and a statement on a single line.
- *     - Not adding docblocks to (for me:) obvious internal stuff.
  *     - Skipping default "public" keywords.
  *     - Using only "public" and "private", nothing inbetween.
  */
 class Chano implements Iterator, ArrayAccess {
     /**
      * The encoding used in charset sensitive filters.
+     * 
      * @var string
      */
     static $encoding = 'utf-8';
+    
     /**
      * An array of iterators for supported datatypes. See the 
      * register_iterator() method.
@@ -50,14 +50,21 @@ class Chano implements Iterator, ArrayAccess {
     static $iterators;
 
     /**
-     * The value of the current item after filters has been applied.
-     * @var scalar/array
+     * The value of the current item being operated on. When a lookup is
+     * performed or a function is applied on the looked up item, this value
+     * changes accordingly.
+     *
+     * @var mixed
      */
     public $v = self::INITIAL;
 
-    // Constants.
+    /**
+     * A value used because PHP properties defaults to null, that makes it
+     * possible to separate between the two.
+     *
+     * @var string
+     */
     const INITIAL = '__CHANO_INITIAL__';
-    const NON_ITERABLE_VALUE = -8296;
 
     // Private values.
     private $_iterator;
@@ -68,38 +75,52 @@ class Chano implements Iterator, ArrayAccess {
     private $_lookups = array();
     private $_previous_lookups = array();
     private $_autoescape = true;
-    private $_autoescape_next = null;
+    private $_autoescape_single = null;
 
     /**
-     * Takes an array, iterator or stdClass of arrays or stdClasses as the only 
-     * argument.
+     * Sets the iterator for the items being iterated over.
      * 
-     * @param array $items
-     *   Accepts an array, object, iterator, etc. giving arrays or objects. The
-     *   given value is responsible for being countable for any of the filters
-     *   using that feature to be used.
+     * @param mixed $items
+     *   Accepts an array, object, iterator, etc. of arrays or objects. The
+     *   given value is responsible for being countable if any of the filters
+     *   using that feature are to be used.
+     *
+     *   If the value null is given then no iterator is set, and the user is
+     *   responsible for doing so.
      */
     function __construct($items) {
-        if ($items !== self::NON_ITERABLE_VALUE)
+        if ($items !== null)
             $this->_set_iterator($items);
     }
+
+    /**
+     * Returns the current value cast to a string, possibly HTML escaping it
+     * first.
+     *
+     * @return string
+     */
     function __toString() {
-        return $this->_out($this->_reset_v());
+        $s = (string)$this->_reset_v();
+        if ($this->_autoescape_single !== null)
+            $do_escape = $this->_autoescape_single;
+        else
+            $do_escape = $this->_autoescape;
+        return $do_escape ? $this->_escape($s) : $s;
     }
+
+    /**
+     * HTML escapes given string, using the set encoding.
+     * 
+     * @param string $s
+     * @return string
+     */
     private function _escape($s) {
         return htmlspecialchars((string)$s, ENT_NOQUOTES, self::$encoding);
-    }
-    private function _out($v, $escape=null) {
-        if ($escape === null) $escape = $this->_autoescape;
-        if ($this->_autoescape_next !== null)
-            $escape = $this->_autoescape_next;
-        $s = $escape ? $this->_escape($v) : (string)$v;
-        return (string)$s;
     }
 
     /**
      * Yes, this actually seems to be the fastest way to make a deep copy of an
-     * object or an array in PHP. Scary!
+     * object or an array in PHP. Scary! Used by the deepcopy() function.
      * 
      * @param array/object $var
      * @return array/object
@@ -146,7 +167,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return mixed
      */
     private function _reset_filter() {
-        $this->_autoescape_next = null;
+        $this->_autoescape_single = null;
         return $this->_reset_v();
     }
 
@@ -263,7 +284,7 @@ class Chano implements Iterator, ArrayAccess {
      */
     static function with($value=null) {
         static $chano = false;
-        if (!$chano) $chano = new Chano(self::NON_ITERABLE_VALUE);
+        if (!$chano) $chano = new Chano(null);
         $chano->_set_current(array('value' => $value));
         $chano->__get('value');
         return $chano;
@@ -345,7 +366,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function unorderedlist() {
-        $this->_autoescape_next = false;
+        $this->_autoescape_single = false;
         $this->v = $this->_unorderedlist($this->_clean_list($this->v));
         return $this;
     }
@@ -1103,7 +1124,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function urlize() {
-        $this->_autoescape_next = false;
+        $this->_autoescape_single = false;
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
         foreach($vs as &$v)
@@ -1148,7 +1169,7 @@ class Chano implements Iterator, ArrayAccess {
         // TODO: This passes the tests but also truncates existing html
         // addresses which is probably not the desired behavior. Change _urlize
         // to support truncate.
-        $this->_autoescape_next = false;
+        $this->_autoescape_single = false;
         $this->_urlizetrunc_len = $len;
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
@@ -1231,7 +1252,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function truncatewordshtml($number) {
-        $this->_autoescape_next = false;
+        $this->_autoescape_single = false;
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
         foreach($vs as &$v)
@@ -1442,7 +1463,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function removetags() {
-        $this->_autoescape_next = false;
+        $this->_autoescape_single = false;
         $args = func_get_args();
         if (empty($args)) return $this;
         $tags = implode('|', $args);
@@ -1479,7 +1500,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function linebreaks() {
-        $this->_autoescape_next = false;
+        $this->_autoescape_single = false;
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
         foreach($vs as &$v)
@@ -1503,7 +1524,7 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function linebreaksbr() {
-        $this->_autoescape_next = false;
+        $this->_autoescape_single = false;
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
         foreach($vs as &$v)
@@ -2122,7 +2143,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype escaping
      * @return Chano instance
      */
-    function escape() { $this->_autoescape_next = true; return $this; }
+    function escape() { $this->_autoescape_single = true; return $this; }
 
     /**
      * Marks a string as not requiring further HTML escaping prior to output.
@@ -2139,7 +2160,7 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype escaping
      * @return Chano instance
      */
-    function safe() { $this->_autoescape_next = false; return $this; }
+    function safe() { $this->_autoescape_single = false; return $this; }
 
     /**
      * Applies HTML escaping to a string (see the `escape`_ filter for
@@ -2154,11 +2175,11 @@ class Chano implements Iterator, ArrayAccess {
     function forceescape() {
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
-        $autoescape_next = $this->_autoescape_next;
+        $autoescape_next = $this->_autoescape_single;
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
                 $v = $this->_escape($this->_reset_filter());
-        $this->_autoescape_next = $autoescape_next;
+        $this->_autoescape_single = $autoescape_next;
         return $this;
     }
 }
