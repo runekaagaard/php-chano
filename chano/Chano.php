@@ -32,6 +32,7 @@ class Chano_NoMatchingIteratorFoundError extends Exception {}
  *     - Having both an if/foreach and a statement on a single line.
  *     - Skipping default "public" keywords.
  *     - Using only "public" and "private", nothing inbetween.
+ *     - Not documenting some helper and callback functions.
  */
 class Chano implements Iterator, ArrayAccess {
     /**
@@ -66,15 +67,71 @@ class Chano implements Iterator, ArrayAccess {
      */
     const INITIAL = '__CHANO_INITIAL__';
 
-    // Private values.
+    /**
+     * The matched iterator for the items given to the constructor.
+     * 
+     * @var <type>
+     */
     private $_iterator;
+
+    /**
+     * The current 0-indexed count.
+     *
+     * @var int
+     */
     private $_i = 0;
+
+    /**
+     * The current item in the iteration.
+     *
+     * @var mixed
+     */
     private $_current = self::INITIAL;
+
+    /**
+     * A clone of the current item, if the deepcopy() functions has been called.
+     * 
+     * @var mixed
+     */
     private $_current_clone = self::INITIAL;
+
+    /**
+     * A string representation of the various lookups the user performs on the
+     * current item before hitting the __toString() method.
+     * 
+     * @var string
+     */
     private $_lookup_path;
+
+    /**
+     * The actual values for the different lookup paths. Used to to check if the
+     * value is changed() or the same() as the previous iteration.
+     * 
+     * @var array
+     */
     private $_lookups = array();
+
+    /**
+     * The lookups for the previous iteration.
+     * 
+     * @var array
+     */
     private $_previous_lookups = array();
+
+    /**
+     * If everytime the __toString() method is being called, its output should
+     * be HTML escaped or not.
+     * 
+     * @var bool
+     */
     private $_autoescape = true;
+
+    /**
+     * If the next time only the __toString() method, the global autoescape
+     * value should be overridden, and with a value of true or false.
+     * 
+     * @var bool/null
+     */
     private $_autoescape_single = null;
 
     /**
@@ -90,7 +147,7 @@ class Chano implements Iterator, ArrayAccess {
      */
     function __construct($items) {
         if ($items !== null)
-            $this->_set_iterator($items);
+            $this->_set_matching_iterator($items);
     }
 
     /**
@@ -130,7 +187,7 @@ class Chano implements Iterator, ArrayAccess {
     }
     
     /**
-     * Resets and returns current value.
+     * Resets and returns current value. Resets lookups.
      *
      * @return mixed
      */
@@ -138,20 +195,14 @@ class Chano implements Iterator, ArrayAccess {
         $value = $this->v;
         $this->v = self::INITIAL;
         $this->_lookup_path_reset();
-        if ($this->_current_clone !== self::INITIAL) {
-            unset($this->_current);
-            if (is_object($this->_current_clone))
-                $this->_current = clone $this->_current_clone;
-            else
-                $this->_current = $this->_current_clone;
-        }
+        $this->_reset_current_from_clone();
         return $value;
     }
     
     /**
      * Some functions, like length() and pluralize() should work directly on the
-     * base instance too. Returns the main iterator if the v property has not
-     * been set, else the v property.
+     * base instance too, i.e. outside of a foreach loop. Returns the main
+     * iterator if the v property has not been set, else the v property.
      * 
      * @return mixed
      */
@@ -161,8 +212,8 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
-     * Resets settings for filters that does not wait for the __toString()
-     * method being called to return calue.
+     * Resets escape settings and current value. Used by functions that returns
+     * an actual value, and not the Chano instance.
      *
      * @return mixed
      */
@@ -182,7 +233,14 @@ class Chano implements Iterator, ArrayAccess {
         self::$iterators[] = $class;
     }
 
-    private function _set_iterator($items) {
+    /**
+     * Tries the registered iterators by turn and stores the first matching one.
+     * If no match is found it throws a Chano_NoMatchingIteratorFoundError.
+     *
+     * @param mixed $items
+     * @return bool
+     */
+    private function _set_matching_iterator($items) {
         foreach (self::$iterators as $iterator) {
             if (call_user_func(array($iterator, 'is_match'), $items)) {
                 $this->_iterator = call_user_func(
@@ -212,19 +270,34 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /*
-     * Stores lookups ($i->key1->key2->etc->_) so it can be compared to lookups
+     * Handles lookups ($i->key1->key2->etc->_) so it can be compared to lookups
      * for previous item.
      */
-    
+
+    /**
+     * Adds a lookup.
+     *
+     * @param string $o
+     */
     private function _lookup_add($o) {
         $this->_lookup_path .= $o;
         $this->_lookups[$this->_lookup_path] = $this->v;
     }
+
+    /**
+     * Resets and returns the current lookup path.
+     *
+     * @return string
+     */
     private function _lookup_path_reset() {
         $path = $this->_lookup_path;
         $this->_lookup_path = '';
         return $path;
     }
+
+    /**
+     * Stores current lookups as previous and resets lookups.
+     */
     private function _lookup_next() {
         $this->_previous_lookups = $this->_lookups;
         $this->_lookups = array();
@@ -234,7 +307,13 @@ class Chano implements Iterator, ArrayAccess {
     /*
      * Implementation of ArrayAcces interface.
      */
-    
+
+    /**
+     * Handles a lookup on the current item.
+     *
+     * @param string $o
+     * @return Chano instance
+     */
     function offsetGet($o) {
         if ($o == '_') return $this->__toString();
 
@@ -255,16 +334,31 @@ class Chano implements Iterator, ArrayAccess {
     /**
      * Implementation of magic methods.
      */
-    
+
+    /**
+     * Handles a lookup on the current item.
+     *
+     * @param string $o
+     * @return Chano instance
+     */
     function  __get($name) { return $this->offsetGet($name); }
-    
+
+    /**
+     * Functions not existing on Chano is passed on to the current item and
+     * used to modify the current value.
+     * 
+     * @param string $name
+     * @param array $args
+     * @return mixed
+     */
     function __call($name, $args) {
         $this->v = call_user_func_array(array($this->_current, $name), $args);
         return $this;
     }
     
     /**
-     * Not part of the public API, even though it is public.
+     * Sets the current item and resets the clone. Not part of the public API,
+     * even though it is public.
      * 
      * @param mixed $current 
      */
@@ -272,6 +366,19 @@ class Chano implements Iterator, ArrayAccess {
         $this->_current = &$current;
         unset($this->_current_clone);
         $this->_current_clone = self::INITIAL;
+    }
+
+    /**
+     * Resets the current item from the clone if it exists.
+     */
+    private function _reset_current_from_clone() {
+        if ($this->_current_clone !== self::INITIAL) {
+            unset($this->_current);
+            if (is_object($this->_current_clone))
+                $this->_current = clone $this->_current_clone;
+            else
+                $this->_current = $this->_current_clone;
+        }
     }
     
     /**
@@ -2072,7 +2179,6 @@ class Chano implements Iterator, ArrayAccess {
      * @return Chano instance
      */
     function vd() { var_dump($this->v); return $this; }
-
 
     /**
      * @section escaping
