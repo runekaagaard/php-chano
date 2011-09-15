@@ -640,6 +640,23 @@ class Chano implements Iterator, ArrayAccess {
     }
 
     /**
+     * Version of $this->_mb_str_pad that works with all charsets.
+     *
+     * @param string $input
+     * @param int $pad_length
+     * @param string $pad_string
+     * @param int $pad_type
+     * @todo This workaround could have flaws. Make a better one.
+     * @return string
+     */
+    function _mb_str_pad($input, $pad_length, $pad_string=' ',
+    $pad_type=STR_PAD_RIGHT) {
+        // Thanks to Kari "Haprog" Sderholm!
+        // http://www.php.net/manual/en/function.str-pad.php#89754.
+        $diff = strlen($input) - mb_strlen($input, self::$encoding);
+        return str_pad($input, $pad_length+$diff, $pad_string, $pad_type);
+    }
+    /**
      * Centers the value in a field of a given width.
      *
      * For example::
@@ -655,9 +672,11 @@ class Chano implements Iterator, ArrayAccess {
     function center($width) {
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
-        foreach($vs as &$v)
-            if (!is_array($v) && !($v instanceof stdClass))
-                $v = str_pad($v, $width, " ", STR_PAD_BOTH);
+        foreach($vs as &$v) {
+            if (!is_array($v) && !($v instanceof stdClass)) {
+                $v = $this->_mb_str_pad($v, $width, " ", STR_PAD_BOTH);
+            }
+        }
         return $this;
     }
 
@@ -679,7 +698,7 @@ class Chano implements Iterator, ArrayAccess {
         else $vs = array(&$this->v);
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
-                $v = str_pad($v, $width, " ", STR_PAD_LEFT);
+                $v = $this->_mb_str_pad($v, $width, " ", STR_PAD_LEFT);
         return $this;
     }
 
@@ -701,7 +720,7 @@ class Chano implements Iterator, ArrayAccess {
         else $vs = array(&$this->v);
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
-                $v = str_pad($v, $width, " ", STR_PAD_RIGHT);
+                $v = $this->_mb_str_pad($v, $width, " ", STR_PAD_RIGHT);
         return $this;
     }
 
@@ -1245,8 +1264,8 @@ class Chano implements Iterator, ArrayAccess {
     private function _urlizetrunc_cb($ms) {
         $len = $this->_urlizetrunc_len;
         if ($len <= 3) return $ms[1] . '...' . $ms[3];
-        if (strlen($ms[2]) <= $len) return $ms[0];
-        return $ms[1] . substr($ms[2], 0, $len-3) . '...' . $ms[3];
+        if (mb_strlen($ms[2], self::$encoding) <= $len) return $ms[0];
+        return $ms[1] . mb_substr($ms[2], 0, $len-3, self::$encoding) . '...' . $ms[3];
     }
 
     function _urlizetrunc($v) {
@@ -1331,7 +1350,7 @@ class Chano implements Iterator, ArrayAccess {
                 // Thankyou cakePHP!
                 return chano_truncate($v, $found_words_len+4, array(
                     'ending' => ' ...', 'exact' => true, 'html' => true,
-                ));
+                ), self::$encoding);
             }
             ++$found_words_len;
         }
@@ -1452,19 +1471,20 @@ class Chano implements Iterator, ArrayAccess {
     private function _slice($v, $str) {
         $ps = explode(':', $str);
         $count = count($ps);
+        $e = self::$encoding;
         if ($count == 1) {
             $a = $ps[0];
             if ($a == 0) return '';
-            else return mb_substr($v, 0, $a, self::$encoding);
+            else return mb_substr($v, 0, $a, $e);
         }
         if ($count == 2) {
             list($a,$b) = $ps;
-            return mb_substr($v, $a, $b-$a, self::$encoding);
+            return mb_substr($v, $a, $b-$a, $e);
         }
         if ($count == 3) {
             list ($a, $dummy, $b) = $ps;
-            $v = mb_substr($v, $a, strlen($v), self::$encoding);
-            $len = strlen($v) - 1;
+            $v = mb_substr($v, $a, mb_strlen($v, $e), $e);
+            $len = mb_strlen($v, $e) - 1;
             $result = '';
             for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
             return $result;
@@ -1513,7 +1533,7 @@ class Chano implements Iterator, ArrayAccess {
         $i = 1;
         foreach ($lines as $line) {
             $string .=
-                str_pad($i, $strlen, '0', STR_PAD_LEFT)
+                $this->_mb_str_pad($i, $strlen, '0', STR_PAD_LEFT)
                 . '. ' . $line . "\n";
             ++$i;
         }
@@ -1681,7 +1701,7 @@ class Chano implements Iterator, ArrayAccess {
         else $vs = array(&$this->v);
         foreach($vs as &$v) {
             if (!is_array($v) && !($v instanceof stdClass))  {
-                $_vs = str_split((string)$v);
+                $_vs = preg_split('/(?<!^)(?!$)/u', (string)$v);
                 if (is_int($v)) foreach ($_vs as &$_v) $_v = (int)$_v;
                 $v = $_vs;
             }
