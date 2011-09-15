@@ -609,9 +609,11 @@ class Chano implements Iterator, ArrayAccess {
     function capfirst() {
         if (is_array($this->v) || $this->v instanceof stdClass) $vs = &$this->v; 
         else $vs = array(&$this->v);
+        $e = self::$encoding;
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
-                $v = ucfirst($v);
+                $v = mb_strtoupper(mb_substr($v, 0, 1, $e), $e)
+                     . mb_substr($v, 1, mb_strlen($v, $e), $e);
         return $this;
     }
 
@@ -1390,8 +1392,8 @@ class Chano implements Iterator, ArrayAccess {
         else $vs = array(&$this->v);
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
-                if (strlen($v) > $length)
-                    $v = mb_substr($v, 0, $length - strlen($ellipsis),
+                if (mb_strlen($v) > $length)
+                    $v = mb_substr($v, 0, $length - mb_strlen($ellipsis),
                                 self::$encoding)
                          . $ellipsis;
         return $this;
@@ -2086,7 +2088,7 @@ class Chano implements Iterator, ArrayAccess {
     function length() {
         $v = $this->_get_v_or_iterator();
         $this->_reset_filter();
-        if (is_scalar($v)) return strlen((string)$v);
+        if (is_scalar($v)) return mb_strlen((string)$v, self::$encoding);
         else return count($v);
     }
     
