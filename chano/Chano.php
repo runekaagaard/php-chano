@@ -698,7 +698,7 @@ class Chano implements Iterator, ArrayAccess {
         else $vs = array(&$this->v);
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
-                $v = $this->_mb_str_pad($v, $width, " ", STR_PAD_LEFT);
+                $v = $this->_mb_str_pad($v, $width, " ", STR_PAD_RIGHT);
         return $this;
     }
 
@@ -720,7 +720,7 @@ class Chano implements Iterator, ArrayAccess {
         else $vs = array(&$this->v);
         foreach($vs as &$v)
             if (!is_array($v) && !($v instanceof stdClass))
-                $v = $this->_mb_str_pad($v, $width, " ", STR_PAD_RIGHT);
+                $v = $this->_mb_str_pad($v, $width, " ", STR_PAD_LEFT);
         return $this;
     }
 
@@ -1486,7 +1486,7 @@ class Chano implements Iterator, ArrayAccess {
             $v = mb_substr($v, $a, mb_strlen($v, $e), $e);
             $len = mb_strlen($v, $e) - 1;
             $result = '';
-            for ($i=$a; $i<=$len; $i+=$b) $result .= $v[$i];
+            for ($i=$a; $i<=$len; $i+=$b) $result .= mb_substr($v, $i, 1, $e);
             return $result;
         }
         return '';
