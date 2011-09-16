@@ -25,6 +25,7 @@ Table of contents
    usage
    functions
    installation
+   changelog
 
 Example
 =======
