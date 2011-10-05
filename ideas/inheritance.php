@@ -29,6 +29,7 @@ class Chano {
 	static function block($name) {
 		ob_start();
 		self::$active_block = $name;
+		return self::block_is_on();
 	}
 
 	static function block_is_on() {
