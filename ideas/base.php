@@ -18,7 +18,7 @@
     <div id="content">
         <?if(Chano::block('content')):?>
             My slow content. <?sleep(10)?>
-        <?endif?><?Chano::endblock()?>
+        <?endif;Chano::endblock()?>
     </div>
 </body>
 </html>
