@@ -31,12 +31,16 @@ class Chano {
 		self::$active_block = $name;
 	}
 
+	static function block_is_on() {
+		return !isset(self::$blocks[self::$active_block]);
+	}
+
 	static function endblock() {
 		if (self::$inside_blocks) {
 			if (empty(self::$blocks[self::$active_block]))
 				self::$blocks[self::$active_block] = ob_get_clean();
 		} else {
-			if (!empty(self::$blocks[self::$active_block])) {
+			if (isset(self::$blocks[self::$active_block])) {
 				ob_end_clean();
 				echo self::$blocks[self::$active_block];
 			} else {
