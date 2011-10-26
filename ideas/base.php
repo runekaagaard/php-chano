@@ -16,9 +16,11 @@
     </div>
 
     <div id="content">
-        <?if(Chano::block('content')):?>
-            My slow content. <?sleep(10)?>
-        <?endif;Chano::endblock()?>
+        <?Chano::block('content')?>
+            <?if(Chano::block_is_on()):?>
+                My slow content. <?sleep(10)?>
+            <?endif?>
+        <?Chano::endblock()?>
     </div>
 </body>
 </html>

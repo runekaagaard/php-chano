@@ -24,6 +24,7 @@ Table of contents
 
    usage
    functions
+   inheritance
    installation
    changelog
 
