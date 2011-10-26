@@ -1,5 +1,5 @@
 --TEST--
-Basic inheritance functionality.
+Including the same file twice should yield the same results.
 --FILE--
 <?php
 include dirname(__FILE__) . '/../../chano/Chano.php';
