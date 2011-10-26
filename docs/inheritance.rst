@@ -3,6 +3,9 @@
 Chano template inheritance
 ==========================
 
+Please note that template inheritance has not yet been released. It will soon
+though!
+
 Template inheritance allows you to build a base "skeleton" template that 
 contains all the common elements of your site and defines **blocks** that child 
 templates can override.
