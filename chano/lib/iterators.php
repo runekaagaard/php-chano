@@ -36,7 +36,12 @@ class Chano_Iterators_Iterator implements Chano_Iterators_Interface {
     }
 
     static function get_instance($items) {
-        return $items;
+        // ArrayObjects can be used by foreach but cannot be used as an iterator
+        // so we need to get the real iterator.
+        if ($items instanceof ArrayObject)
+            return $items->getIterator();
+        else
+            return $items;
     }
 }
 // Register this iterator with Chano.
