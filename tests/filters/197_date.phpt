@@ -3,7 +3,7 @@ Testing chaining capabilities.
 --FILE--
 <?php
 date_default_timezone_set('UTC');
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = array(
     array('d' => "2000-01-01"),
     array('d' => new DateTime("2000-01-01")),

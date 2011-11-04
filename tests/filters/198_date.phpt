@@ -5,7 +5,7 @@ Testing date locale
 // Needs on ubuntu to pass: sudo locale-gen da_DK.utf8.
 setlocale(LC_ALL, 'da_DK.utf8');
 date_default_timezone_set('UTC');
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = array(
     array('d' => "2000-01-01"),
     array('d' => new DateTime("2000-01-01")),

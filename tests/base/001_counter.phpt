@@ -2,7 +2,7 @@
 Testing that counting works.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = array(
     array('d' => 1),
     array('d' => 1),

@@ -2,7 +2,7 @@
 A generated testfile for the "escapejs" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = new Chano(array(array('input' => "paragraph separator:\xe2\x80\xa9and line separator:\xe2\x80\xa8")));
 foreach ($items as $i) echo $i->input->escapejs();
 --EXPECT--

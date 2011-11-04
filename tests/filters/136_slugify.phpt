@@ -2,7 +2,7 @@
 A generated testfile for the "slugify" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = new Chano(array(array('input' => ' Jack & Jill like numbers 1,2,3 and 4 and silly characters ?%.$!/')));
 foreach ($items as $i) echo $i->input->slugify();
 --EXPECT--

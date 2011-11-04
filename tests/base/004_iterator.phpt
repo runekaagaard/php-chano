@@ -2,7 +2,7 @@
 Testing that __call redirects to function on $this->v.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 
 class myIterator implements Iterator {
     private $position = 0;

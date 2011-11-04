@@ -2,7 +2,7 @@
 Testing rendering of a simple template.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = new Chano(array(
     array(
         'title' => 'I am legend',

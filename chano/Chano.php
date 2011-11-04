@@ -466,8 +466,10 @@ class Chano implements Iterator, ArrayAccess {
             if ($isnt_extended && $has_content) {
                 echo $content;
             } else {
-                echo self::$blocks[self::$active_block];
-                unset(self::$blocks[self::$active_block]);
+                if (isset(self::$blocks[self::$active_block])) {
+                    echo self::$blocks[self::$active_block];
+                    unset(self::$blocks[self::$active_block]);
+                } 
             }
         }
         self::$active_block = null;

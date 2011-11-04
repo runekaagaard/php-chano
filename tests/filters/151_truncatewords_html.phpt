@@ -2,7 +2,7 @@
 A generated testfile for the "truncatewordshtml" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = new Chano(array(array('input' => '<p>one <a href="#">two - three <br>four</a> five</p>')));
 foreach ($items as $i) echo $i->input->truncatewordshtml(5);
 --EXPECT--

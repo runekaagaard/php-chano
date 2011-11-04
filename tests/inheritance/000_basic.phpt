@@ -2,7 +2,7 @@
 Basic inheritance functionality.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 require dirname(__FILE__) . '/blog.php';
 --EXPECT--
 <!DOCTYPE html>

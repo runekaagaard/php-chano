@@ -2,7 +2,7 @@
 A generated testfile for the "escapejs" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = new Chano(array(array('input' => "and lots of whitespace: \r\n\t\v\f")));
 foreach ($items as $i) echo $i->input->escapejs();
 --EXPECT--

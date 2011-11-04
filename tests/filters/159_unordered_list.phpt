@@ -2,7 +2,7 @@
 A generated testfile for the "unorderedlist" filter.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = new Chano(array(array('input' => array (
   0 => 'ulitem-a',
   1 => 'ulitem-b',

@@ -2,7 +2,7 @@
 Testing that filters works on arrays.
 --FILE--
 <?php
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 $items = array(
     (object)array('a' => array('b' => 'ab', 'c' => 'GEARcd', 'd' => array('e' => 'y'))),
     (object)array('a' => (object)array('b' => 'ef', 'c' => 'GEARgh', 'd' => (object)array('e' => 'x'))),

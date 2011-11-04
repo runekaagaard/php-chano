@@ -4,7 +4,7 @@ Testing date locale
 <?php
 // Needs on ubuntu to pass: sudo locale-gen da_DK.utf8.
 date_default_timezone_set('UTC');
-include dirname(__FILE__) . '/../../chano/Chano.php';
+require dirname(__FILE__) . '/../bootstrap.php';
 define ('CHANO_TESTS_NOWTIME', 946684800);
 $items = array(
     array('d' => ""),
