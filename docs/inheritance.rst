@@ -39,7 +39,7 @@ This template, which we'll call ``base.php``, defines a simple HTML skeleton
 document that you might use for a simple two-column page. It's the job of
 "child" templates to fill the empty blocks with content.
 
-In this example, the ´´Chano::block()`` method defines three blocks that child
+In this example, the ``Chano::block()`` method defines three blocks that child
 templates can opt to fill in. A child template might look like this::
 
     <?Chano::extend()?>
