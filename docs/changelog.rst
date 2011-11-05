@@ -1,6 +1,13 @@
 Chano changelog
 ===============
 
+v1.2.0, Nov 5, 2011
+-------------------
+
+- Added template inheritance!
+- Gave yesno function default parameters.
+- Adding support for ArrayObject as an input type.
+
 v1.1.1, Sep 16, 2011
 --------------------
 
