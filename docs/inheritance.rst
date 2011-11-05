@@ -3,6 +3,9 @@
 Chano template inheritance
 ==========================
 
+Extending templates
+-------------------
+
 Please note that template inheritance has not yet been released. It will soon
 though!
 
@@ -46,7 +49,7 @@ file or the child file.
 
 A child template might look like this::
 
-    <?Chano::extend('base.php')?>
+    <?Chano::extend()?>
 
         <?Chano::block('title')?>My amazing blog<?Chano::endblock()?>
 
@@ -60,7 +63,10 @@ A child template might look like this::
     <?Chano::endextend()?><?require dirname(__FILE__) . '/base.php'?>
 
 The ``Chano::extend()`` method is the key here. It tells the template engine 
-that this template "extends" another template.
+that the blocks inside the ``<?Chano::extend()?><?Chano::endextend()?>``
+construct extends another template. Deciding which template a "child" template
+should extend is as simple as including that file right after the 
+``endextend()`` method.
 
 Depending on the value of ``$blog_entries``, the output might look like::
 
@@ -92,9 +98,35 @@ Depending on the value of ``$blog_entries``, the output might look like::
 Note that since the child template didn't define the ``sidebar`` block, the
 value from the parent template is used instead. Content within a 
 ``<?Chano::block()`` tag in a parent template is always used as a fallback.
+Blocks with no content or only whitespace are considered as being noexisting.
+You can use as many levels of inheritance as needed. 
 
-You can use as many levels of inheritance as needed. One common way of using
-inheritance is the following three-level approach:
+Super
+-----
+
+If you need to get the content of the block from the parent template, the 
+``<?=Chano::super?>`` constant will do the trick. This is useful if you want to 
+add to the contents of a parent block instead of completely overriding it. 
+
+For example, if the child template looks like::
+
+    <?Chano::extend()?>
+        <?Chano::block('title')?><?=Chano::super?> blog<?Chano::endblock()?>
+    <?Chano::endextend()?><?require dirname(__FILE__) . '/base.php'?>
+
+And the base template like::
+
+    <?Chano::block('title')?>This is my<?Chano::endblock()?>
+
+The output would be ``This is my blog``.
+
+Data inserted using ``<?Chano::super?>`` will not be automatically escaped, 
+since it was already escaped, if necessary, in the parent template.
+  
+Usage recommendations
+---------------------
+
+One common way of using inheritance is the following three-level approach:
 
 * Create a ``base.php`` template that holds the main look-and-feel of your
   site.
@@ -119,13 +151,6 @@ Here are some tips for working with inheritance:
 * If you find yourself duplicating content in a number of templates, it
   probably means you should move that content to a ``<?Chano::block()`` in a
   parent template.
-
-* If you need to get the content of the block from the parent template,
-  the ``<?Chano::super?>`` variable will do the trick. This is useful
-  if you want to add to the contents of a parent block instead of
-  completely overriding it. Data inserted using ``<?Chano::super?>`` will
-  not be automatically escaped, since it was
-  already escaped, if necessary, in the parent template.
 
 * For extra readability, you can optionally give a *name* to your
   ``<?Chano::endblock()?>`` method. For example::

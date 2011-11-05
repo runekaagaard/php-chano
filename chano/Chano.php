@@ -423,6 +423,12 @@ class Chano implements Iterator, ArrayAccess {
     private static $inside_extend = false;
     
     /**
+     * Will be replaced with the content of the parent block. 
+     * @const string
+     */
+    const super = '__CHANO_SUPER__';
+    
+    /**
      * Begins an extend.
      */
     static function extend() {
@@ -458,18 +464,21 @@ class Chano implements Iterator, ArrayAccess {
     static function endblock() {
         $content = ob_get_clean();
         $has_content = trim($content) !== '';
-        $isnt_extended = !isset(self::$blocks[self::$active_block]);
+        $is_extended = isset(self::$blocks[self::$active_block]);
+        
         if (self::$inside_extend) {
-            if ($isnt_extended && $has_content)
+            if (!$is_extended && $has_content)
                 self::$blocks[self::$active_block] = $content;
         } else {
-            if ($isnt_extended && $has_content) {
-                echo $content;
-            } else {
-                if (isset(self::$blocks[self::$active_block])) {
+            if ($is_extended) {
+                if ($has_content)
+                    echo str_replace(self::super, $content, 
+                                     self::$blocks[self::$active_block]);
+                else
                     echo self::$blocks[self::$active_block];
-                    unset(self::$blocks[self::$active_block]);
-                } 
+                unset(self::$blocks[self::$active_block]);
+            } else {
+                if ($has_content) echo $content;
             }
         }
         self::$active_block = null;
