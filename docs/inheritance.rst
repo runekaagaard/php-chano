@@ -6,9 +6,6 @@ Chano template inheritance
 Extending templates
 -------------------
 
-Please note that template inheritance has not yet been released. It will soon
-though!
-
 Template inheritance allows you to build a base "skeleton" template that 
 contains all the common elements of your site and defines **blocks** that child 
 templates can override.
@@ -43,11 +40,7 @@ document that you might use for a simple two-column page. It's the job of
 "child" templates to fill the empty blocks with content.
 
 In this example, the ´´Chano::block()`` method defines three blocks that child
-templates can fill in. All the ´´Chano::block()`` method does in this context is 
-to output the correct content of the block, i.e. either the content in the base
-file or the child file.
-
-A child template might look like this::
+templates can opt to fill in. A child template might look like this::
 
     <?Chano::extend()?>
 
@@ -60,11 +53,11 @@ A child template might look like this::
             <?endforeach?>
         <?Chano::endblock()?>
         
-    <?Chano::endextend()?><?require dirname(__FILE__) . '/base.php'?>
+    <?Chano::endextend()?><?require 'templates/base.php'?>
 
 The ``Chano::extend()`` method is the key here. It tells the template engine 
 that the blocks inside the ``<?Chano::extend()?><?Chano::endextend()?>``
-construct extends another template. Deciding which template a "child" template
+construct extends another template. Deciding which template a child template
 should extend is as simple as including that file right after the 
 ``endextend()`` method.
 

@@ -316,8 +316,8 @@ If ``value`` is 123456789, the output will be ``117.7 MB``.
 
 .. _yesno:
 
-yesno($yes=null, $no=null, $maybe=null)
-+++++++++++++++++++++++++++++++++++++++
+yesno($yes='yes', $no='no', $maybe='maybe')
++++++++++++++++++++++++++++++++++++++++++++
 
 Given a string mapping values for true, false and (optionally) null,
 returns one of those strings according to the value:

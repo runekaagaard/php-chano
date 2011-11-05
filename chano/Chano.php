@@ -944,17 +944,13 @@ class Chano implements Iterator, ArrayAccess {
      * @chanotype filter
      * @return Chano instance
      */
-    function yesno($yes='', $no='', $maybe='') {
-        $choices = array(
-            true => $yes ? $yes : 'yes',
-            false => $no ? $no : 'no',
-            null => $maybe ? $maybe : 'maybe',
-        );
+    function yesno($yes='yes', $no='no', $maybe='maybe') {
+        $choices = array(true => $yes, false => $no, null => $maybe);
         if (is_array($this->_v) || $this->_v instanceof stdClass) $vs = &$this->_v; 
         else $vs = array(&$this->_v);
         foreach($vs as &$v) {
             if (!is_array($v) && !($v instanceof stdClass))  {
-                if ($v === null && $no && !$maybe) $v = False;
+                if ($v === null && $no && !$maybe) $v = false;
                 if ($v !== null) $v = (bool)$v;
                 $v = $choices[$v];
             }
