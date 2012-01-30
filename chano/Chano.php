@@ -1927,7 +1927,8 @@ class Chano implements Iterator, ArrayAccess {
     function islast() { return $this->_i === $this->_iterator->count(); }
 
     /**
-     * Check if a value has changed from the last iteration of a loop.
+     * Check if a value has changed from the last iteration of a loop. Also
+     * returns true on the first iteration.
      * 
      * For example::
      *
@@ -1944,8 +1945,10 @@ class Chano implements Iterator, ArrayAccess {
     function changed() {
         $this->_v = self::INITIAL;
         $path = $this->_lookup_path_reset();
-        return isset($this->_previous_lookups[$path]) &&
-            $this->_previous_lookups[$path] != $this->_lookups[$path];
+        if (!isset($this->_previous_lookups[$path]))
+            return true;
+        else 
+            return $this->_previous_lookups[$path] != $this->_lookups[$path];
     }
 
     /**
